@@ -130,5 +130,6 @@ dmypy.json
 
 # GigaSpeech ignore list
 SAFEBOX/aliyun_ossutil.cfg
+dict/*
 ossutil64
 ossutilmac64
