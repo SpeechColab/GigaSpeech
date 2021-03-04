@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# GigaSpeech ignore list
+SAFEBOX/aliyun_ossutil.cfg
+ossutil64
+ossutilmac64
