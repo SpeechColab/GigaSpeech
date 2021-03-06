@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# this script downloads entire gigaspeech audio files 
+# this script downloads cmudict and g2p models
 
 [ `uname -s` == 'Linux' ]  && ossbin=ossutil64
 [ `uname -s` == 'Darwin' ] && ossbin=ossutilmac64
