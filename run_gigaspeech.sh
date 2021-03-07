@@ -5,7 +5,7 @@ set -e
 
 . ./env_vars.sh
 
-stage=2
+stage=0
 
 [ ! -d $data_dst ] && mkdir -p $data_dst
 

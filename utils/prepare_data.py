@@ -20,20 +20,20 @@ def get_args():
 def prepare_kaldi_format(input_json, output_dir):
   input_dir = os.path.dirname(input_json)
 
-  if not os.path.exists(args.output_dir):
-    os.makedirs(args.output_dir)
+  if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
   try:
-    with open(args.input_json, 'r') as injson:
+    with open(input_json, 'r') as injson:
       json_data = json.load(injson)
   except:
-    sys.exit("Failed to load input json file: {0}".format(args.input_json))
+    sys.exit("Failed to load input json file: {0}".format(input_json))
   else:
     if json_data["audios"] is not None:
-      with open(args.output_dir + '/utt2spk', 'w') as utt2spk, \
-            open(args.output_dir + '/text', 'w') as utt2text, \
-            open(args.output_dir + '/segments', 'w') as segments, \
-            open(args.output_dir + '/wav.scp', 'w') as wavscp:
+      with open(output_dir + '/utt2spk', 'w') as utt2spk, \
+            open(output_dir + '/text', 'w') as utt2text, \
+            open(output_dir + '/segments', 'w') as segments, \
+            open(output_dir + '/wav.scp', 'w') as wavscp:
         for long_audio in json_data["audios"]:
           try:
             long_audio_path = os.path.realpath(os.path.join(input_dir,long_audio["path"]))
