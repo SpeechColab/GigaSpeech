@@ -6,15 +6,20 @@ set -e
 . env_vars.sh
 
 remove_opus=
-
 if [ "$1" == --remove-opus ]; then
   remove_opus='--remove-opus'
   shift
 fi
 
+grid_engine=false
+if [ "$1" == --grid-engine ]; then
+  grid_engine=true
+  shift
+fi
+
 if [ $# != 1 ]; then
    echo "Usage: "
-   echo "  $0 [--remove-opus] <opus-scp>"
+   echo "  $0 [--remove-opus] [--grid-engine] <opus-scp>"
    exit 1
 fi
 
@@ -37,8 +42,15 @@ fi
 if [ $stage -le 2 ]; then
   #opus2wav
   echo -e "===START convet opus to wav|current time : `date +%Y-%m-%d-%T`==="
-  $cmd JOB=1:$nj $dir/log/opus2wav.JOB.log \
-           python3 utils/opus2wav.py $remove_opus $dir/split${nj}/JOB/$file_name
+  if $grid_engine:
+    $cmd JOB=1:$nj $dir/log/opus2wav.JOB.log \
+             python3 utils/opus2wav.py $remove_opus $dir/split${nj}/JOB/$file_name
+  else:
+    for n in `seq $nj`; do
+    (
+      python3 utils/opus2wav.py $remove_opus $dir/split${nj}/$n/$file_name
+    ) &
+    done
 
   sed -i 's|.opus|.wav|' $wav_scp
   echo -e "===END convet opus to wav|current time : `date +%Y-%m-%d-%T`==="
