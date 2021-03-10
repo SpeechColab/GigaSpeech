@@ -48,7 +48,7 @@ def meta_analysis(input_json, output_dir, pipe):
             segments_dicts = long_audio['segments']
             assert(os.path.exists(long_audio_path))
             assert('opus' == long_audio['format'])
-            assert('16k' == long_audio['sample_rate'])
+            assert('16000' == long_audio['sample_rate'])
           except AssertionError:
             print(f'Warning: {file_utt} something is wrong, maybe AssertionError, skipped')
             continue

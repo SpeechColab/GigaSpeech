@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2021  Xiaomi Corporation (Author: Yongqing Wang)
 
+# This script untar opus audio into wav, and please run kaldi path.sh first.
 set -e
 
 . env_vars.sh
@@ -48,15 +49,10 @@ if [ $stage -le 2 ]; then
   else:
     for n in `seq $nj`; do
     (
-      python3 utils/opus2wav.py $remove_opus $dir/split${nj}/$n/$file_name
+      python3 utils/untar_opus2wav.py $remove_opus $dir/split${nj}/$n/$file_name
     ) &
     done
 
   sed -i 's|.opus|.wav|' $wav_scp
   echo -e "===END convet opus to wav|current time : `date +%Y-%m-%d-%T`==="
-fi
-
-if $remove_opus; then
-  rm 
-
 fi
