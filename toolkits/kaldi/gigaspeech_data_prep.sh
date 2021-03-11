@@ -28,6 +28,12 @@ if [ $stage -le 1 ]; then
   utt2spk=$data_dir/corpus/utt2spk
   spk2utt=$data_dir/corpus/spk2utt
   utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt || exit 1
+
+# Delete <*> tag
+  sed -i '/<MUSIC>/d' $data_dir/corpus/text
+  sed -i '/<NOISE>/d' $data_dir/corpus/text
+  sed -i "s|<[^>]*>||g" $data_dir/corpus/text
+  sed -i 's/[ ][ ]*/ /g' $data_dir/corpus/text
 fi
 
 if [ $stage -le 2 ]; then
@@ -38,5 +44,4 @@ if [ $stage -le 2 ]; then
     tag=${dic_sets[$sub]}
     grep "{$tag}" $meta_dir/utt2subsets | subset_data_dir.sh --utt-list - $data_dir/corpus $data_dir/$sub
   done
-
 fi
