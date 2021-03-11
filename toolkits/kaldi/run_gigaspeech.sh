@@ -39,7 +39,7 @@ if [ $stage -le 2 ]; then
     python3 utils/analyze_meta.py --pipe-format $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir
   else:
     python3 utils/analyze_meta.py $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir
-    egs/run_opus2wav.sh --grid-engine $meta_dir/wav.scp
+    toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp
 fi
 
 if [ $stage -le 3 ]; then
