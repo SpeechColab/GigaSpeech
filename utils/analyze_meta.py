@@ -35,45 +35,52 @@ def meta_analysis(input_json, output_dir, pipe):
   else:
     if json_data['audios'] is not None:
       with open(f'{output_dir}/utt2spk', 'w') as utt2spk, \
+           open(f'{output_dir}/utt2dur', 'w') as utt2dur, \
            open(f'{output_dir}/text', 'w') as utt2text, \
            open(f'{output_dir}/segments', 'w') as segments, \
            open(f'{output_dir}/wav.scp', 'w') as wavscp, \
-           open(f'{output_dir}/file2md5', 'w') as file2md5:
+           open(f'{output_dir}/audio2md5', 'w') as audio2md5, \
+           open(f'{output_dir}/utt2subsets', 'w') as utt2subsets:
         for long_audio in json_data['audios']:
           try:
             long_audio_path = os.path.realpath(os.path.join(input_dir, long_audio['path']))
             fname, fename = os.path.splitext(long_audio['path'])
-            file_utt = os.path.basename(fname)
+            audio_utt = os.path.basename(fname)
             md5str = long_audio['md5']
-            segments_dicts = long_audio['segments']
+            segments_lists = long_audio['segments']
             assert(os.path.exists(long_audio_path))
             assert('opus' == long_audio['format'])
-            assert('16000' == long_audio['sample_rate'])
+            assert(16000 == long_audio['sample_rate'])
           except AssertionError:
-            print(f'Warning: {file_utt} something is wrong, maybe AssertionError, skipped')
+            print(f'Warning: {audio_utt} something is wrong, maybe AssertionError, skipped')
             continue
           except:
-            print(f'Warning: {file_utt} something is wrong, maybe the error path: {long_audio_path}, skipped')
+            print(f'Warning: {audio_utt} something is wrong, maybe the error path: {long_audio_path}, skipped')
             continue
           else:
             if pipe is True:
-              wavscp.write(f'{file_utt}\tffmpeg -i {long_audio_path} -f wav pipe:1 |\n')
+              wavscp.write(f'{audio_utt}\tffmpeg -i {long_audio_path} -f wav pipe:1 |\n')
             else:
-              wavscp.write(f'{file_utt}\t{long_audio_path}\n')
-            file2md5.write(f'{file_utt}\t{md5str}\n')
-            for segment_file in segments_dicts:
+              wavscp.write(f'{audio_utt}\t{long_audio_path}\n')
+            audio2md5.write(f'{audio_utt}\t{md5str}\n')
+            for segment_file in segments_lists:
               try:
                 uuid = segment_file['uuid']
                 start_time = segment_file['begin_time']
                 end_time = segment_file['end_time']
+                dur = end_time - start_time
                 text = segment_file['text_tn']
+                segment_subsets = segment_file["subsets"]
               except:
                 print(f'Warning: {segment_file} something is wrong, skipped')
                 continue
               else:
                 utt2spk.write(f'{uuid}\t{uuid}\n')
+                utt2dur.write(f'{uuid}\t{dur}\n')
                 utt2text.write(f'{uuid}\t{text}\n')
-                segments.write(f'{uuid}\t{file_utt}\t{start_time}\t{end_time}\n')
+                segments.write(f'{uuid}\t{audio_utt}\t{start_time}\t{end_time}\n')
+                segment_sub_names = " " .join(segment_subsets)
+                utt2subsets.write(f'{uuid}\t{segment_sub_names}\n')
 
 
 def main():

@@ -34,12 +34,13 @@ if [ $stage -le 2 ]; then
   [ ! -f $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json ] && echo "Please Download GigaSpeech.json first!" && exit 1
   [ ! -d $GIGA_SPEECH_LOCAL_ROOT/audio ] && echo "Please Download audio first!" && exit 1
 
-  # Default: wav.scp file2md5 utt2spk text and segments are generated
-  if $pipe_format:
+  # Default: wav.scp audio2md5 utt2spk text and segments utt2dur are generated
+  if $pipe_format; then
     python3 utils/analyze_meta.py --pipe-format $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir
-  else:
+  else
     python3 utils/analyze_meta.py $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir
     toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp
+  fi
 fi
 
 if [ $stage -le 3 ]; then
@@ -51,7 +52,7 @@ if [ $stage -le 4 ]; then
   # Prepare data for different toolkits
   if [ $toolkit == 'KALDI' ]; then
     # data/train data/test data/dev are generated
-    toolkits/kaldi/data_prep.sh $meta_dir $dbase
+    toolkits/kaldi/gigaspeech_data_prep.sh $meta_dir $dbase
   fi
 fi
 
