@@ -21,7 +21,7 @@ if [ $stage -le 1 ]; then
   # all corpus
   [ ! -d $data_dir/corpus ] && mkdir -p $data_dir/corpus
 
-  for f in utt2spk wav.scp text segments utt2dur; do
+  for f in utt2spk wav.scp text segments utt2dur reco2dur; do
     [ -f $meta_dir/$f ] && cp $meta_dir/$f $data_dir/corpus/
   done
 

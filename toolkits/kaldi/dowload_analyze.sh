@@ -31,7 +31,7 @@ if [ $stage -le 2 ]; then
   [ ! -f $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json ] && echo "Please Download GigaSpeech.json first!" && exit 1
   [ ! -d $GIGA_SPEECH_LOCAL_ROOT/audio ] && echo "Please Download audio first!" && exit 1
 
-  # Default: wav.scp audio2md5 utt2spk text and segments utt2dur are generated
+  # Default: wav.scp reco2md5 utt2spk text and segments utt2dur reco2durare generated
   if $pipe_format; then
     python3 utils/analyze_meta.py --pipe-format $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir
   else
