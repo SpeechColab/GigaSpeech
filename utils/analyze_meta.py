@@ -59,7 +59,7 @@ def meta_analysis(input_json, output_dir, pipe):
             continue
           else:
             if pipe is True:
-              wavscp.write(f'{audio_utt}\tffmpeg -i {long_audio_path} -f wav pipe:1 |\n')
+              wavscp.write(f'{audio_utt}\tffmpeg -i {long_audio_path} -ar 16000 -f wav pipe:1 |\n')
             else:
               wavscp.write(f'{audio_utt}\t{long_audio_path}\n')
             audio2md5.write(f'{audio_utt}\t{md5str}\n')
