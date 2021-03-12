@@ -4,7 +4,7 @@
 # This script untar opus audio into wav, and please run kaldi path.sh first.
 set -e
 
-. env_vars.sh
+. ./env_vars.sh
 
 remove_opus=
 if [ "$1" == --remove-opus ]; then
