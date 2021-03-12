@@ -1,4 +1,8 @@
-# this is user-specified directory to store GigaSpeech dataset
+# Download URL.
 export GIGA_SPEECH_RELEASE_URL=oss://speechcolab/GigaSpeech/release/GigaSpeech
-export GIGA_SPEECH_LOCAL_ROOT=~/GigaSpeech # this path needs to have at least XXX G free space
+
+# User-specified directory to store the GigaSpeech dataset. It needs at least
+# 900G of free space.
+export GIGA_SPEECH_LOCAL_ROOT=~/GigaSpeech
+
 export PATH=$PWD:$PATH
