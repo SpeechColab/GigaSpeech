@@ -7,8 +7,6 @@ set -e
 
 stage=0
 
-dbase=$1 # the path of prepared data
-
 pipe_format=true
 meta_dir=$GIGA_SPEECH_LOCAL_ROOT/data/meta
 
