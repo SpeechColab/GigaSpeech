@@ -3,9 +3,9 @@
 
 set -e
 
-. env_vars.sh
+. ./env_vars.sh
 
-stage=2
+stage=0
 
 dbase=$1 # the path of prepared data
 
