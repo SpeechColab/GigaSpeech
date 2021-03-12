@@ -5,12 +5,11 @@ set -e
 
 . env_vars.sh
 
-stage=0
+stage=2
 
 dbase=$1 # the path of prepared data
 
 pipe_format=true
-toolkit='KALDI'
 meta_dir=$GIGA_SPEECH_LOCAL_ROOT/data/meta
 
 if [ $stage -le 0 ]; then
@@ -47,12 +46,3 @@ if [ $stage -le 3 ]; then
   #Check data size or md5
   echo "Please add scripts for checking data"
 fi
-
-if [ $stage -le 4 ]; then
-  # Prepare data for different toolkits
-  if [ $toolkit == 'KALDI' ]; then
-    # data/train data/test data/dev are generated
-    toolkits/kaldi/gigaspeech_data_prep.sh $meta_dir $dbase
-  fi
-fi
-
