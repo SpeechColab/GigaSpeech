@@ -36,33 +36,36 @@ def meta_analysis(input_json, output_dir, pipe):
     if json_data['audios'] is not None:
       with open(f'{output_dir}/utt2spk', 'w') as utt2spk, \
            open(f'{output_dir}/utt2dur', 'w') as utt2dur, \
+           open(f'{output_dir}/utt2subsets', 'w') as utt2subsets, \
            open(f'{output_dir}/text', 'w') as utt2text, \
            open(f'{output_dir}/segments', 'w') as segments, \
            open(f'{output_dir}/wav.scp', 'w') as wavscp, \
-           open(f'{output_dir}/audio2md5', 'w') as audio2md5, \
-           open(f'{output_dir}/utt2subsets', 'w') as utt2subsets:
+           open(f'{output_dir}/reco2md5', 'w') as reco2md5, \
+           open(f'{output_dir}/reco2dur', 'w') as reco2dur:
         for long_audio in json_data['audios']:
           try:
             long_audio_path = os.path.realpath(os.path.join(input_dir, long_audio['path']))
             fname, fename = os.path.splitext(long_audio['path'])
-            audio_utt = os.path.basename(fname)
+            reco_name = os.path.basename(fname)
             md5str = long_audio['md5']
             segments_lists = long_audio['segments']
+            duration = long_audio['duration']
             assert(os.path.exists(long_audio_path))
             assert('opus' == long_audio['format'])
             assert(16000 == long_audio['sample_rate'])
           except AssertionError:
-            print(f'Warning: {audio_utt} something is wrong, maybe AssertionError, skipped')
+            print(f'Warning: {reco_name} something is wrong, maybe AssertionError, skipped')
             continue
           except:
-            print(f'Warning: {audio_utt} something is wrong, maybe the error path: {long_audio_path}, skipped')
+            print(f'Warning: {reco_name} something is wrong, maybe the error path: {long_audio_path}, skipped')
             continue
           else:
             if pipe is True:
-              wavscp.write(f'{audio_utt}\tffmpeg -i {long_audio_path} -ar 16000 -f wav pipe:1 |\n')
+              wavscp.write(f'{reco_name}\tffmpeg -i {long_audio_path} -ar 16000 -f wav pipe:1 |\n')
             else:
-              wavscp.write(f'{audio_utt}\t{long_audio_path}\n')
-            audio2md5.write(f'{audio_utt}\t{md5str}\n')
+              wavscp.write(f'{reco_name}\t{long_audio_path}\n')
+            reco2md5.write(f'{reco_name}\t{md5str}\n')
+            reco2dur.write(f'{reco_name}\t{duration}\n')
             for segment_file in segments_lists:
               try:
                 uuid = segment_file['uuid']
@@ -78,7 +81,7 @@ def meta_analysis(input_json, output_dir, pipe):
                 utt2spk.write(f'{uuid}\t{uuid}\n')
                 utt2dur.write(f'{uuid}\t{dur}\n')
                 utt2text.write(f'{uuid}\t{text}\n')
-                segments.write(f'{uuid}\t{audio_utt}\t{start_time}\t{end_time}\n')
+                segments.write(f'{uuid}\t{reco_name}\t{start_time}\t{end_time}\n')
                 segment_sub_names = " " .join(segment_subsets)
                 utt2subsets.write(f'{uuid}\t{segment_sub_names}\n')
 
