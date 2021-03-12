@@ -22,12 +22,12 @@ if [ $stage -le 1 ]; then
   [ ! -d $data_dir/corpus ] && mkdir -p $data_dir/corpus
 
   for f in utt2spk wav.scp text segments utt2dur; do
-    [ -f $meta_dir/$f ] && cp $meta_dir/$f $data_dir/corpus/ || echo "Error: cp $meta_dir to $data_dir/corpus" && exit 1
+    [ -f $meta_dir/$f ] && cp $meta_dir/$f $data_dir/corpus/
   done
 
   utt2spk=$data_dir/corpus/utt2spk
   spk2utt=$data_dir/corpus/spk2utt
-  utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt || echo "Error: utt2spk to spk2utt" && exit 1
+  utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt || (echo "Error: utt2spk to spk2utt" && exit 1)
 
 # Delete <*> tag
   sed -i '/<MUSIC>/d' $data_dir/corpus/text
