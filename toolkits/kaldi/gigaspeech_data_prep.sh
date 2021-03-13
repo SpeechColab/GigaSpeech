@@ -8,6 +8,12 @@ stage=1
 if [ $# -lt 3 ] || [ $# -gt 4 ]; then
   echo "Usage: $0 <gigaspeech-src> <data-dir> <use-pipe> [<subset-prefix>]"
   echo " e.g.: $0 ~/gigaspeech_data data/ true gigaspeech"
+  echo ""
+  echo "This script takes the GigaSpeech source directory, and prepares the"
+  echo "Kaldi format data directory. When <use-pipe> is true, it decodes the"
+  echo "OPUS audio format through a pipe; Otherwise it writes the decoded"
+  echo "output to wav files. <subset-prefix> is an optional prefix for Kaldi"
+  echo "data directories."
   exit 1
 fi
 
