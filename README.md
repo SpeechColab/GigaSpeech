@@ -41,13 +41,15 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-toolkits/kaldi/run_gigaspeech.sh data/
+toolkits/kaldi/gigaspeech_download.sh
+toolkits/kaldi/gigaspeech_data_prep.sh ../data gigaspeech
 cd ..
 ```
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
-`toolkits/kaldi/run_gigaspeech.sh`, and add similar scripts for your own
-toolkit. For example, for ESPnet2, the main script would be
-`toolkits/espnet2/run_gigaspeech.sh`, and all other related scripts should be
-maintained under `toolkits/espnet2`.
+`toolkits/kaldi/gigaspeech_download.sh` and `toolkits/kaldi/gigaspeech_data_prep.sh`,
+and add similar scripts for your own toolkit. For example, for ESPnet2, you
+would add `toolkits/espnet2/gigaspeech_download.sh` to download the data, and
+`toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
+other related scripts should be maintained under `toolkits/espnet2`.
