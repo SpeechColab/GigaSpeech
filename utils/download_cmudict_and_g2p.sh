@@ -1,8 +1,29 @@
 #!/usr/bin/env bash
-# this script downloads cmudict and g2p models
+# Copyright 2021  Jiayu Du
+#                 Seasalt AI, Inc (Author: Guoguo Chen)
 
-[ `uname -s` == 'Linux' ] && ossbin=ossutil64
-[ `uname -s` == 'Darwin' ] && ossbin=ossutilmac64
 
-$ossbin -c SAFEBOX/aliyun_ossutil.cfg cp ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a $GIGA_SPEECH_LOCAL_ROOT/dict/cmudict.0.7a
-$ossbin -c SAFEBOX/aliyun_ossutil.cfg cp -r ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $GIGA_SPEECH_LOCAL_ROOT/dict/
+set -e
+
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <gigaspeech-src>"
+  echo " e.g.: $0 ~/gigaspeech_data"
+  echo ""
+  echo "This script downloads the CMU dictionary and its corresponding Sequitur"
+  echo "G2P models."
+  exit 1
+fi
+
+
+gigaspeech_src=$1
+
+[ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
+[ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
+
+$ossbin -c SAFEBOX/aliyun_ossutil.cfg \
+  cp ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a \
+  $gigaspeech_src/dict/cmudict.0.7a || exit 1
+$ossbin -c SAFEBOX/aliyun_ossutil.cfg \
+  cp -r ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $gigaspeech_src/dict/ || exit 1
+
+echo "$0: Done"

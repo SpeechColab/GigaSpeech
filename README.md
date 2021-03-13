@@ -12,18 +12,9 @@ A Large, modern and evolving dataset for automatic speech recognition.
 ## Dataset Download
 To download the dataset, do the following steps:
 1. Put aliyun_ossutil.cfg in the `SAFEBOX` folder
-2. Edit env_vars.sh
-    ```bash
-    # User-specified directory to store the GigaSpeech dataset. It needs at least
-    # 900G of free space.
-    export GIGA_SPEECH_LOCAL_ROOT=~/GigaSpeech
-    ```
-3. Run the following steps for downloading the dataset only
+2. Run the following steps for downloading the dataset only
    ```bash
-   . ./env_vars.sh
-   utils/setup_oss_for_downloading.sh
-   utils/download_meta.sh
-   utils/download_audio.sh
+   utils/gigaspeech_download.sh
    ```
 
 ## Toolkit Support
@@ -41,13 +32,14 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-toolkits/kaldi/run_gigaspeech.sh data/
+utils/gigaspeech_download.sh ~/gigaspeech_src
+toolkits/kaldi/gigaspeech_data_prep.sh ~/gigaspeech_src ../data true gigaspeech
 cd ..
 ```
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
-`toolkits/kaldi/run_gigaspeech.sh`, and add similar scripts for your own
-toolkit. For example, for ESPnet2, the main script would be
-`toolkits/espnet2/run_gigaspeech.sh`, and all other related scripts should be
-maintained under `toolkits/espnet2`.
+`toolkits/kaldi/gigaspeech_data_prep.sh`and add similar scripts for your own
+toolkit. For example, for ESPnet2, you would add
+`toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
+other related scripts should be maintained under `toolkits/espnet2`.
