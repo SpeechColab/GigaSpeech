@@ -39,9 +39,8 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-. ./env_vars.sh
 utils/gigaspeech_download.sh
-toolkits/kaldi/gigaspeech_data_prep.sh true ../data gigaspeech
+toolkits/kaldi/gigaspeech_data_prep.sh ~/gigaspeech_src ../data true gigaspeech
 cd ..
 ```
 

@@ -3,21 +3,21 @@
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
 
 set -e
+stage=1
 
-if [ $# -lt 2 ] || [ $# -gt 3 ]; then
-  echo "Usage: $0 <use-pipe> <data-dir> [<subset-prefix>]"
-  echo " e.g.: $0 true data/ gigaspeech"
+if [ $# -lt 3 ] || [ $# -gt 4 ]; then
+  echo "Usage: $0 <gigaspeech-src> <data-dir> <use-pipe> [<subset-prefix>]"
+  echo " e.g.: $0 ~/gigaspeech_data data/ true gigaspeech"
   exit 1
 fi
 
-use_pipe=$1
+gigaspeech_src=$1
 data_dir=$2
+use_pipe=$3
 prefix=
-if [ $# -eq 3 ]; then
+if [ $# -eq 4 ]; then
   prefix=${3}_
 fi
-
-stage=1
 
 declare -A subsets
 subsets=([train]="XL" [dev]="DEV" [test]="TEST")
@@ -25,10 +25,10 @@ subsets=([train]="XL" [dev]="DEV" [test]="TEST")
 meta_dir=$data_dir/${prefix}corpus/meta
 if [ $stage -le 1 ]; then
   # Sanity check.
-  [ ! -f $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json ] &&\
-    echo "$0: Please Download the GigaSpeech.json file!" && exit 1
-  [ ! -d $GIGA_SPEECH_LOCAL_ROOT/audio ] &&\
-    echo "$0: Please Download the audio collection!" && exit 1
+  [ ! -f $gigaspeech_src/GigaSpeech.json ] &&\
+    echo "$0: Please download $gigaspeech_src/GigaSpeech.json!" && exit 1
+  [ ! -d $gigaspeech_src/audio ] &&\
+    echo "$0: Please download $gigaspeech_src/audio!" && exit 1
 
   [ ! -d $meta_dir ] && mkdir -p $meta_dir
 
@@ -36,10 +36,10 @@ if [ $stage -le 1 ]; then
   # wav.scp reco2md5 utt2spk text and segments utt2dur reco2durare
   if [ "$use_pipe" = true ]; then
     python3 utils/analyze_meta.py \
-      --pipe-format $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir || exit 1
+      --pipe-format $gigaspeech_src/GigaSpeech.json $meta_dir || exit 1
   else
     python3 utils/analyze_meta.py \
-      $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir || exit 1
+      $gigaspeech_src/GigaSpeech.json $meta_dir || exit 1
     toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp || exit 1
   fi
 fi
