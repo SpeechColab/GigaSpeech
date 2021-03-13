@@ -21,9 +21,7 @@ To download the dataset, do the following steps:
 3. Run the following steps for downloading the dataset only
    ```bash
    . ./env_vars.sh
-   utils/setup_oss_for_downloading.sh
-   utils/download_meta.sh
-   utils/download_audio.sh
+   utils/gigaspeech_download.sh
    ```
 
 ## Toolkit Support
@@ -41,8 +39,9 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-toolkits/kaldi/gigaspeech_download.sh
-toolkits/kaldi/gigaspeech_data_prep.sh ../data gigaspeech
+. ./env_vars.sh
+utils/gigaspeech_download.sh
+toolkits/kaldi/gigaspeech_data_prep.sh true ../data gigaspeech
 cd ..
 ```
 
