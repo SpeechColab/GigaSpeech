@@ -14,6 +14,11 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
+. ./env_vars.sh || exit 1
+if [ -z "${GIGA_SPEECH_RELEASE_URL}" ]; then
+  echo "ERROR: env variable GIGA_SPEECH_RELEASE_URL is empty(check env_vars.sh?)"
+  exit 1
+fi
 
 dir=$1
 

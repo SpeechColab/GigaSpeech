@@ -10,7 +10,13 @@ if [ $# -ne 1 ]; then
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script downloads the entire GigaSpeech audio collection. We"
-  echo "suggest having at least 600G of free space under <gigaspeech-dataset-local-dir>."
+  echo "suggest having at least 600G of free space in local dir."
+  exit 1
+fi
+
+. ./env_vars.sh || exit 1
+if [ -z "${GIGA_SPEECH_RELEASE_URL}" ]; then
+  echo "ERROR: env variable GIGA_SPEECH_RELEASE_URL is empty(check env_vars.sh?)"
   exit 1
 fi
 

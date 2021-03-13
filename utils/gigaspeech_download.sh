@@ -3,7 +3,7 @@
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
 
 set -e
-. ./env_vars.sh || exit 1
+
 stage=0
 
 if [ $# -ne 1 ]; then
