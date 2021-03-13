@@ -11,6 +11,10 @@ if [ $# -ne 1 ]; then
   echo ""
   echo "This script downloads the entire GigaSpeech audio collection. We"
   echo "suggest having at least 600G of free space in local dir."
+  echo "If audios are updated, you can just re-run this script for "
+  echo "incremental downloading, downloader will only download updates"
+  echo "After downloading, you may run utils/check_audio_consistency.sh"
+  echo "to make sure everything is consistent with official release."
   exit 1
 fi
 

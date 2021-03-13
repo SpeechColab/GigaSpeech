@@ -6,8 +6,8 @@
 set -e
 
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 <gigaspeech-src>"
-  echo " e.g.: $0 ~/gigaspeech_data"
+  echo "Usage: $0 <gigaspeech-dataset-local-dir>"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script lists the audio files that are not used in the current"
   echo "dataset release."
