@@ -4,28 +4,47 @@
 
 set -e
 
-if [ $# -lt 1 ] || [ $# -gt 2 ]; then
-  echo "Usage: $0 <data-dir> [<subset-prefix>]"
-  echo " e.g.: $0 data/ gigaspeech"
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+  echo "Usage: $0 <use-pipe> <data-dir> [<subset-prefix>]"
+  echo " e.g.: $0 true data/ gigaspeech"
   exit 1
 fi
 
-data_dir=$1
+use_pipe=$1
+data_dir=$2
 prefix=
-if [ $# -eq 2 ]; then
-  prefix=${2}_
+if [ $# -eq 3 ]; then
+  prefix=${3}_
 fi
 
 stage=1
 
-meta_dir=$GIGA_SPEECH_LOCAL_ROOT/data/meta
 declare -A subsets
 subsets=([train]="XL" [dev]="DEV" [test]="TEST")
 
+meta_dir=$data_dir/${prefix}corpus/meta
 if [ $stage -le 1 ]; then
-  # All data.
-  [ ! -d $data_dir/${prefix}corpus ] && mkdir -p $data_dir/${prefix}corpus
+  # Sanity check.
+  [ ! -f $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json ] &&\
+    echo "$0: Please Download the GigaSpeech.json file!" && exit 1
+  [ ! -d $GIGA_SPEECH_LOCAL_ROOT/audio ] &&\
+    echo "$0: Please Download the audio collection!" && exit 1
 
+  [ ! -d $meta_dir ] && mkdir -p $meta_dir
+
+  # Files to be created:
+  # wav.scp reco2md5 utt2spk text and segments utt2dur reco2durare
+  if [ "$use_pipe" = true ]; then
+    python3 utils/analyze_meta.py \
+      --pipe-format $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir || exit 1
+  else
+    python3 utils/analyze_meta.py \
+      $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir || exit 1
+    toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp || exit 1
+  fi
+fi
+
+if [ $stage -le 2 ]; then
   for f in utt2spk wav.scp text segments utt2dur reco2dur; do
     [ -f $meta_dir/$f ] && cp $meta_dir/$f $data_dir/${prefix}corpus/
   done
@@ -42,7 +61,7 @@ if [ $stage -le 1 ]; then
   sed -i 's/[ ][ ]*/ /g' $data_dir/${prefix}corpus/text || exit 1
 fi
 
-if [ $stage -le 2 ]; then
+if [ $stage -le 3 ]; then
   # Split data to train, dev and test.
   [ ! -f $meta_dir/utt2subsets ] &&\
     echo "$0: Error: No such file $meta_dir/utt2subsets!" && exit 1
