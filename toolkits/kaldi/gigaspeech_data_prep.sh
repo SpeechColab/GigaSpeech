@@ -73,7 +73,7 @@ if [ $stage -le 3 ]; then
     echo "$0: Error: No such file $meta_dir/utt2subsets!" && exit 1
   for subset in ${!subsets[*]}; do
     [ ! -d $data_dir/${prefix}$subset ] && mkdir -p $data_dir/${prefix}$subset
-    tag=${subsets[$subet]}
+    tag=${subsets[$subset]}
     grep "{$tag}" $meta_dir/utt2subsets |\
       subset_data_dir.sh --utt-list - \
       $data_dir/${prefix}corpus $data_dir/${prefix}$subset || exit 1
