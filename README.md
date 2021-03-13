@@ -8,18 +8,21 @@ A Large, modern and evolving dataset for automatic speech recognition.
 | Audiobook      |  2,655        |
 | ***total***    |  ***10,000*** |
 
-## Subsets & Target usage
+## Training Set
 We organize the entire dataset via 5 subsets, targeting on different users.
 
-| Subset   |    Size(Hours)    |  Target Usage  |
-|:---------------|:-------------:|:-------------:|
-| XS        |  10        | coding/debugging for pipeline/recipe |
-| S        |  250        | quick research experiment for new ideas |
-| M      |  1000        | serious research experiment / quick industrial experiment |
-| L      |  2500        | serious industial-scale experiment |
-| XL      |  10000        | building industrial-scale system |
+| Subset   | Notation |    Size(Hours)    |  Target Usage  |
+|:---------------|:-------------:|:-------------:|:-------------|
+| eXtra Small | XS        |  10        |coding/debugging for pipeline/recipe |
+| Small | S        |  250        |quick research experiment for new ideas |
+| Medium | M      |  1000        | serious research experiment / quick industrial experiment |
+| Large | L      |  2500        | serious industial-scale experiment |
+| eXtra Large | XL      |  10000        | industrial-scale system building|
 
-(`XL` includes (`L` includes (`M` includes (`S` includes `XS`)))) 
+{`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
+
+
+## Dev/Testing Set
 
 
 ## Dataset Download
