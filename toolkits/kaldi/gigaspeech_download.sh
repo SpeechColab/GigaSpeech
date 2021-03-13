@@ -8,9 +8,6 @@ set -e
 
 stage=0
 
-pipe_format=true
-meta_dir=$GIGA_SPEECH_LOCAL_ROOT/data/meta
-
 if [ $stage -le 0 ]; then
   utils/setup_oss_for_downloading.sh || exit 1
 fi
@@ -28,25 +25,6 @@ if [ $stage -le 1 ]; then
 fi
 
 if [ $stage -le 2 ]; then
-  # Sanity check.
-  [ ! -f $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json ] &&\
-    echo "$0: Please Download the GigaSpeech.json file!" && exit 1
-  [ ! -d $GIGA_SPEECH_LOCAL_ROOT/audio ] &&\
-    echo "$0: Please Download the audio collection!" && exit 1
-
-  # Files to be created:
-  # wav.scp reco2md5 utt2spk text and segments utt2dur reco2durare
-  if $pipe_format; then
-    python3 utils/analyze_meta.py \
-      --pipe-format $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir || exit 1
-  else
-    python3 utils/analyze_meta.py \
-      $GIGA_SPEECH_LOCAL_ROOT/GigaSpeech.json $meta_dir || exit 1
-    toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp || exit 1
-  fi
-fi
-
-if [ $stage -le 3 ]; then
   # Verify the data size or md5.
   echo "$0: Please add scripts for checking data"
 fi
