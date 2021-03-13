@@ -14,7 +14,7 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-gigaspeech_src=$1
+gigaspeech_dataset_local_dir=$1
 
 if ! which jq >/dev/null; then
   echo "$0: You have to get jq installed in order to use this. See"
@@ -22,6 +22,4 @@ if ! which jq >/dev/null; then
   exit 1
 fi
 
-cat $gigaspeech_src/GigaSpeech.json | jq -r '.audios[].path' || exit 1
-
-echo "$0: Done"
+cat $gigaspeech_dataset_local_dir/GigaSpeech.json | jq -r '.audios[].path' || exit 1
