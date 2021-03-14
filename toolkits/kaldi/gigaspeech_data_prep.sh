@@ -6,8 +6,8 @@ set -e
 stage=1
 
 if [ $# -lt 3 ] || [ $# -gt 4 ]; then
-  echo "Usage: $0 <gigaspeech-src> <data-dir> <use-pipe> [<subset-prefix>]"
-  echo " e.g.: $0 ~/gigaspeech_data data/ true gigaspeech"
+  echo "Usage: $0 <gigaspeech-dataset-dir> <data-dir> <use-pipe> [<subset-prefix>]"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech data/ true gigaspeech"
   echo ""
   echo "This script takes the GigaSpeech source directory, and prepares the"
   echo "Kaldi format data directory. When <use-pipe> is true, it decodes the"
@@ -17,7 +17,7 @@ if [ $# -lt 3 ] || [ $# -gt 4 ]; then
   exit 1
 fi
 
-gigaspeech_src=$1
+gigaspeech_dir=$1
 data_dir=$2
 use_pipe=$3
 prefix=
@@ -31,10 +31,10 @@ subsets=([train]="XL" [dev]="DEV" [test]="TEST")
 meta_dir=$data_dir/${prefix}corpus/meta
 if [ $stage -le 1 ]; then
   # Sanity check.
-  [ ! -f $gigaspeech_src/GigaSpeech.json ] &&\
-    echo "$0: Please download $gigaspeech_src/GigaSpeech.json!" && exit 1
-  [ ! -d $gigaspeech_src/audio ] &&\
-    echo "$0: Please download $gigaspeech_src/audio!" && exit 1
+  [ ! -f $gigaspeech_dir/GigaSpeech.json ] &&\
+    echo "$0: Please download $gigaspeech_dir/GigaSpeech.json!" && exit 1
+  [ ! -d $gigaspeech_dir/audio ] &&\
+    echo "$0: Please download $gigaspeech_dir/audio!" && exit 1
 
   [ ! -d $meta_dir ] && mkdir -p $meta_dir
 
@@ -42,11 +42,11 @@ if [ $stage -le 1 ]; then
   # wav.scp reco2md5 utt2spk text and segments utt2dur reco2durare
   if [ "$use_pipe" = true ]; then
     python3 utils/analyze_meta.py \
-      --pipe-format $gigaspeech_src/GigaSpeech.json $meta_dir || exit 1
+      --pipe-format $gigaspeech_dir/GigaSpeech.json $meta_dir || exit 1
   else
     python3 utils/analyze_meta.py \
-      $gigaspeech_src/GigaSpeech.json $meta_dir || exit 1
-    toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp || exit 1
+      $gigaspeech_dir/GigaSpeech.json $meta_dir || exit 1
+    toolkits/kaldi/opus_to_wav.sh --grid-engine $meta_dir/wav.scp || exit 1
   fi
 fi
 

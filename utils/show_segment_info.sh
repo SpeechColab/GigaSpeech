@@ -6,8 +6,8 @@
 set -e
 
 if [ $# -ne 2 ]; then
-  echo "Usage: $0 <gigaspeech-src> <segment-id>"
-  echo " e.g.: $0 ~/gigaspeech_data POD1000000004_S0000000"
+  echo "Usage: $0 <gigaspeech-dataset-local-dir> <segment-id>"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech POD1000000004_S0000000"
   echo ""
   echo "This script extracts information from GigaSpeech.json for the given"
   echo "segment."

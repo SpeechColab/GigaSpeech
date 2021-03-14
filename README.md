@@ -8,6 +8,22 @@ A Large, modern and evolving dataset for automatic speech recognition.
 | Audiobook      |  2,655        |
 | ***total***    |  ***10,000*** |
 
+## Training Set
+We organize the entire dataset via 5 subsets, targeting on different users.
+
+| Subset   | Notation |    Size(Hours)    |  Target Usage  |
+|:---------------|:-------------:|:-------------:|:-------------|
+| eXtra Small | XS        |  10        |coding/debugging for pipeline/recipe |
+| Small | S        |  250        |quick research experiment for new ideas |
+| Medium | M      |  1000        | serious research experiment / quick industrial experiment |
+| Large | L      |  2500        | serious industial-scale experiment |
+| eXtra Large | XL      |  10000        | industrial-scale system building|
+
+{`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
+
+
+## Dev/Testing Set
+
 
 ## Dataset Download
 To download the dataset, do the following steps:
@@ -32,8 +48,8 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-utils/gigaspeech_download.sh ~/gigaspeech_src
-toolkits/kaldi/gigaspeech_data_prep.sh ~/gigaspeech_src ../data true gigaspeech
+utils/gigaspeech_download.sh /disk1/audio_data/gigaspeech
+toolkits/kaldi/gigaspeech_data_prep.sh /disk1/audio_data/gigaspeech ../data true gigaspeech
 cd ..
 ```
 
