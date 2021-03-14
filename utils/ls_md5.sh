@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2021  Jiayu Du
-#                 Seasalt AI, Inc (Author: Guoguo Chen)
-
+# Copyright 2021  SpeechColab Authors
 
 set -e
 
@@ -9,7 +7,8 @@ if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-local-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script lists all audio files that are used in the dataset release."
+  echo "This script lists md5 for all audios in dataset"
+  echo "can be used in data consistency check"
   exit 1
 fi
 
@@ -21,4 +20,4 @@ if ! which jq >/dev/null; then
   exit 1
 fi
 
-cat $gigaspeech_dataset_local_dir/GigaSpeech.json | jq -r '.audios[].path' || exit 1
+cat $gigaspeech_dataset_local_dir/GigaSpeech.json | jq -r '.audios[] | "\(.md5) \(.path)"' || exit 1
