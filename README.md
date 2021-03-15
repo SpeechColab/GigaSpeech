@@ -52,16 +52,16 @@ utils/gigaspeech_download.sh /disk1/audio_data/gigaspeech
 toolkits/kaldi/gigaspeech_data_prep.sh /disk1/audio_data/gigaspeech ../data true gigaspeech
 cd ..
 ```
-#### Some Notes on text processing
-1. By design we have punctuations in supervision labels. To be specific, 4 punctuations may appear in utterance's `text_tn` section, they are:
+#### Notes on Text Processing
+1. By design we have punctuations in labels. To be specific, 4 punctuations may appear in utterance's `text_tn` section, they are:
    ```
    <COMMA>
    <PERIOD>
    <QUESTIONMARK>
    <EXCLAMATIONPOINT>
    ```
-1. meta tags in DEV/TEST sets:
-   our DEV/TEST sets are labelled by human annotators, they are required to label every single piece of the entire audio. So when some piece of the audio are not human speech, they label it with a set of meta tags.
+2. Meta tags in DEV/TEST sets:
+   our DEV/TEST sets are labelled by human annotators, they are instructed to label every single piece of the entire audio. So if part of audio is not human speech, they label it with a set of meta tags.
    A *complete table* of meta tags are listed below:
    ```
    <SIL> # silence segment
