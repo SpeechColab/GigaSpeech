@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2021  Xiaomi Corporation (Author: Yongqing Wang)
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
+#                 Jiayu DU
 
 set -e
 
@@ -40,7 +41,8 @@ fi
 
 if [ $stage -le 2 ]; then
   # Verify the data size or md5.
-  echo "$0: Please add scripts for checking data"
+  echo "$0: Checking md5 of downloaded audio files"
+  utils/check_downloaded_audio_md5.sh $dir || exit 1
 fi
 
 echo "$0: Done"

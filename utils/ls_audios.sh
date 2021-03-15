@@ -9,8 +9,7 @@ if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-local-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script lists the audio files that are not used in the current"
-  echo "dataset release."
+  echo "This script lists all audio files in dataset release."
   exit 1
 fi
 
@@ -22,4 +21,5 @@ if ! which jq >/dev/null; then
   exit 1
 fi
 
-cat $gigaspeech_dataset_local_dir/GigaSpeech.json | jq -r '.audios[].path' || exit 1
+cat $gigaspeech_dataset_local_dir/GigaSpeech.json \
+  | jq -r '.audios[].path' || exit 1
