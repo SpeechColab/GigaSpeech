@@ -12,10 +12,9 @@ fi
 
 gigaspeech_dataset_dir=$1
 
-utils/ls_md5.sh > $gigaspeech_dataset_dir/md5 || exit 1
+utils/ls_md5.sh $gigaspeech_dataset_dir > $gigaspeech_dataset_dir/md5.list || exit 1
 
 cd $gigaspeech_dataset_dir
-md5sum -c md5 >& md5_check.log || exit 1
-cd -
-
+md5sum -c md5.list >& md5_check.log || exit 1
 echo "$0: Done md5 consistency checking, log generated in $gigaspeech_dataset_dir/md5_check.log"
+cd -
