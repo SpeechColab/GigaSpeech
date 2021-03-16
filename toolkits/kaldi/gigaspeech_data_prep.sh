@@ -3,7 +3,7 @@
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
 
 set -e
-stage=3
+stage=1
 
 if [ $# -lt 3 ] || [ $# -gt 4 ]; then
   echo "Usage: $0 <gigaspeech-src> <data-dir> <use-pipe> [<subset-prefix>]"
