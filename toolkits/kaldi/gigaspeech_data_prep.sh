@@ -33,7 +33,7 @@ subsets=([train]="XL" [dev]="DEV" [test]="TEST")
 
 corpus_dir=$data_dir/${prefix}corpus/
 if [ $stage -le 1 ]; then
-  echo "$0: Analyze meta into $corpus_dir"
+  echo "$0: Extract meta into $corpus_dir"
   # Sanity check.
   [ ! -f $gigaspeech_src/GigaSpeech.json ] &&\
     echo "$0: Please download $gigaspeech_src/GigaSpeech.json!" && exit 1
@@ -45,10 +45,10 @@ if [ $stage -le 1 ]; then
   # Files to be created:
   # wav.scp utt2spk text and segments utt2dur reco2dur spk2utt
   if [ "$use_pipe" = true ]; then
-    python3 toolkits/kaldi/extract_corpus_for_kaldi.py \
+    python3 toolkits/kaldi/extract_meta.py \
       --pipe-format $gigaspeech_src/GigaSpeech.json $corpus_dir || exit 1
   else
-    python3 toolkits/kaldi/extract_corpus_for_kaldi.py \
+    python3 toolkits/kaldi/extract_meta.py \
       $gigaspeech_src/GigaSpeech.json $corpus_dir || exit 1
     toolkits/kaldi/opus_to_wav.sh --grid-engine $corpus_dir/wav.scp || exit 1
   fi
