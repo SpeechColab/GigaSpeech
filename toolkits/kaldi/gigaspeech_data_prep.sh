@@ -25,58 +25,68 @@ if [ $# -eq 4 ]; then
   prefix=${3}_
 fi
 
+garbage_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
+punctuations_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
+
 declare -A subsets
 subsets=([train]="XL" [dev]="DEV" [test]="TEST")
 
-meta_dir=$data_dir/${prefix}corpus/meta
+corpus_dir=$data_dir/${prefix}corpus/
 if [ $stage -le 1 ]; then
+  echo "$0: Extract meta into $corpus_dir"
   # Sanity check.
   [ ! -f $gigaspeech_src/GigaSpeech.json ] &&\
     echo "$0: Please download $gigaspeech_src/GigaSpeech.json!" && exit 1
   [ ! -d $gigaspeech_src/audio ] &&\
     echo "$0: Please download $gigaspeech_src/audio!" && exit 1
 
-  [ ! -d $meta_dir ] && mkdir -p $meta_dir
+  [ ! -d $corpus_dir ] && mkdir -p $corpus_dir
 
   # Files to be created:
-  # wav.scp reco2md5 utt2spk text and segments utt2dur reco2durare
+  # wav.scp utt2spk text and segments utt2dur reco2dur spk2utt
   if [ "$use_pipe" = true ]; then
-    python3 utils/analyze_meta.py \
-      --pipe-format $gigaspeech_src/GigaSpeech.json $meta_dir || exit 1
+    python3 toolkits/kaldi/extract_meta.py \
+      --pipe-format $gigaspeech_src/GigaSpeech.json $corpus_dir || exit 1
   else
-    python3 utils/analyze_meta.py \
-      $gigaspeech_src/GigaSpeech.json $meta_dir || exit 1
-    toolkits/kaldi/run_opus2wav.sh --grid-engine $meta_dir/wav.scp || exit 1
+    python3 toolkits/kaldi/extract_meta.py \
+      $gigaspeech_src/GigaSpeech.json $corpus_dir || exit 1
+    toolkits/kaldi/opus_to_wav.sh --grid-engine $corpus_dir/wav.scp || exit 1
   fi
+  utt2spk=$corpus_dir/utt2spk
+  spk2utt=$corpus_dir/spk2utt
+  utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
+    (echo "$0: Error: utt2spk to spk2utt" && exit 1)
 fi
 
 if [ $stage -le 2 ]; then
-  for f in utt2spk wav.scp text segments utt2dur reco2dur; do
-    [ -f $meta_dir/$f ] && cp $meta_dir/$f $data_dir/${prefix}corpus/
+  echo "$0: Filter $corpus_dir/text"
+  # Delete utterances with garbage meta tags
+  for tag in $garbage_tags; do
+    sed -i "/${tag}/d" $corpus_dir/text
   done
 
-  utt2spk=$data_dir/${prefix}corpus/utt2spk
-  spk2utt=$data_dir/${prefix}corpus/spk2utt
-  utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
-    (echo "$0: Error: utt2spk to spk2utt" && exit 1)
+  # Delete punctuations in utterances
+  for tag in $punctuations_tags; do
+    sed -i "s/${tag}//g" $corpus_dir/text
+  done
 
-  # Delete <*> tag
-  sed -i '/<MUSIC>/d' $data_dir/${prefix}corpus/text || exit 1
-  sed -i '/<NOISE>/d' $data_dir/${prefix}corpus/text || exit 1
-  sed -i "s|<[^>]*>||g" $data_dir/${prefix}corpus/text || exit 1
-  sed -i 's/[ ][ ]*/ /g' $data_dir/${prefix}corpus/text || exit 1
+  # Ensure space only appears once and utt is seprated with others by '\t'
+  sed -i 's/\t/ /g' $corpus_dir/text
+  sed -i 's/[ ][ ]*/ /g' $corpus_dir/text
+  sed -i 's/ /\t/' $corpus_dir/text
 fi
 
 if [ $stage -le 3 ]; then
+  echo "$0: Split data to train, dev and test"
   # Split data to train, dev and test.
-  [ ! -f $meta_dir/utt2subsets ] &&\
-    echo "$0: Error: No such file $meta_dir/utt2subsets!" && exit 1
+  [ ! -f $corpus_dir/utt2subsets ] &&\
+    echo "$0: Error: No such file $corpus_dir/utt2subsets!" && exit 1
   for subset in ${!subsets[*]}; do
     [ ! -d $data_dir/${prefix}$subset ] && mkdir -p $data_dir/${prefix}$subset
-    tag=${subsets[$subet]}
-    grep "{$tag}" $meta_dir/utt2subsets |\
+    tag=${subsets[$subset]}
+    grep "{$tag}" $corpus_dir/utt2subsets |\
       subset_data_dir.sh --utt-list - \
-      $data_dir/${prefix}corpus $data_dir/${prefix}$subset || exit 1
+      $corpus_dir $data_dir/${prefix}$subset || exit 1
   done
 fi
 
