@@ -8,6 +8,22 @@ A Large, modern and evolving dataset for automatic speech recognition.
 | Audiobook      |  2,655        |
 | ***total***    |  ***10,000*** |
 
+## Training Set
+We organize the entire dataset via 5 subsets, targeting on different users.
+
+| Subset   | Notation |    Size(Hours)    |  Target Usage  |
+|:---------------|:-------------:|:-------------:|:-------------|
+| eXtra Small | XS        |  10        |coding/debugging for pipeline/recipe |
+| Small | S        |  250        |quick research experiment for new ideas |
+| Medium | M      |  1000        | serious research experiment / quick industrial experiment |
+| Large | L      |  2500        | serious industial-scale experiment |
+| eXtra Large | XL      |  10000        | industrial-scale system building|
+
+{`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
+
+
+## Dev/Testing Set
+
 
 ## Dataset Download
 To download the dataset, do the following steps:
@@ -32,10 +48,28 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-utils/gigaspeech_download.sh ~/gigaspeech_src
-toolkits/kaldi/gigaspeech_data_prep.sh ~/gigaspeech_src ../data true gigaspeech
+utils/gigaspeech_download.sh /disk1/audio_data/gigaspeech
+toolkits/kaldi/gigaspeech_data_prep.sh /disk1/audio_data/gigaspeech ../data true gigaspeech
 cd ..
 ```
+#### Notes on Text Processing
+1. By design we have punctuations in labels. To be specific, 4 punctuations may appear in utterance's `text_tn` section, they are:
+   ```
+   <COMMA>
+   <PERIOD>
+   <QUESTIONMARK>
+   <EXCLAMATIONPOINT>
+   ```
+2. Meta tags in DEV/TEST sets:
+   our DEV/TEST sets are labelled by human annotators, they are instructed to label every single piece of the entire audio. So if part of audio is not human speech, they label it with a set of meta tags.
+   A *complete table* of meta tags are listed below:
+   ```
+   <SIL> # silence segment
+   <MUSIC> # music segment
+   <NOISE> # noise segment
+   <OTHER> # something else, that human annotators can't tell what it is, i.e. garbage
+   ```
+   Normally, utterances with these tags are not supposed to be used in ASR system, so our recommendation is to discard these utterances in downstream training/testing. The reason why we keep these tags is to keep the integrity of human labels, so there is no "gap" inside DEV/TEST labels.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow

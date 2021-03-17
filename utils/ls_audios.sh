@@ -6,15 +6,14 @@
 set -e
 
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 <gigaspeech-src>"
-  echo " e.g.: $0 ~/gigaspeech_data"
+  echo "Usage: $0 <gigaspeech-dataset-local-dir>"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script lists the audio files that are not used in the current"
-  echo "dataset release."
+  echo "This script lists all audio files in dataset release."
   exit 1
 fi
 
-gigaspeech_src=$1
+gigaspeech_dataset_local_dir=$1
 
 if ! which jq >/dev/null; then
   echo "$0: You have to get jq installed in order to use this. See"
@@ -22,6 +21,5 @@ if ! which jq >/dev/null; then
   exit 1
 fi
 
-cat $gigaspeech_src/GigaSpeech.json | jq -r '.audios[].path' || exit 1
-
-echo "$0: Done"
+cat $gigaspeech_dataset_local_dir/GigaSpeech.json \
+  | jq -r '.audios[].path' || exit 1

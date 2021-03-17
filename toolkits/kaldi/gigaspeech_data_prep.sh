@@ -6,8 +6,8 @@ set -e
 stage=1
 
 if [ $# -lt 3 ] || [ $# -gt 4 ]; then
-  echo "Usage: $0 <gigaspeech-src> <data-dir> <use-pipe> [<subset-prefix>]"
-  echo " e.g.: $0 ~/gigaspeech_data data/ true gigaspeech"
+  echo "Usage: $0 <gigaspeech-dataset-dir> <data-dir> <use-pipe> [<subset-prefix>]"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech data/ true gigaspeech"
   echo ""
   echo "This script takes the GigaSpeech source directory, and prepares the"
   echo "Kaldi format data directory. When <use-pipe> is true, it decodes the"
@@ -17,7 +17,7 @@ if [ $# -lt 3 ] || [ $# -gt 4 ]; then
   exit 1
 fi
 
-gigaspeech_src=$1
+gigaspeech_dir=$1
 data_dir=$2
 use_pipe=$3
 prefix=
@@ -35,10 +35,10 @@ corpus_dir=$data_dir/${prefix}corpus/
 if [ $stage -le 1 ]; then
   echo "$0: Extract meta into $corpus_dir"
   # Sanity check.
-  [ ! -f $gigaspeech_src/GigaSpeech.json ] &&\
-    echo "$0: Please download $gigaspeech_src/GigaSpeech.json!" && exit 1
-  [ ! -d $gigaspeech_src/audio ] &&\
-    echo "$0: Please download $gigaspeech_src/audio!" && exit 1
+  [ ! -f $gigaspeech_dir/GigaSpeech.json ] &&\
+    echo "$0: Please download $gigaspeech_dir/GigaSpeech.json!" && exit 1
+  [ ! -d $gigaspeech_dir/audio ] &&\
+    echo "$0: Please download $gigaspeech_dir/audio!" && exit 1
 
   [ ! -d $corpus_dir ] && mkdir -p $corpus_dir
 
