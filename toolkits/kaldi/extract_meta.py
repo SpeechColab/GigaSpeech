@@ -40,14 +40,12 @@ def meta_analysis(input_json, output_dir, pipe):
            open(f'{output_dir}/text', 'w') as utt2text, \
            open(f'{output_dir}/segments', 'w') as segments, \
            open(f'{output_dir}/wav.scp', 'w') as wavscp, \
-           open(f'{output_dir}/reco2md5', 'w') as reco2md5, \
            open(f'{output_dir}/reco2dur', 'w') as reco2dur:
         for long_audio in json_data['audios']:
           try:
             long_audio_path = os.path.realpath(os.path.join(input_dir, long_audio['path']))
             fname, fename = os.path.splitext(long_audio['path'])
             reco_name = os.path.basename(fname)
-            md5str = long_audio['md5']
             segments_lists = long_audio['segments']
             duration = long_audio['duration']
             assert(os.path.exists(long_audio_path))
@@ -64,7 +62,6 @@ def meta_analysis(input_json, output_dir, pipe):
               wavscp.write(f'{reco_name}\tffmpeg -i {long_audio_path} -ar 16000 -f wav pipe:1 |\n')
             else:
               wavscp.write(f'{reco_name}\t{long_audio_path}\n')
-            reco2md5.write(f'{reco_name}\t{md5str}\n')
             reco2dur.write(f'{reco_name}\t{duration}\n')
             for segment_file in segments_lists:
               try:
