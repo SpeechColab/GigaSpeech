@@ -27,7 +27,7 @@ dir=$1
 [ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
 
 $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp ${GIGA_SPEECH_RELEASE_URL}/GigaSpeech.json \
+  cp -u ${GIGA_SPEECH_RELEASE_URL}/GigaSpeech.json \
   $dir/GigaSpeech.json || exit 1
 
 echo "$0: Done"

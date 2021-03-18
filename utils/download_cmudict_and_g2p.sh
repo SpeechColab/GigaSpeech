@@ -26,9 +26,9 @@ dir=$1
 [ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
 
 $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a \
+  cp -u ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a \
   $dir/dict/cmudict.0.7a || exit 1
 $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp -r ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $dir/dict/ || exit 1
+  cp -ur ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $dir/dict/ || exit 1
 
 echo "$0: Done"
