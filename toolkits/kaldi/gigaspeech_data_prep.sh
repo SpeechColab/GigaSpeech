@@ -46,10 +46,10 @@ if [ $stage -le 1 ]; then
   # wav.scp utt2spk text and segments utt2dur reco2dur spk2utt
   if [ "$use_pipe" = true ]; then
     python3 toolkits/kaldi/extract_meta.py \
-      --pipe-format $gigaspeech_src/GigaSpeech.json $corpus_dir || exit 1
+      --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1
   else
     python3 toolkits/kaldi/extract_meta.py \
-      $gigaspeech_src/GigaSpeech.json $corpus_dir || exit 1
+      $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1
     toolkits/kaldi/opus_to_wav.sh --grid-engine $corpus_dir/wav.scp || exit 1
   fi
   utt2spk=$corpus_dir/utt2spk
