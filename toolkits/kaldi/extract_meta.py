@@ -44,28 +44,27 @@ def meta_analysis(input_json, output_dir, pipe):
         for long_audio in json_data['audios']:
           try:
             long_audio_path = os.path.realpath(os.path.join(input_dir, long_audio['path']))
-            fname, fename = os.path.splitext(long_audio['path'])
-            reco_name = os.path.basename(fname)
+            aid = long_audio['aid']
             segments_lists = long_audio['segments']
             duration = long_audio['duration']
             assert(os.path.exists(long_audio_path))
             assert('opus' == long_audio['format'])
             assert(16000 == long_audio['sample_rate'])
           except AssertionError:
-            print(f'Warning: {reco_name} something is wrong, maybe AssertionError, skipped')
+            print(f'Warning: {aid} something is wrong, maybe AssertionError, skipped')
             continue
           except:
-            print(f'Warning: {reco_name} something is wrong, maybe the error path: {long_audio_path}, skipped')
+            print(f'Warning: {aid} something is wrong, maybe the error path: {long_audio_path}, skipped')
             continue
           else:
             if pipe is True:
-              wavscp.write(f'{reco_name}\tffmpeg -i {long_audio_path} -ar 16000 -f wav pipe:1 |\n')
+              wavscp.write(f'{aid}\tffmpeg -i {long_audio_path} -ar 16000 -f wav pipe:1 |\n')
             else:
-              wavscp.write(f'{reco_name}\t{long_audio_path}\n')
-            reco2dur.write(f'{reco_name}\t{duration}\n')
+              wavscp.write(f'{aid}\t{long_audio_path}\n')
+            reco2dur.write(f'{aid}\t{duration}\n')
             for segment_file in segments_lists:
               try:
-                uuid = segment_file['uuid']
+                sid = segment_file['sid']
                 start_time = segment_file['begin_time']
                 end_time = segment_file['end_time']
                 dur = end_time - start_time
@@ -75,12 +74,12 @@ def meta_analysis(input_json, output_dir, pipe):
                 print(f'Warning: {segment_file} something is wrong, skipped')
                 continue
               else:
-                utt2spk.write(f'{uuid}\t{uuid}\n')
-                utt2dur.write(f'{uuid}\t{dur}\n')
-                utt2text.write(f'{uuid}\t{text}\n')
-                segments.write(f'{uuid}\t{reco_name}\t{start_time}\t{end_time}\n')
+                utt2spk.write(f'{sid}\t{sid}\n')
+                utt2dur.write(f'{sid}\t{dur}\n')
+                utt2text.write(f'{sid}\t{text}\n')
+                segments.write(f'{sid}\t{aid}\t{start_time}\t{end_time}\n')
                 segment_sub_names = " " .join(segment_subsets)
-                utt2subsets.write(f'{uuid}\t{segment_sub_names}\n')
+                utt2subsets.write(f'{sid}\t{segment_sub_names}\n')
 
 
 def main():
