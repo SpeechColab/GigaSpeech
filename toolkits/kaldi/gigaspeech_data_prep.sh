@@ -29,7 +29,7 @@ garbage_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
 punctuations_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
 
 declare -A subsets
-subsets=([train]="XL" [dev]="DEV" [test]="TEST")
+subsets=([train_XL]="XL" [train_L]="L" [train_M]="M" [train_S]="S" [dev]="DEV" [test]="TEST")
 
 corpus_dir=$data_dir/${prefix}corpus/
 if [ $stage -le 1 ]; then
@@ -87,6 +87,7 @@ if [ $stage -le 3 ]; then
     grep "{$tag}" $corpus_dir/utt2subsets |\
       subset_data_dir.sh --utt-list - \
       $corpus_dir $data_dir/${prefix}$subset || exit 1
+    fix_data_dir.sh $data_dir/${prefix}$subset || exit 1
   done
 fi
 
