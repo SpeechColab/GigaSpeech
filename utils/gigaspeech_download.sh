@@ -42,7 +42,7 @@ fi
 if [ $stage -le 2 ]; then
   # Verify the data size or md5.
   echo "$0: Checking md5 of downloaded audio files"
-  utils/check_downloaded_audio_md5.sh $dir || exit 1
+  utils/check_audio_md5.sh $dir || exit 1
 fi
 
 echo "$0: Done"
