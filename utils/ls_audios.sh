@@ -16,10 +16,11 @@ fi
 gigaspeech_dataset_local_dir=$1
 
 if ! which jq >/dev/null; then
-  echo "$0: You have to get jq installed in order to use this. See"
-  echo "$0: utils/install_jq.sh"
+  >&2 echo "$0: You have to get jq installed in order to use this. See"
+  >&2 echo "$0: utils/install_jq.sh"
   exit 1
 fi
 
 cat $gigaspeech_dataset_local_dir/GigaSpeech.json \
-  | jq -r '.audios[].path' || exit 1
+  | jq -r '.audios[].path' |\
+  awk -v prefix="$gigaspeech_dataset_local_dir" '{print prefix"/"$1}' || exit 1

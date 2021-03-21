@@ -18,8 +18,8 @@ gigaspeech_src=$1
 segment_id=$2
 
 if ! which jq >/dev/null; then
-  echo "$0: You have to get jq installed in order to use this. See"
-  echo "$0: utils/install_jq.sh"
+  >&2 echo "$0: You have to get jq installed in order to use this. See"
+  >&2 echo "$0: utils/install_jq.sh"
   exit 1
 fi
 

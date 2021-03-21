@@ -15,15 +15,16 @@ fi
 gigaspeech_dataset_dir=$1
 
 if ! which jq >/dev/null; then
-  echo "$0: You have to get jq installed in order to use this. See"
-  echo "$0: utils/install_jq.sh"
+  >&2 echo "$0: You have to get jq installed in order to use this. See"
+  >&2 echo "$0: utils/install_jq.sh"
   exit 1
 fi
 
 if [ -f $gigaspeech_dataset_dir/GigaSpeech.json ]; then
-  cat $gigaspeech_dataset_dir/GigaSpeech.json \
-    | jq -r '.audios[] | "\(.md5) \(.path)"' || exit 1
+  cat $gigaspeech_dataset_dir/GigaSpeech.json |\
+    jq -r '.audios[] | "\(.md5) \(.path)"' |\
+    awk -v prefix="$gigaspeech_dataset_dir" '{print $1" "prefix"/"$2}' || exit 1
 else
-  echo "$0: ERROR, couldn't find $gigaspeech_dataset_dir/GigaSpeech.json"
+  >&2 echo "$0: ERROR, couldn't find $gigaspeech_dataset_dir/GigaSpeech.json"
   exit 1
 fi
