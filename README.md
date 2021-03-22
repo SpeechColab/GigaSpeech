@@ -13,11 +13,11 @@ We organize the entire dataset via 5 subsets, targeting on different users.
 
 | Subset   | Notation |    Size(Hours)    |  Target Usage  |
 |:---------------|:-------------:|:-------------:|:-------------|
-| eXtra Small | XS        |  10        |coding/debugging for pipeline/recipe |
+| eXtra Small | XS        |  10        |pipeline/recipe coding & debugging |
 | Small | S        |  250        |quick research experiment for new ideas |
 | Medium | M      |  1000        | serious research experiment / quick industrial experiment |
-| Large | L      |  2500        | serious industial-scale experiment |
-| eXtra Large | XL      |  10000        | industrial-scale system building|
+| Large | L      |  2500        | serious industrial experiment |
+| eXtra Large | XL      |  10000        | industrial system building|
 
 {`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
 
@@ -60,16 +60,16 @@ cd ..
    <QUESTIONMARK>
    <EXCLAMATIONPOINT>
    ```
-2. Meta tags in DEV/TEST sets:
-   our DEV/TEST sets are labelled by human annotators, they are instructed to label every single piece of the entire audio. So if part of audio is not human speech, they label it with a set of meta tags.
-   A *complete table* of meta tags are listed below:
+2. Grabage meta tags in DEV/TEST sets:
+   our DEV/TEST sets are labelled by human annotators, they are instructed to label every single piece of the entire audio. So if part of audio is not human speech, they label it with a set of garbage meta tags.
+   A *complete table* of garbage meta tags are listed below:
    ```
-   <SIL> # silence segment
-   <MUSIC> # music segment
-   <NOISE> # noise segment
-   <OTHER> # something else, that human annotators can't tell what it is, i.e. garbage
+   <SIL>
+   <MUSIC>
+   <NOISE>
+   <OTHER>
    ```
-   Normally, utterances with these tags are not supposed to be used in ASR system, so our recommendation is to discard these utterances in downstream training/testing. The reason why we keep these tags is to keep the integrity of human labels, so there is no "gap" inside DEV/TEST labels.
+   Garbage meta tags are utterance level, meaning these utterances are not considered to be valid speech. So our recommendation is to discard these utterances in downstream training/testing. The reason why we keep these tags is to keep the integrity of human labels, so there is no "gap" inside DEV/TEST labels.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
