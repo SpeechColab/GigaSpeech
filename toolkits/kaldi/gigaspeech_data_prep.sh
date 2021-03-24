@@ -4,32 +4,112 @@
 
 set -e
 stage=1
+prefix=gigaspeech
+use_pipe=true
+garbage_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
+punctuation_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
+train_subset=XL
 
-if [ $# -lt 3 ] || [ $# -gt 4 ]; then
-  echo "Usage: $0 <gigaspeech-dataset-dir> <data-dir> <use-pipe> [<subset-prefix>]"
-  echo " e.g.: $0 /disk1/audio_data/gigaspeech data/ true gigaspeech"
+while true; do
+  [ -z "${1:-}" ] && break;  # break if there are no arguments
+  case "$1" in
+    --*) name=`echo "$1" | sed s/^--// | sed s/-/_/g`;
+      eval '[ -z "${'$name'+xxx}" ]' &&\
+        echo "$0: invalid option $1" 1>&2 && exit 1;
+
+      oldval="`eval echo \\$$name`";
+      if [ "$oldval" == "true" ] || [ "$oldval" == "false" ]; then
+        was_bool=true;
+      else
+        was_bool=false;
+      fi
+      eval $name=\"$2\";
+      if $was_bool && [[ "$2" != "true" && "$2" != "false" ]]; then
+        echo "$0: expected \"true\" or \"false\": $1 $2" 1>&2
+        exit 1;
+      fi
+      shift 2;
+      ;;
+  *) break;
+  esac
+done
+
+filter_by_id () {
+  idlist=$1
+  input=$2
+  output=$3
+  field=1
+  if [ $# -eq 4 ]; then
+    field=$4
+  fi
+  cat $input | perl -se '
+    open(F, "<$idlist") || die "Could not open id-list file $idlist";
+    while(<F>) {
+      @A = split;
+      @A>=1 || die "Invalid id-list file line $_";
+      $seen{$A[0]} = 1;
+    }
+    while(<>) {
+      @A = split;
+      @A > 0 || die "Invalid file line $_";
+      @A >= $field || die "Invalid file line $_";
+      if ($seen{$A[$field-1]}) {
+        print $_;
+      }
+    }' -- -idlist="$idlist" -field="$field" > $output ||\
+  (echo "$0: Failed to call filter_by_id(): $input" && exit 1)
+}
+
+subset_data_dir () {
+  utt_list=$1
+  src_dir=$2
+  dest_dir=$3
+  mkdir -p $dest_dir || exit 1
+  # wav.scp utt2spk text segments utt2dur reco2dur spk2utt
+  filter_by_id $utt_list $src_dir/utt2spk $dest_dir/utt2spk ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/utt2spk" && exit 1)
+  filter_by_id $utt_list $src_dir/spk2utt $dest_dir/spk2utt 2 ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/spk2utt" && exit 1)
+  filter_by_id $utt_list $src_dir/utt2dur $dest_dir/utt2dur ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/utt2dur" && exit 1)
+  filter_by_id $utt_list $src_dir/text $dest_dir/text ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/text" && exit 1)
+  filter_by_id $utt_list $src_dir/segments $dest_dir/segments ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/segments" && exit 1)
+  awk '{print $2}' $dest_dir/segments | sort | uniq > $destdir/reco
+  filter_by_id $destdir/reco $src_dir/wav.scp $dest_dir/wav.scp ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/wav.scp" && exit 1)
+  filter_by_id $destdir/reco $src_dir/reco2dur $dest_dir/reco2dur ||\
+    (echo "$0: Failed to call subset_data_dir(): $src_dir/reco2dur" && exit 1)
+}
+
+if [ $# -ne 2 ]; then
+  echo "Usage: $0 [options] <gigaspeech-dataset-dir> <data-dir>"
+  echo " e.g.: $0 --train-subset XL /disk1/audio_data/gigaspeech/ data/"
   echo ""
   echo "This script takes the GigaSpeech source directory, and prepares the"
-  echo "Kaldi format data directory. When <use-pipe> is true, it decodes the"
-  echo "OPUS audio format through a pipe; Otherwise it writes the decoded"
-  echo "output to wav files. <subset-prefix> is an optional prefix for Kaldi"
-  echo "data directories."
+  echo "Kaldi format data directory."
+  echo "  --garbage-tags <tags>        # Tags for non-speech."
+  echo "  --prefix <prefix>            # Prefix for output data directory."
+  echo "  --punctuation-tags <tags>    # Tags for punctuations."
+  echo "  --stage <stage>              # Processing stage."
+  echo "  --train-subset <XL|L|M|X>    # Train subset to be created."
+  echo "  --use-pipe <true|false>      # If true, use pipe for OPUS decoding."
   exit 1
 fi
 
 gigaspeech_dir=$1
 data_dir=$2
-use_pipe=$3
-prefix=
-if [ $# -eq 4 ]; then
-  prefix=${3}_
-fi
-
-garbage_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
-punctuations_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
 
 declare -A subsets
-subsets=([train_XL]="XL" [train_L]="L" [train_M]="M" [train_S]="S" [dev]="DEV" [test]="TEST")
+subsets=(
+  [XL]="train_xl"
+  [L]="train_l"
+  [M]="train_m"
+  [S]="train_s"
+  [DEV]="dev"
+  [TEST]="test")
+prefix=${prefix:+${prefix}_}
 
 corpus_dir=$data_dir/${prefix}corpus/
 if [ $stage -le 1 ]; then
@@ -55,7 +135,7 @@ if [ $stage -le 1 ]; then
   utt2spk=$corpus_dir/utt2spk
   spk2utt=$corpus_dir/spk2utt
   utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
-    (echo "$0: Error: utt2spk to spk2utt" && exit 1)
+    (echo "$0: utt2spk to spk2utt" && exit 1)
 fi
 
 if [ $stage -le 2 ]; then
@@ -66,7 +146,7 @@ if [ $stage -le 2 ]; then
   done
 
   # Delete punctuations in utterances
-  for tag in $punctuations_tags; do
+  for tag in $punctuation_tags; do
     sed -i "s/${tag}//g" $corpus_dir/text
   done
 
@@ -80,14 +160,18 @@ if [ $stage -le 3 ]; then
   echo "$0: Split data to train, dev and test"
   # Split data to train, dev and test.
   [ ! -f $corpus_dir/utt2subsets ] &&\
-    echo "$0: Error: No such file $corpus_dir/utt2subsets!" && exit 1
-  for subset in ${!subsets[*]}; do
+    echo "$0: No such file $corpus_dir/utt2subsets!" && exit 1
+  for label in $train_subset DEV TEST; do
+    if [ ! ${subsets[$label]+set} ]; then
+      echo "$0: Subset $label is not defined in GigaSpeech.json."
+      exit 1
+    fi
+    subset=${subsets[$label]}
     [ ! -d $data_dir/${prefix}$subset ] && mkdir -p $data_dir/${prefix}$subset
-    tag=${subsets[$subset]}
-    grep "{$tag}" $corpus_dir/utt2subsets |\
-      subset_data_dir.sh --utt-list - \
+    grep "{$label}" $corpus_dir/utt2subsets \
+      > $corpus_dir/${prefix}${subset}_utt_list|| exit 1
+    subset_data_dir $corpus_dir/${prefix}${subset}_utt_list \
       $corpus_dir $data_dir/${prefix}$subset || exit 1
-    fix_data_dir.sh $data_dir/${prefix}$subset || exit 1
   done
 fi
 
