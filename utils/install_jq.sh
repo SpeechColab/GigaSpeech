@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -o pipefail
+
 if [ `uname -s` == 'Linux' ]; then
   if [ "`grep NAME /etc/os-release | grep Ubuntu`" != "" ] ||\
     [ "`grep NAME /etc/os-release | grep Debian`" != "" ]; then

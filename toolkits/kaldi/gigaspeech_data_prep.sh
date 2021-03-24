@@ -2,7 +2,10 @@
 # Copyright 2021  Xiaomi Corporation (Author: Yongqing Wang)
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
 
+
 set -e
+set -o pipefail
+
 stage=1
 prefix=gigaspeech
 garbage_utterance_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
