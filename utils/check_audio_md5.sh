@@ -21,14 +21,14 @@ failed=false
 utils/ls_md5.sh $gigaspeech_dataset_dir | (while read line; do
   echo $line | md5sum -c --strict --quiet --status 2>/dev/null
   if [ $? -ne 0 ]; then
-    echo "$0: md5 check failed for: \"$line\""
+    echo "$0: md5 verification failed for: \"$line\""
     failed=true
   fi
 done
 
 if [ "$failed" = true ]; then
-  echo "$0: md5 checking failed, check the above logs."
+  echo "$0: md5 verification failed, check the above logs."
   exit 1
 fi) || exit 1
 
-echo "$0: Done md5 checking."
+echo "$0: Done md5 verification."
