@@ -75,11 +75,12 @@ subset_data_dir () {
     (echo "$0: Failed to call subset_data_dir(): $src_dir/text" && exit 1)
   filter_by_id $utt_list $src_dir/segments $dest_dir/segments ||\
     (echo "$0: Failed to call subset_data_dir(): $src_dir/segments" && exit 1)
-  awk '{print $2}' $dest_dir/segments | sort | uniq > $destdir/reco
-  filter_by_id $destdir/reco $src_dir/wav.scp $dest_dir/wav.scp ||\
+  awk '{print $2}' $dest_dir/segments | sort | uniq > $dest_dir/reco
+  filter_by_id $dest_dir/reco $src_dir/wav.scp $dest_dir/wav.scp ||\
     (echo "$0: Failed to call subset_data_dir(): $src_dir/wav.scp" && exit 1)
-  filter_by_id $destdir/reco $src_dir/reco2dur $dest_dir/reco2dur ||\
+  filter_by_id $dest_dir/reco $src_dir/reco2dur $dest_dir/reco2dur ||\
     (echo "$0: Failed to call subset_data_dir(): $src_dir/reco2dur" && exit 1)
+  rm -f $dest_dir/reco
 }
 
 if [ $# -ne 2 ]; then
