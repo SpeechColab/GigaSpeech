@@ -5,7 +5,6 @@
 set -e
 stage=1
 prefix=gigaspeech
-use_pipe=true
 garbage_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
 punctuation_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
 train_subset=XL
@@ -94,7 +93,6 @@ if [ $# -ne 2 ]; then
   echo "  --punctuation-tags <tags>    # Tags for punctuations."
   echo "  --stage <stage>              # Processing stage."
   echo "  --train-subset <XL|L|M|X>    # Train subset to be created."
-  echo "  --use-pipe <true|false>      # If true, use pipe for OPUS decoding."
   exit 1
 fi
 
@@ -124,14 +122,8 @@ if [ $stage -le 1 ]; then
 
   # Files to be created:
   # wav.scp utt2spk text and segments utt2dur reco2dur spk2utt
-  if [ "$use_pipe" = true ]; then
-    python3 toolkits/kaldi/extract_meta.py \
-      --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1
-  else
-    python3 toolkits/kaldi/extract_meta.py \
-      $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1
-    toolkits/kaldi/opus_to_wav.sh --grid-engine $corpus_dir/wav.scp || exit 1
-  fi
+  python3 toolkits/kaldi/extract_meta.py \
+    --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1
   utt2spk=$corpus_dir/utt2spk
   spk2utt=$corpus_dir/spk2utt
   utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
