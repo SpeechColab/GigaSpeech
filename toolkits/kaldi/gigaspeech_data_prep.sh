@@ -93,7 +93,7 @@ if [ $# -ne 2 ]; then
   echo "  --prefix <prefix>                # Prefix for output data directory."
   echo "  --punctuation-tags <tags>        # Tags for punctuations."
   echo "  --stage <stage>                  # Processing stage."
-  echo "  --train-subset <XL|L|M|X>        # Train subset to be created."
+  echo "  --train-subset <XL|L|M|X|XS>     # Train subset to be created."
   exit 1
 fi
 
@@ -106,6 +106,7 @@ subsets=(
   [L]="train_l"
   [M]="train_m"
   [S]="train_s"
+  [XS]="train_xs"
   [DEV]="dev"
   [TEST]="test")
 prefix=${prefix:+${prefix}_}
