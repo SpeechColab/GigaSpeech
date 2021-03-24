@@ -5,7 +5,7 @@
 set -e
 stage=1
 prefix=gigaspeech
-garbage_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
+garbage_utterance_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
 punctuation_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
 train_subset=XL
 
@@ -89,11 +89,11 @@ if [ $# -ne 2 ]; then
   echo ""
   echo "This script takes the GigaSpeech source directory, and prepares the"
   echo "Kaldi format data directory."
-  echo "  --garbage-tags <tags>        # Tags for non-speech."
-  echo "  --prefix <prefix>            # Prefix for output data directory."
-  echo "  --punctuation-tags <tags>    # Tags for punctuations."
-  echo "  --stage <stage>              # Processing stage."
-  echo "  --train-subset <XL|L|M|X>    # Train subset to be created."
+  echo "  --garbage-utterance-tags <tags>  # Tags for non-speech."
+  echo "  --prefix <prefix>                # Prefix for output data directory."
+  echo "  --punctuation-tags <tags>        # Tags for punctuations."
+  echo "  --stage <stage>                  # Processing stage."
+  echo "  --train-subset <XL|L|M|X>        # Train subset to be created."
   exit 1
 fi
 
@@ -134,7 +134,7 @@ fi
 if [ $stage -le 2 ]; then
   echo "$0: Filter $corpus_dir/text"
   # Delete utterances with garbage meta tags
-  for tag in $garbage_tags; do
+  for tag in $garbage_utterance_tags; do
     sed -i "/${tag}/d" $corpus_dir/text
   done
 
