@@ -12,7 +12,7 @@ garbage_utterance_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
 punctuation_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
 train_subset=XL
 
-. ./utils/parse_options.sh || exit 1
+. ./utils/parse_options.sh || exit 1;
 
 filter_by_id () {
   idlist=$1
@@ -37,30 +37,30 @@ filter_by_id () {
         print $_;
       }
     }' -- -idlist="$idlist" -field="$field" > $output ||\
-  (echo "$0: Failed to call filter_by_id(): $input" && exit 1)
+  (echo "$0: filter_by_id() error: $input" && exit 1) || exit 1;
 }
 
 subset_data_dir () {
   utt_list=$1
   src_dir=$2
   dest_dir=$3
-  mkdir -p $dest_dir || exit 1
+  mkdir -p $dest_dir || exit 1;
   # wav.scp utt2spk text segments utt2dur reco2dur spk2utt
   filter_by_id $utt_list $src_dir/utt2spk $dest_dir/utt2spk ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/utt2spk" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/utt2spk" && exit 1) || exit 1;
   filter_by_id $utt_list $src_dir/spk2utt $dest_dir/spk2utt 2 ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/spk2utt" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/spk2utt" && exit 1) || exit 1;
   filter_by_id $utt_list $src_dir/utt2dur $dest_dir/utt2dur ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/utt2dur" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/utt2dur" && exit 1) || exit 1;
   filter_by_id $utt_list $src_dir/text $dest_dir/text ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/text" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/text" && exit 1) || exit 1;
   filter_by_id $utt_list $src_dir/segments $dest_dir/segments ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/segments" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/segments" && exit 1) || exit 1;
   awk '{print $2}' $dest_dir/segments | sort | uniq > $dest_dir/reco
   filter_by_id $dest_dir/reco $src_dir/wav.scp $dest_dir/wav.scp ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/wav.scp" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/wav.scp" && exit 1) || exit 1;
   filter_by_id $dest_dir/reco $src_dir/reco2dur $dest_dir/reco2dur ||\
-    (echo "$0: Failed to call subset_data_dir(): $src_dir/reco2dur" && exit 1)
+    (echo "$0: subset_data_dir() error: $src_dir/reco2dur" && exit 1) || exit 1;
   rm -f $dest_dir/reco
 }
 
@@ -97,20 +97,20 @@ if [ $stage -le 1 ]; then
   echo "$0: Extract meta into $corpus_dir"
   # Sanity check.
   [ ! -f $gigaspeech_dir/GigaSpeech.json ] &&\
-    echo "$0: Please download $gigaspeech_dir/GigaSpeech.json!" && exit 1
+    echo "$0: Please download $gigaspeech_dir/GigaSpeech.json!" && exit 1;
   [ ! -d $gigaspeech_dir/audio ] &&\
-    echo "$0: Please download $gigaspeech_dir/audio!" && exit 1
+    echo "$0: Please download $gigaspeech_dir/audio!" && exit 1;
 
   [ ! -d $corpus_dir ] && mkdir -p $corpus_dir
 
   # Files to be created:
   # wav.scp utt2spk text and segments utt2dur reco2dur spk2utt
   python3 toolkits/kaldi/extract_meta.py \
-    --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1
+    --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1;
   utt2spk=$corpus_dir/utt2spk
   spk2utt=$corpus_dir/spk2utt
   utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
-    (echo "$0: utt2spk to spk2utt" && exit 1)
+    (echo "$0: utt2spk to spk2utt" && exit 1) || exit 1;
 fi
 
 if [ $stage -le 2 ]; then
@@ -135,18 +135,17 @@ if [ $stage -le 3 ]; then
   echo "$0: Split data to train, dev and test"
   # Split data to train, dev and test.
   [ ! -f $corpus_dir/utt2subsets ] &&\
-    echo "$0: No such file $corpus_dir/utt2subsets!" && exit 1
+    echo "$0: No such file $corpus_dir/utt2subsets!" && exit 1;
   for label in $train_subset DEV TEST; do
     if [ ! ${subsets[$label]+set} ]; then
-      echo "$0: Subset $label is not defined in GigaSpeech.json."
-      exit 1
+      echo "$0: Subset $label is not defined in GigaSpeech.json." && exit 1;
     fi
     subset=${subsets[$label]}
     [ ! -d $data_dir/${prefix}$subset ] && mkdir -p $data_dir/${prefix}$subset
     grep "{$label}" $corpus_dir/utt2subsets \
-      > $corpus_dir/${prefix}${subset}_utt_list|| exit 1
+      > $corpus_dir/${prefix}${subset}_utt_list|| exit 1;
     subset_data_dir $corpus_dir/${prefix}${subset}_utt_list \
-      $corpus_dir $data_dir/${prefix}$subset || exit 1
+      $corpus_dir $data_dir/${prefix}$subset || exit 1;
   done
 fi
 
