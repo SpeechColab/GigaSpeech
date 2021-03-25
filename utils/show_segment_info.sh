@@ -4,6 +4,7 @@
 
 
 set -e
+set -o pipefail
 
 if [ $# -ne 2 ]; then
   echo "Usage: $0 <gigaspeech-dataset-local-dir> <segment-id>"

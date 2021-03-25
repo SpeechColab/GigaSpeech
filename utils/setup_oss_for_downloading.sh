@@ -5,6 +5,10 @@
 # Aliyun official Command Line Interface(CLI) for oss storage service. It is
 # open sourced at https://github.com/aliyun/ossutil
 
+
+set -e
+set -o pipefail
+
 [ ! -d tools/downloader ] && mkdir -p tools/downloader
 
 if [ `uname -s` == 'Linux' ]; then

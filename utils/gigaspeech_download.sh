@@ -3,7 +3,9 @@
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
 #                 Jiayu DU
 
+
 set -e
+set -o pipefail
 
 stage=0
 

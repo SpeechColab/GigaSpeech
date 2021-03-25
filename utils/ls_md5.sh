@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Copyright 2021  SpeechColab Authors
 
+
 set -e
+set -o pipefail
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
