@@ -7,7 +7,7 @@ set -e
 set -o pipefail
 
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 <gigaspeech-dataset-local-dir>"
+  echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script tries to detect errors in the downloaded audio files "

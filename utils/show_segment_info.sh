@@ -7,7 +7,7 @@ set -e
 set -o pipefail
 
 if [ $# -ne 2 ]; then
-  echo "Usage: $0 <gigaspeech-dataset-local-dir> <segment-id>"
+  echo "Usage: $0 <gigaspeech-dataset-dir> <segment-id>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech POD1000000004_S0000000"
   echo ""
   echo "This script extracts information from GigaSpeech.json for the given"
@@ -15,7 +15,7 @@ if [ $# -ne 2 ]; then
   exit 1
 fi
 
-gigaspeech_src=$1
+gigaspeech_dataset_dir=$1
 segment_id=$2
 
 if ! which jq >/dev/null; then
@@ -24,7 +24,7 @@ if ! which jq >/dev/null; then
   exit 1
 fi
 
-cat $gigaspeech_src/GigaSpeech.json |\
+cat $gigaspeech_dataset_dir/GigaSpeech.json |\
   jq --arg query "$segment_id" \
   '.audios[].segments[] | select(.sid == $query)' || exit 1
 

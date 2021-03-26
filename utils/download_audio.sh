@@ -7,7 +7,7 @@ set -e
 set -o pipefail
 
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 <gigaspeech-dataset-local-dir>"
+  echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script downloads the entire GigaSpeech audio collection. We"
@@ -25,12 +25,12 @@ if [ -z "${GIGA_SPEECH_RELEASE_URL}" ]; then
   exit 1
 fi
 
-dir=$1
+gigaspeech_dataset_dir=$1
 
 [ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
 [ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
 
 $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp -ur ${GIGA_SPEECH_RELEASE_URL}/audio/ $dir/audio || exit 1
+  cp -ur ${GIGA_SPEECH_RELEASE_URL}/audio/ $gigaspeech_dataset_dir/audio || exit 1
 
 echo "$0: Done"
