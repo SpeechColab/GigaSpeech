@@ -25,7 +25,7 @@ if ! which jq >/dev/null; then
 fi
 
 cat $gigaspeech_src/GigaSpeech.json |\
-  jq --arg query_uuid "$segment_id" \
-  '.audios[].segments[] | select(.uuid == $query_uuid)' || exit 1
+  jq --arg segment_id "$segment_id" \
+  '.audios[].segments[] | select(.sid == $segment_id)' || exit 1
 
 echo "$0: Done"
