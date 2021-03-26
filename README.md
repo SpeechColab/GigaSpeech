@@ -60,8 +60,8 @@ cd ..
    <QUESTIONMARK>
    <EXCLAMATIONPOINT>
    ```
-2. Grabage meta tags in DEV/TEST sets:
-   our DEV/TEST sets are labelled by human annotators, they are instructed to label every single piece of the entire audio. So if part of audio is not human speech, they label it with a set of garbage meta tags.
+2. Grabage utterance tags in DEV/TEST sets:
+   our DEV/TEST sets are labelled by human annotators, they are instructed to label every single piece of the entire audio. So if part of audio is not human speech, they label it with a set of garbage utterance tags.
    A *complete table* of garbage meta tags are listed below:
    ```
    <SIL>
@@ -69,7 +69,7 @@ cd ..
    <NOISE>
    <OTHER>
    ```
-   Garbage meta tags are utterance level, meaning these utterances are not considered to be valid speech. So our recommendation is to discard these utterances in downstream training/testing. The reason why we keep these tags is to keep the integrity of human labels, so there is no "gap" inside DEV/TEST labels.
+   utterances with these garbage tags are not considered to be valid speech. So our recommendation is to discard these utterances in downstream training/testing. The reason why we keep these tags is to keep the integrity of human labels, so there is no "gap" inside DEV/TEST labels.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
