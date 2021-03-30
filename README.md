@@ -1,12 +1,12 @@
 # GigaSpeech
 A Large, modern and evolving dataset for automatic speech recognition.
 
-| Audio Source   |      Hours    |
-|:---------------|:-------------:|
-| Podcast        |  3,498        |
-| Youtube        |  3,845        |
-| Audiobook      |  2,655        |
-| ***total***    |  ***10,000*** |
+| Audio Source   |      Hours    | acoustic | domain |
+|:---------------|:-------------:|:---------------|:---------------|
+| Podcast        |  3,498        | near-field spontaneous speech, with background music/sound effects, accents | Covering all kinds of daily topics |
+| Youtube        |  3,845        | vast coverage of all kinds of audio scene | vast coverage of all content domains |
+| Audiobook      |  2,655        | slow, clear, readings | books, stories |
+| ***total***    |  ***10,000*** |||
 
 ## Training Set
 We organize the entire dataset via 5 subsets, targeting on different users.
@@ -23,15 +23,26 @@ We organize the entire dataset via 5 subsets, targeting on different users.
 
 
 ## Dev/Testing Set
-
+1. For Audiobook: use librispeech for audiobook domain evaluation.
+1. For Podcast & Youtube: 
+      * dev set: random drawn audios from crawled data
+      * test set: random drawn audios from crawled data + human-curated audios which are independent of crawling process
+      * podcast dev+test ~= 30 hours
+      * youtube dev+test ~= 30 hours
+      * All dev/test sets are labeled by payed professional human annotators, in verbalized form instead of written form(common practice in speech recognition research).
 
 ## Dataset Download
 To download the dataset, do the following steps:
 1. Put aliyun_ossutil.cfg in the `SAFEBOX` folder
 2. Run the following steps for downloading the dataset only
    ```bash
-   utils/gigaspeech_download.sh
+   utils/gigaspeech_download.sh /download/destination/dir/for/GigaSpeechDataset
    ```
+   Then the entire dataset will be downloaded to your local dir.
+
+   If your network is interrupted or broken during downloading, you can just rerun above command, it will continue with previous downloading.
+
+   You can also use above command to update your local GigaSpeech copy with newest GigaSpeech release.
 
 ## Toolkit Support
 We maintain data preparation scripts for different speech recognition toolkits
