@@ -37,6 +37,7 @@ def meta_analysis(input_json, output_dir, pipe):
       with open(f'{output_dir}/utt2spk', 'w') as utt2spk, \
            open(f'{output_dir}/utt2dur', 'w') as utt2dur, \
            open(f'{output_dir}/utt2subsets', 'w') as utt2subsets, \
+           open(f'{output_dir}/utt2source', 'w') as utt2source, \
            open(f'{output_dir}/text', 'w') as utt2text, \
            open(f'{output_dir}/segments', 'w') as segments, \
            open(f'{output_dir}/wav.scp', 'w') as wavscp, \
@@ -47,6 +48,7 @@ def meta_analysis(input_json, output_dir, pipe):
             aid = long_audio['aid']
             segments_lists = long_audio['segments']
             duration = long_audio['duration']
+            source = long_audio['source']
             assert(os.path.exists(long_audio_path))
             assert('opus' == long_audio['format'])
             assert(16000 == long_audio['sample_rate'])
@@ -80,6 +82,7 @@ def meta_analysis(input_json, output_dir, pipe):
                 segments.write(f'{sid}\t{aid}\t{start_time}\t{end_time}\n')
                 segment_sub_names = " " .join(segment_subsets)
                 utt2subsets.write(f'{sid}\t{segment_sub_names}\n')
+                utt2source.write(f'{sid}\t{source}\n')
 
 
 def main():

@@ -4,6 +4,7 @@
 
 
 set -e
+
 set -o pipefail
 
 stage=1
@@ -11,6 +12,7 @@ prefix=gigaspeech
 garbage_utterance_tags="<SIL> <MUSIC> <NOISE> <OTHER>"
 punctuation_tags="<COMMA> <EXCLAMATIONPOINT> <PERIOD> <QUESTIONMARK>"
 train_subset=XL
+sources="podcast youtube audiobook"
 
 . ./utils/parse_options.sh || exit 1;
 
@@ -133,10 +135,10 @@ fi
 
 if [ $stage -le 3 ]; then
   echo "$0: Split data to train, dev and test"
-  # Split data to train, dev and test.
+  # Split data to train
   [ ! -f $corpus_dir/utt2subsets ] &&\
     echo "$0: No such file $corpus_dir/utt2subsets!" && exit 1;
-  for label in $train_subset DEV TEST; do
+  for label in $train_subset; do
     if [ ! ${subsets[$label]+set} ]; then
       echo "$0: Subset $label is not defined in GigaSpeech.json." && exit 1;
     fi
@@ -146,6 +148,23 @@ if [ $stage -le 3 ]; then
       > $corpus_dir/${prefix}${subset}_utt_list|| exit 1;
     subset_data_dir $corpus_dir/${prefix}${subset}_utt_list \
       $corpus_dir $data_dir/${prefix}$subset || exit 1;
+  done
+  # Split data to dev and test
+  for label in DEV TEST; do
+    if [ ! ${subsets[$label]+set} ]; then
+      echo "$0: Subset $label is not defined in GigaSpeech.json." && exit 1;
+    fi
+    subset=${subsets[$label]}
+    for src in $sources; do
+      (grep "{$label}" $corpus_dir/utt2subsets \
+        | awk 'NR==FNR{a[$1]=$0;next}NR>FNR{if($1 in a) print $0}' - $corpus_dir/utt2source \
+        | grep "$src" >$corpus_dir/${prefix}${subset}_${src}_utt_list )|| true;
+      if [ -s $corpus_dir/${prefix}${subset}_${src}_utt_list ]; then
+        mkdir -p $data_dir/${prefix}${subset}_${src}
+        subset_data_dir $corpus_dir/${prefix}${subset}_${src}_utt_list \
+          $corpus_dir $data_dir/${prefix}${subset}_${src} || (echo "error for subset_data_dir" && exit 1);
+      fi
+    done
   done
 fi
 
