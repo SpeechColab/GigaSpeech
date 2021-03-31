@@ -3,8 +3,8 @@ A Large, modern and evolving dataset for automatic speech recognition.
 
 | Audio Source   |      Hours    | acoustic | domain |
 |:---------------|:-------------:|:---------------|:---------------|
-| Podcast        |  3,498        | near-field spontaneous speech, with background music/sound effects, accents | Covering all kinds of daily topics |
-| Youtube        |  3,845        | vast coverage of all kinds of audio scene | vast coverage of all content domains |
+| Podcast        |  3,498        | near-field, indoor, spontaneous, background music, genders, ages, accents | daily topics |
+| Youtube        |  3,845        | near & far field, indoor & outdoor, reading & spontaneous, clean & loud background music/noises, genders, ages, accents | vast topics/domains coverage |
 | Audiobook      |  2,655        | slow, clear, readings | books, stories |
 | ***total***    |  ***10,000*** |||
 
@@ -22,18 +22,20 @@ We organize the entire dataset via 5 subsets, targeting on different users.
 {`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
 
 
-## Dev/Testing Set
-1. For Audiobook: use librispeech for audiobook domain evaluation.
-1. For Podcast & Youtube: 
-      * dev set: random drawn audios from crawled data
-      * test set: random drawn audios from crawled data + human-curated audios which are independent of crawling process
-      * podcast dev+test ~= 30 hours
-      * youtube dev+test ~= 30 hours
-      * All dev/test sets are labeled by payed professional human annotators, in verbalized form instead of written form(common practice in speech recognition research).
+## Dev & Test Sets
+### Dev set
+* source:
+   1. random drawn audios from crawled podcast & youtube data
+### Test set
+* source:
+   1. random drawn audios from crawled podcast & youtube data
+   1. independent to crawling process, GigaSpeech authors manually collected podcasts & videos from internet, to cover wider scenarios & domains.
 
-## Dataset Download
+(Dev + Test) sets contain 50~60 hours raw data, labeled by payed professional human annotators.
+
+## Dataset download
 To download the dataset, do the following steps:
-1. Put aliyun_ossutil.cfg in the `SAFEBOX` folder
+1. Put aliyun_ossutil.cfg in `SAFEBOX` folder
 2. Run the following steps for downloading the dataset only
    ```bash
    utils/gigaspeech_download.sh /download/destination/dir/for/GigaSpeechDataset
