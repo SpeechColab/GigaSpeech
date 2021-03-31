@@ -4,7 +4,6 @@
 
 
 set -e
-
 set -o pipefail
 
 stage=1
