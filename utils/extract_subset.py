@@ -9,7 +9,7 @@ def get_args():
       This script is used to process raw json dataset of GigaSpeech
       to download selected subset.
       """)
-  parser.add_argument('subset', default='XL', help="""Subset to download""")
+  parser.add_argument('subset', type=str, choices=['DEV', 'TEST', 'XL', 'L', 'M', 'S', 'XS'], default='XL', help="""Subset to download""")
   parser.add_argument('input_json', help="""Input json file of Gigaspeech""")
   args = parser.parse_args()
   return args
