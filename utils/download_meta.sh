@@ -31,4 +31,6 @@ $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
   cp -u ${GIGA_SPEECH_RELEASE_URL}/GigaSpeech.json \
   $gigaspeech_dataset_dir/GigaSpeech.json || exit 1
 
+jq -c '.audios[]' $gigaspeech_dataset_dir/GigaSpeech.json > $gigaspeech_dataset_dir/GigaSpeech.jsonl
+
 echo "$0: Done"
