@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2021  Xiaomi Corporation (Author: Yongqing Wang)
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
-
+#                 Mobvoi Corporation (Author: Di Wu)
 
 set -e
 set -o pipefail
@@ -45,11 +45,7 @@ subset_data_dir () {
   src_dir=$2
   dest_dir=$3
   mkdir -p $dest_dir || exit 1;
-  # wav.scp utt2spk text segments utt2dur reco2dur spk2utt
-  filter_by_id $utt_list $src_dir/utt2spk $dest_dir/utt2spk ||\
-    (echo "$0: subset_data_dir() error: $src_dir/utt2spk" && exit 1) || exit 1;
-  filter_by_id $utt_list $src_dir/spk2utt $dest_dir/spk2utt 2 ||\
-    (echo "$0: subset_data_dir() error: $src_dir/spk2utt" && exit 1) || exit 1;
+  # wav.scp text segments utt2dur
   filter_by_id $utt_list $src_dir/utt2dur $dest_dir/utt2dur ||\
     (echo "$0: subset_data_dir() error: $src_dir/utt2dur" && exit 1) || exit 1;
   filter_by_id $utt_list $src_dir/text $dest_dir/text ||\
@@ -59,8 +55,6 @@ subset_data_dir () {
   awk '{print $2}' $dest_dir/segments | sort | uniq > $dest_dir/reco
   filter_by_id $dest_dir/reco $src_dir/wav.scp $dest_dir/wav.scp ||\
     (echo "$0: subset_data_dir() error: $src_dir/wav.scp" && exit 1) || exit 1;
-  filter_by_id $dest_dir/reco $src_dir/reco2dur $dest_dir/reco2dur ||\
-    (echo "$0: subset_data_dir() error: $src_dir/reco2dur" && exit 1) || exit 1;
   rm -f $dest_dir/reco
 }
 
@@ -69,7 +63,7 @@ if [ $# -ne 2 ]; then
   echo " e.g.: $0 --train-subset XL /disk1/audio_data/gigaspeech/ data/"
   echo ""
   echo "This script takes the GigaSpeech source directory, and prepares the"
-  echo "Kaldi format data directory."
+  echo "WeNet format data directory."
   echo "  --garbage-utterance-tags <tags>  # Tags for non-speech."
   echo "  --prefix <prefix>                # Prefix for output data directory."
   echo "  --punctuation-tags <tags>        # Tags for punctuations."
@@ -104,13 +98,9 @@ if [ $stage -le 1 ]; then
   [ ! -d $corpus_dir ] && mkdir -p $corpus_dir
 
   # Files to be created:
-  # wav.scp utt2spk text and segments utt2dur reco2dur spk2utt
-  python3 toolkits/kaldi/extract_meta.py \
-    --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1;
-  utt2spk=$corpus_dir/utt2spk
-  spk2utt=$corpus_dir/spk2utt
-  utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
-    (echo "$0: utt2spk to spk2utt" && exit 1) || exit 1;
+  # wav.scp text segments utt2dur
+  python3 toolkits/wenet/extract_meta.py \
+     $gigaspeech_dir/GigaSpeech.json $corpus_dir | exit 1;
 fi
 
 if [ $stage -le 2 ]; then
