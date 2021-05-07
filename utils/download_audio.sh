@@ -53,7 +53,7 @@ else
     $subset $gigaSpeech_meta $gigaspeech_dataset_dir/subset_path_${subset} || exit ;
   for line in `cat $gigaspeech_dataset_dir/subset_path_${subset}`; do
     $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-      cp -ur ${GIGA_SPEECH_RELEASE_URL}/$line $gigaspeech_dataset_dir/$line || exit 1
+      cp -u ${GIGA_SPEECH_RELEASE_URL}/$line $gigaspeech_dataset_dir/$line || exit 1
   done
 fi
 
