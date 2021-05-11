@@ -20,7 +20,7 @@ def get_args():
   return args
 
 
-def meta_analysis(input_json, output_dir, pipe):
+def meta_analysis(input_json, output_dir):
   input_dir = os.path.dirname(input_json)
 
   if not os.path.exists(output_dir):
@@ -55,8 +55,7 @@ def meta_analysis(input_json, output_dir, pipe):
             print(f'Warning: {aid} something is wrong, maybe the error path: {long_audio_path}, skipped')
             continue
           else:
-            else:
-              wavscp.write(f'{aid}\t{long_audio_path}\n')
+            wavscp.write(f'{aid}\t{long_audio_path}\n')
             reco2dur.write(f'{aid}\t{duration}\n')
             for segment_file in segments_lists:
               try:
@@ -79,7 +78,7 @@ def meta_analysis(input_json, output_dir, pipe):
 def main():
   args = get_args()
 
-  meta_analysis(args.input_json, args.output_dir, args.pipe_format)
+  meta_analysis(args.input_json, args.output_dir)
 
 
 if __name__ == '__main__':
