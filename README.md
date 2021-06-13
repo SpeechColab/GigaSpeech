@@ -54,7 +54,7 @@ To download the dataset, do the following steps:
 
    You can also use above command to update your local GigaSpeech copy with newest GigaSpeech release.
 
-## Toolkit Support
+## Dataset Processing Guidelines
 We maintain data preparation scripts for different speech recognition toolkits
 in this repository so that when we update the dataset (note, this is an evolving
 dataset), we don't have to update the scripts in the downstream toolkits. Data
@@ -93,7 +93,14 @@ cd ..
    ```
    utterances with these garbage tags are not considered to be valid speech. We recommend to discard these utterances in preprocessing. The reason why we keep these tags is to keep the integrity of human labels.
 
-## Baselines from invited speech toolkits/frameworks
+### Add Support for a New Toolkit
+To add data preparation support for a new toolkit, please follow
+`toolkits/kaldi/gigaspeech_data_prep.sh`and add similar scripts for your own
+toolkit. For example, for ESPnet2, you would add
+`toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
+other related scripts should be maintained under `toolkits/espnet2`.
+
+# Baselines from invited speech toolkits/frameworks
 
 | Toolkit   | recipe |
 |:---------------|:---------------|
@@ -103,16 +110,18 @@ cd ..
 |Pika | https://github.com/tencent-ailab/pika (to be released) |
 |WeNet | https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0 |
 
-* Above baselines are all trained with GigaSpeech XL set
-* For most up-to-date results, please follow recipe links
+* Follow above links for most up-to-date results
 
-## paper 
-* link
-* sitation
+# Citation
+* Please cite our paper if you find this work useful:
 
-### Add Support for a New Toolkit
-To add data preparation support for a new toolkit, please follow
-`toolkits/kaldi/gigaspeech_data_prep.sh`and add similar scripts for your own
-toolkit. For example, for ESPnet2, you would add
-`toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
-other related scripts should be maintained under `toolkits/espnet2`.
+```bibtext
+@inproceedings{GigaSpeech2021,
+  title={GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio},
+  author={Guoguo Chen, Shuzhou Chai, Guanbo Wang, Jiayu Du, Wei-Qiang Zhang, Chao Weng, Dan Su, Daniel Povey, Jan Trmal, Junbo Zhang, Mingjie Jin, Sanjeev Khudanpur, Shinji Watanabe, Shuaijiang Zhao, Wei Zou, Xiangang Li, Xuchen Yao, Yongqing Wang, Yujun Wang, Zhao You, Zhiyong Yan},
+  year=2021,
+  booktitle={Proc. Interspeech 2021}
+}
+```
+
+
