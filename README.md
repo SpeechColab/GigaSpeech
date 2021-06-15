@@ -1,7 +1,9 @@
 # GigaSpeech
-A Large, modern and evolving dataset for automatic speech recognition.
+This is the official repo for GigaSpeech dataset.
 
-InterSpeech 2021 Accepted paper, arXiv preprint link: ... 
+*"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*
+
+InterSpeech 2021 Accepted paper, [preprint PDF on arxiv](https://arxiv.org/abs/2106.06909)
 
 ## Data sources
 * Language: English
@@ -10,14 +12,14 @@ InterSpeech 2021 Accepted paper, arXiv preprint link: ...
 
 | Audio Source   |      Hours    | acoustic | domain |
 |:---------------|:-------------:|:---------------|:---------------|
+| Audiobook      |  2,655        | slow narrative reading | books, stories |
 | Podcast        |  3,498        | near-field <br> indoor <br> spontaneous chat & dialogue <br> clean or background music <br> genders, ages, accents | daily topics |
 | Youtube        |  3,845        | near & far field <br> indoor & outdoor <br> reading & spontaneous <br> clean & noisy <br> genders, ages, accents | vast topics/domains coverage |
-| Audiobook      |  2,655        | slow narrative reading | books, stories |
 | ***total***    |  ***10,000*** |||
 
 
-## Supervised Training Set
-| Subset   | Notation |    Size(Hours)    |  Target Usage  |
+## Supervised Training Subsets
+| Subset   | Notation |    Size(Hours)    |  Target Use  |
 |:---------------|:-------------:|:-------------:|:-------------|
 | eXtra Small | XS        |  10        |pipeline/recipe coding & debugging, gradient/loss playground |
 | Small | S        |  250        |quick research experiment for new ideas |
