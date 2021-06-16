@@ -24,7 +24,7 @@ fi
 
 gigaspeech_dataset_dir=$1
 
-if if [[ "$GIGA_SPEECH_RELEASE_URL" == oss* ]]; then
+if [[ "$GIGA_SPEECH_RELEASE_URL" == oss* ]]; then
 
   [ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
   [ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
@@ -40,7 +40,7 @@ elif [[ "$GIGA_SPEECH_RELEASE_URL" == *tsinghua* ]]; then
   cmd="wget -c -P $dst_dir $src"
   echo $cmd
   eval $cmd
-  
+
 else
   echo "unsupported release URL: $GIGA_SPEECH_RELEASE_URL"
   exit 1
