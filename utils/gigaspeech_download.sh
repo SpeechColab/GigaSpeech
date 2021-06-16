@@ -23,7 +23,7 @@ gigaspeech_dataset_dir=$1
 
 if [ $stage -le 0 ]; then
   echo "$0: Setting up downloader."
-  utils/install_downloader_oss.sh || exit 1
+  utils/install_downloader.sh || exit 1
 fi
 
 if [ $stage -le 1 ]; then

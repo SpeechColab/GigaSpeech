@@ -42,17 +42,8 @@ InterSpeech 2021 Accepted paper, [preprint PDF on arxiv](https://arxiv.org/abs/2
 
 
 ## Dataset Download
-Steps:
-1. Put aliyun_ossutil.cfg in `SAFEBOX` folder
-2. Run the following steps for downloading the dataset only
-   ```bash
-   utils/gigaspeech_download.sh /download/destination/dir/for/GigaSpeechDataset
-   ```
-   Then the entire dataset will be downloaded to your local dir.
-
-   If your network is interrupted or broken during downloading, you can just rerun above command, it will continue with previous downloading.
-
-   You can also use above command to update your local GigaSpeech copy with newest GigaSpeech release.
+For public:
+uploading dataset to several free hosts, need some time, please wait.
 
 ## Dataset Pre-processing Guidelines
 We maintain data preparation scripts for different speech recognition toolkits
