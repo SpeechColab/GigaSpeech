@@ -38,34 +38,29 @@ if [[ "$GIGA_SPEECH_RELEASE_URL" == oss* ]]; then
 
 elif [[ "$GIGA_SPEECH_RELEASE_URL" == *tsinghua* ]]; then
 
-  if [ `uname -s` != 'Linux' ]; then
-    echo "tsinghua hosted resources support only linux"
-    exit 1
-  fi
-
   echo "Start to downloading audio from Tsinghua Host"
-  
-  if [ ! -f SAFEBOX/password ]; then
-    echo "SAFEBOX/password required"
-    exit 1
-  fi
 
-  PASSWORD=`cat SAFEBOX/password`
-  domains='podcast youtube audiobook'
-  for domain in $domains; do
-    domain_dir=$gigaspeech_dataset_dir/audio/$domain
-    mkdir -p $domain_dir
+  [ `uname -s` != 'Linux' ] && echo "Linux supported only" && exit 1
+  [ ! -f SAFEBOX/password ] && echo "SAFEBOX/password required" && exit 1
+
+  PASSWORD=`cat SAFEBOX/password 2>/dev/null`
+  [ -z "$PASSWORD" ] && echo "SAFEBOX/password is empty?" && exit 1
+
+  for domain in youtube podcast audiobook; do
     for part in `cat list/${domain}.list | grep -v '#'`; do
-        cmd="wget -c -P $domain_dir ${GIGA_SPEECH_RELEASE_URL}/$part"
-        echo $cmd
-        eval $cmd
-        part_dir=$gigaspeech_dataset_dir/${part%.tgz.aes}
-        mkdir -p $part_dir
-        cmd="openssl aes-256-cbc -d -salt -k $PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/$part | tar xzf - -C $part_dir"
-        echo $cmd
-        eval $cmd
+      part_dir=$gigaspeech_dataset_dir/$part
+      mkdir -p $part_dir
+
+      cmd="wget -c -P $(dirname $part_dir) ${GIGA_SPEECH_RELEASE_URL}/${part}.tgz.aes"
+      echo $cmd
+      eval $cmd
+      
+      cmd="openssl aes-256-cbc -d -salt -k $PASSWORD -pbkdf2 -in ${part_dir}.tgz.aes | tar xzf - -C $part_dir"
+      echo $cmd
+      eval $cmd
     done
   done
+
 else
   echo "unsupported release URL: $GIGA_SPEECH_RELEASE_URL"
   exit 1
