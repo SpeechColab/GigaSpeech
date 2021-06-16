@@ -27,10 +27,48 @@ fi
 
 gigaspeech_dataset_dir=$1
 
-[ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
-[ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
+if [[ "$GIGA_SPEECH_RELEASE_URL" == oss* ]]; then
+  echo "Start to downloading audio from Aliyun OSS"
 
-$ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp -ur ${GIGA_SPEECH_RELEASE_URL}/audio/ $gigaspeech_dataset_dir/audio || exit 1
+  [ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
+  [ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
+
+  $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
+    cp -ur ${GIGA_SPEECH_RELEASE_URL}/audio/ $gigaspeech_dataset_dir/audio || exit 1
+
+elif [[ "$GIGA_SPEECH_RELEASE_URL" == *tsinghua* ]]; then
+
+  if [ `uname -s` != 'Linux' ]; then
+    echo "tsinghua hosted resources support only linux"
+    exit 1
+  fi
+
+  echo "Start to downloading audio from Tsinghua Host"
+  
+  if [ ! -f SAFEBOX/password ]; then
+    echo "SAFEBOX/password required"
+    exit 1
+  fi
+
+  PASSWORD=`cat SAFEBOX/password`
+  domains='podcast youtube audiobook'
+  for domain in $domains; do
+    domain_dir=$gigaspeech_dataset_dir/audio/$domain
+    mkdir -p $domain_dir
+    for part in `cat list/${domain}.list | grep -v '#'`; do
+        cmd="wget -c -P $domain_dir ${GIGA_SPEECH_RELEASE_URL}/$part"
+        echo $cmd
+        eval $cmd
+        part_dir=$gigaspeech_dataset_dir/${part%.tgz.aes}
+        mkdir -p $part_dir
+        cmd="openssl aes-256-cbc -d -salt -k $PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/$part | tar xzf - -C $part_dir"
+        echo $cmd
+        eval $cmd
+    done
+  done
+else
+  echo "unsupported release URL: $GIGA_SPEECH_RELEASE_URL"
+  exit 1
+fi
 
 echo "$0: Done"
