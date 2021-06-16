@@ -47,7 +47,7 @@ elif [[ "$GIGA_SPEECH_RELEASE_URL" == *tsinghua* ]]; then
   [ -z "$PASSWORD" ] && echo "SAFEBOX/password is empty?" && exit 1
 
   for domain in youtube podcast audiobook; do
-    for part in `cat list/${domain}.list | grep -v '#'`; do
+    for part in `cat resource_list/${domain}.list | grep -v '#'`; do
       part_dir=$gigaspeech_dataset_dir/$part
       mkdir -p $part_dir
 
