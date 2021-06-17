@@ -23,13 +23,30 @@ fi
 
 gigaspeech_dataset_dir=$1
 
-[ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
-[ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
+if [[ "$GIGA_SPEECH_RELEASE_URL" == oss* ]]; then
+  [ `uname -s` == 'Linux' ] && ossbin=tools/downloader/ossutil64
+  [ `uname -s` == 'Darwin' ] && ossbin=tools/downloader/ossutilmac64
 
-$ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp -u ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a \
-  $gigaspeech_dataset_dir/dict/cmudict.0.7a || exit 1
-$ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-  cp -ur ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $gigaspeech_dataset_dir/dict/ || exit 1
+  $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
+    cp -u ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a \
+    $gigaspeech_dataset_dir/dict/cmudict.0.7a || exit 1
+  $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
+    cp -ur ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $gigaspeech_dataset_dir/dict/ || exit 1
+
+elif [[ "$GIGA_SPEECH_RELEASE_URL" == *tsinghua* ]]; then
+
+  cmd="wget -c -P $gigaspeech_dataset_dir ${GIGA_SPEECH_RELEASE_URL}/dict.tgz"
+  echo $cmd
+  eval $cmd
+
+  mkdir -p $gigaspeech_dataset_dir/dict
+  cmd="cat $gigaspeech_dataset_dir/dict.tgz | tar xzf - -C $gigaspeech_dataset_dir/dict"
+  echo $cmd
+  eval $cmd
+
+else
+  echo "unsupported release URL: $GIGA_SPEECH_RELEASE_URL"
+  exit 1
+fi
 
 echo "$0: Done"
