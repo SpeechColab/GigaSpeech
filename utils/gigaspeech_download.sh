@@ -8,6 +8,9 @@ set -e
 set -o pipefail
 
 stage=0
+with_dict=false
+
+. ./utils/parse_options.sh || exit 1
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
@@ -15,7 +18,9 @@ if [ $# -ne 1 ]; then
   echo ""
   echo "This script downloads the entire GigaSpeech dataset"
   echo "to your local dir <gigaspeech-dataset-dir>. "
-  echo "We suggest at least 600G of free space under <gigaspeech-dataset-dir>."
+  echo "We suggest at least 1.2T of free space under <gigaspeech-dataset-dir>."
+  echo "options:"
+  echo "  --with-dict true|false(default) download cmudict & g2p model"
   exit 1
 fi
 
@@ -36,9 +41,11 @@ if [ $stage -le 1 ]; then
   echo "$0: Downloading the audio collection"
   utils/download_audio.sh $gigaspeech_dataset_dir || exit 1
 
-  # Download the CMU dictionary and the corresponding G2P model.
-  echo "$0: Downloading the CMU dictionary and the corresponding G2P model."
-  utils/download_cmudict_and_g2p.sh $gigaspeech_dataset_dir || exit 1
+  if [ $with_dict == true ]; then
+    # Download the CMU dictionary and the corresponding G2P model.
+    echo "$0: Downloading the CMU dictionary and the corresponding G2P model."
+    utils/download_cmudict_and_g2p.sh $gigaspeech_dataset_dir || exit 1
+  fi
 fi
 
 if [ $stage -le 2 ]; then
