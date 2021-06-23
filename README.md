@@ -1,9 +1,6 @@
 # GigaSpeech
-This is the official repo for GigaSpeech dataset.
+This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
-*"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*
-
-InterSpeech 2021 Accepted paper, [preprint PDF on arxiv](https://arxiv.org/abs/2106.06909)
 
 ## Data sources
 * Language: English
