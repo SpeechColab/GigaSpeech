@@ -2,17 +2,17 @@
 This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
 
-## Data sources
+## Data source
 * Language: English
-* 40000+ hours for unsupervised/semi-supervised learning.
-* 10000 hours with high-quality human transcriptions for supervised learning.
+* 40,000+ hours for unsupervised/semi-supervised learning.
+* 10,000 hours with high-quality human transcriptions for supervised learning.
 
-| Audio Source   |      Hours    | acoustic | domain |
-|:---------------|:-------------:|:---------------|:---------------|
-| Audiobook      |  2,655        | slow narrative reading | books, stories |
-| Podcast        |  3,498        | near-field <br> indoor <br> spontaneous chat & dialogue <br> clean or background music <br> genders, ages, accents | daily topics |
-| Youtube        |  3,845        | near & far field <br> indoor & outdoor <br> reading & spontaneous <br> clean & noisy <br> genders, ages, accents | vast topics/domains coverage |
-| ***total***    |  ***10,000*** |||
+| Audio Source   | Transcribed Hours | Total Hours    | Acoustic Condition |
+|:---------------|:-----------------:|:---------------|:-------------------|
+| Audiobook      |  2,655            |                | <li>Reading</li><li>Various ages and accents</li> |
+| Podcast        |  3,498            |                | <li>Clean or background music</li><li>Indoor</li><li>Near-field</li><li>Spontaneous</li><li>Various ages and accents</li>|
+| Youtube        |  3,845            |                | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
+| ***total***    |  ***10,000***     ||
 
 
 ## Supervised Training Subsets
