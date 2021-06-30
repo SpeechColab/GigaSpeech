@@ -29,6 +29,7 @@ if ! which wget >/dev/null; then
   exit 1
 fi
 
-wget -c -P $gigaspeech_dataset_dir $GIGA_SPEECH_RELEASE_URL/GigaSpeech.json
+wget -c -P $gigaspeech_dataset_dir $GIGA_SPEECH_RELEASE_URL/GigaSpeech.json.tgz
+tar -zxf $gigaspeech_dataset_dir/GigaSpeech.json.tgz -C $gigaspeech_dataset_dir/
 
 echo "$0: Done"
