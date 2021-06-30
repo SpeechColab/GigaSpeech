@@ -2,7 +2,21 @@
 This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
 
-## Data source
+# GigaSpeech Leaderboard
+
+| **Contributor**| **Toolkit**       | **Train**         | **Inference**     |**Dev/Test WER**    |
+|:---------------|:------------------|:------------------|:------------------|:------------------|
+|||||
+| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) <u>example</u> | 13.60 / 12.70 | 
+| <em>Baseline</em>    | [Espnet](https://github.com/espnet/espnet) | [Conformer/Transformer-AED](https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1) | [model](https://zenodo.org/record/4630406) [example](https://github.com/espnet/espnet_model_zoo#asr) | 10.90 / 10.80 |
+| <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | <u>model</u> <u>example</u> | 14.78 / 14.84 |
+| <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | <u>model</u> <u>example</u> | 12.30 / 12.30 |
+|||||
+| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) <u>example</u> | |
+
+
+
+## Data Source
 * Language: English
 * 40,000+ hours for unsupervised/semi-supervised learning.
 * 10,000 hours with high-quality human transcriptions for supervised learning.
@@ -87,17 +101,6 @@ toolkit. For example, for ESPnet2, you would add
 `toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
 other related scripts should be maintained under `toolkits/espnet2`.
 
-# Baseline systems
-
-| Toolkit   | recipe |
-|:---------------|:---------------|
-|Athena| https://github.com/athena-team/athena (to be released) |
-|Espnet| https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1 |
-|Kaldi| https://github.com/kaldi-asr/kaldi (to be released) |
-|Pika | https://github.com/tencent-ailab/pika (to be released) |
-|WeNet | https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0 |
-
-Follow above links for up-to-date info
 
 # Citation
 Please cite our paper if you find this work useful:
