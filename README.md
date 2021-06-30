@@ -26,7 +26,7 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 |:---------------|:-----------------:|:---------------|:-------------------|
 | Audiobook      |  2,655            | 11,982         | <li>Reading</li><li>Various ages and accents</li> |
 | Podcast        |  3,498            | 9,254          | <li>Clean or background music</li><li>Indoor</li><li>Near-field</li><li>Spontaneous</li><li>Various ages and accents</li>|
-| Youtube        |  3,845            | 11,768         | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
+| YouTube        |  3,845            | 11,768         | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
 | ***total***    |  ***10,000***     | ***33,005***         ||
 
 
@@ -34,24 +34,19 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 | Subset    |    Hours    |  Remarks  |
 |:---------------:|:-------------:|:-------------|
 | XS |  10        | System building and debugging |
-| S |  250        | Qucik research experiments |
-| M |  1,000      | Large-scale research experiments |
-| L |  2,500      | Medium-scale industrial experiments |
+| S  |  250        | Qucik research experiments |
+| M  |  1,000      | Large-scale research experiments |
+| L  |  2,500      | Medium-scale industrial experiments |
 | XL |  10,000    | Large-scale industrial experiments |
-
-`XS` $$\subset$$ `S` $$\subset$$ `M` $$\subset$$ `L` $$\subset$$ `XL`.
+Larger subsets are supersets of smaller subsets, e.g., subset `L` contains all the data from subset `M`.
 
 
 ### Transcribed Evaluation Subsets
-## Dev Set (~12 hours)
-* all audio files are randomly drawn from crawled podcast & youtube data
-
-
-## Test Set (~40 hours)
-* some audio files are randomly drawn from crawled podcast & youtube data
-* some audio files are manually collected by GigaSpeech authors from internet(independent to crawling process), including podcasts & videos, to cover wider scenarios & domains.
-
-(Dev + Test) sets are labeled by **payed professional human annotators**.
+| Subset | Hours | Remarks |
+|:------:|:-----:|:--------|
+| Dev    | 12    | Randomly selected from the crawled Podcast and YouTube Data |
+| Test   | 40    | Part of the subset was randomly selected from the crawled Podcast and YouTube data; part of it was manually collected through other channels to have better coverage.
+Evaluation subsets are annotated by **professional human annotators**
 
 
 ## Dataset Download
