@@ -38,6 +38,7 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 | M  |  1,000      | Large-scale research experiments |
 | L  |  2,500      | Medium-scale industrial experiments |
 | XL |  10,000    | Large-scale industrial experiments |
+
 Larger subsets are supersets of smaller subsets, e.g., subset `L` contains all the data from subset `M`.
 
 
@@ -45,7 +46,8 @@ Larger subsets are supersets of smaller subsets, e.g., subset `L` contains all t
 | Subset | Hours | Remarks |
 |:------:|:-----:|:--------|
 | Dev    | 12    | Randomly selected from the crawled Podcast and YouTube Data |
-| Test   | 40    | Part of the subset was randomly selected from the crawled Podcast and YouTube data; part of it was manually collected through other channels to have better coverage.
+| Test   | 40    | Part of the subset was randomly selected from the crawled Podcast and YouTube data; part of it was manually collected through other channels to have better coverage. |
+
 Evaluation subsets are annotated by **professional human annotators**
 
 
