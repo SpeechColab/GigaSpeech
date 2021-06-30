@@ -1,18 +1,19 @@
 # GigaSpeech
 This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
+Version: 1.0.0 (07/01/2021)
 
 ## Leaderboard
 
-| **Contributor**| **Toolkit**       | **Train**         | **Inference**     |**Dev/Test WER**    |
-|:---------------|:------------------|:------------------|:------------------|:------------------:|
+| **Contributor**| **Toolkit**       | **Train Recipe**     | **Train Data** | **Inference**     |**Dev/Test WER**    |
+|:---------------|:------------------|:------------------|:------------------|:------------------|:------------------:|
 |||||
-| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) [example](https://github.com/athena-team/athena/blob/e704884ec6a3a947769d892aa267578038e49ecb/examples/asr/gigaspeech/run.sh#L85) | 13.60 / 12.70 | 
-| <em>Baseline</em>    | [Espnet](https://github.com/espnet/espnet) | [Conformer/Transformer-AED](https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1) | [model](https://zenodo.org/record/4630406) [example](https://github.com/espnet/espnet_model_zoo#asr) | 10.90 / 10.80 |
-| <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | <u>model</u> <u>example</u> | 14.78 / 14.84 |
-| <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | <u>model</u> <u>example</u> | 12.30 / 12.30 |
+| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | GigaSpeech v1.0.0 | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) [example](https://github.com/athena-team/athena/blob/e704884ec6a3a947769d892aa267578038e49ecb/examples/asr/gigaspeech/run.sh#L85) | 13.60 / 12.70 | 
+| <em>Baseline</em>    | [Espnet](https://github.com/espnet/espnet) | [Conformer/Transformer-AED](https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1) | GigaSpeech v1.0.0 | [model](https://zenodo.org/record/4630406) [example](https://github.com/espnet/espnet_model_zoo#asr) | 10.90 / 10.80 |
+| <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | GigaSpeech v1.0.0 | <u>model</u> <u>example</u> | 14.78 / 14.84 |
+| <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | GigaSpeech v1.0.0 | <u>model</u> <u>example</u> | 12.30 / 12.30 |
 |||||
-| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) <u>example</u> | |
+| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) <u>example</u> | |
 
 
 ## Dataset
@@ -48,7 +49,7 @@ Larger subsets are supersets of smaller subsets, e.g., subset `L` contains all t
 | Dev    | 12    | Randomly selected from the crawled Podcast and YouTube Data |
 | Test   | 40    | Part of the subset was randomly selected from the crawled Podcast and YouTube data; part of it was manually collected through other channels to have better coverage. |
 
-Evaluation subsets are annotated by **professional human annotators**
+Evaluation subsets are annotated by ***professional human annotators***
 
 
 ## Dataset Download
