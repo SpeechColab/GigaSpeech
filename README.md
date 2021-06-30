@@ -3,6 +3,9 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 
 Version: 1.0.0 (07/01/2021)
 
+## Download
+Please fill out the Google Form [here]() and follow the instructions to download the GigaSpeech dataset.
+
 ## Leaderboard
 
 | **Contributor**| **Toolkit**       | **Train Recipe**     | **Train Data** | **Inference**     |**Dev/Test WER**    |
@@ -24,7 +27,7 @@ Version: 1.0.0 (07/01/2021)
 * 10,000 hours with high-quality human transcriptions for supervised learning
 
 | Audio Source   | Transcribed Hours | Total Hours    | Acoustic Condition |
-|:---------------|:-----------------:|:---------------|:-------------------|
+|:---------------|:-----------------:|:--------------:|:-------------------|
 | Audiobook      |  2,655            | 11,982         | <li>Reading</li><li>Various ages and accents</li> |
 | Podcast        |  3,498            | 9,254          | <li>Clean or background music</li><li>Indoor</li><li>Near-field</li><li>Spontaneous</li><li>Various ages and accents</li>|
 | YouTube        |  3,845            | 11,768         | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
@@ -52,11 +55,7 @@ Larger subsets are supersets of smaller subsets, e.g., subset `L` contains all t
 Evaluation subsets are annotated by ***professional human annotators***
 
 
-## Dataset Download
-For public:
-uploading dataset to several free hosts, need some time, please wait.
-
-## Dataset Pre-processing Guidelines
+## Data preparation Guidelines
 We maintain data preparation scripts for different speech recognition toolkits
 in this repository so that when we update the dataset (note, this is an evolving
 dataset), we don't have to update the scripts in the downstream toolkits. Data
@@ -101,8 +100,9 @@ toolkit. For example, for ESPnet2, you would add
 `toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
 other related scripts should be maintained under `toolkits/espnet2`.
 
+## License
 
-# Citation
+## Citation
 Please cite our paper if you find this work useful:
 
 ```bibtext
