@@ -2,12 +2,12 @@
 This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
 
-## GigaSpeech Leaderboard
+## Leaderboard
 
 | **Contributor**| **Toolkit**       | **Train**         | **Inference**     |**Dev/Test WER**    |
-|:---------------|:------------------|:------------------|:------------------|:------------------|
+|:---------------|:------------------|:------------------|:------------------|:------------------:|
 |||||
-| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) <u>example</u> | 13.60 / 12.70 | 
+| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) [example](https://github.com/athena-team/athena/blob/e704884ec6a3a947769d892aa267578038e49ecb/examples/asr/gigaspeech/run.sh#L85) | 13.60 / 12.70 | 
 | <em>Baseline</em>    | [Espnet](https://github.com/espnet/espnet) | [Conformer/Transformer-AED](https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1) | [model](https://zenodo.org/record/4630406) [example](https://github.com/espnet/espnet_model_zoo#asr) | 10.90 / 10.80 |
 | <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | <u>model</u> <u>example</u> | 14.78 / 14.84 |
 | <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | <u>model</u> <u>example</u> | 12.30 / 12.30 |
@@ -15,7 +15,7 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 | Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) <u>example</u> | |
 
 
-## GigaSpeech Data
+## Dataset
 
 ### Audio Source
 * Language: English
@@ -27,19 +27,19 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 | Audiobook      |  2,655            | 11,982         | <li>Reading</li><li>Various ages and accents</li> |
 | Podcast        |  3,498            | 9,254          | <li>Clean or background music</li><li>Indoor</li><li>Near-field</li><li>Spontaneous</li><li>Various ages and accents</li>|
 | Youtube        |  3,845            | 11,768         | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
-| ***total***    |  ***10,000***     | 33,005         ||
+| ***total***    |  ***10,000***     | ***33,005***         ||
 
 
 ### Transcribed Training Subsets
-| Subset   | Notation |    Size(Hours)    |  Target Use  |
-|:---------------|:-------------:|:-------------:|:-------------|
-| eXtra Small | XS        |  10        |pipeline/recipe coding & debugging, gradient/loss playground |
-| Small | S        |  250        |quick research experiment for new ideas |
-| Medium | M      |  1000        | serious research experiment / quick industrial experiment |
-| Large | L      |  2500        | serious industrial experiment |
-| eXtra Large | XL      |  10000        | industrial system building|
+| Subset    |    Hours    |  Remarks  |
+|:---------------:|:-------------:|:-------------|
+| XS |  10        | System building and debugging |
+| S |  250        | Qucik research experiments |
+| M |  1,000      | Large-scale research experiments |
+| L |  2,500      | Medium-scale industrial experiments |
+| XL |  10,000    | Large-scale industrial experiments |
 
-{`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
+`XS` $$\subset$$ `S` $$\subset$$ `M` $$\subset$$ `L` $$\subset$$ `XL`.
 
 
 ### Transcribed Evaluation Subsets
