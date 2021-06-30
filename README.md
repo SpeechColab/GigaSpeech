@@ -2,7 +2,7 @@
 This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
 
-# GigaSpeech Leaderboard
+## GigaSpeech Leaderboard
 
 | **Contributor**| **Toolkit**       | **Train**         | **Inference**     |**Dev/Test WER**    |
 |:---------------|:------------------|:------------------|:------------------|:------------------|
@@ -15,21 +15,22 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 | Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) <u>example</u> | |
 
 
+## GigaSpeech Data
 
-## Data Source
+### Audio Source
 * Language: English
-* 40,000+ hours for unsupervised/semi-supervised learning.
-* 10,000 hours with high-quality human transcriptions for supervised learning.
+* 33,000+ hours for unsupervised/semi-supervised learning
+* 10,000 hours with high-quality human transcriptions for supervised learning
 
 | Audio Source   | Transcribed Hours | Total Hours    | Acoustic Condition |
 |:---------------|:-----------------:|:---------------|:-------------------|
-| Audiobook      |  2,655            |                | <li>Reading</li><li>Various ages and accents</li> |
-| Podcast        |  3,498            |                | <li>Clean or background music</li><li>Indoor</li><li>Near-field</li><li>Spontaneous</li><li>Various ages and accents</li>|
-| Youtube        |  3,845            |                | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
-| ***total***    |  ***10,000***     ||
+| Audiobook      |  2,655            | 11,982         | <li>Reading</li><li>Various ages and accents</li> |
+| Podcast        |  3,498            | 9,254          | <li>Clean or background music</li><li>Indoor</li><li>Near-field</li><li>Spontaneous</li><li>Various ages and accents</li>|
+| Youtube        |  3,845            | 11,768         | <li>Clean and noisy</li><li>Indoor and outdoor</li><li>Near- and far-field</li><li>Reading and spontaneous</li><li>Various ages and accents</li> |
+| ***total***    |  ***10,000***     | 33,005         ||
 
 
-## Supervised Training Subsets
+### Transcribed Training Subsets
 | Subset   | Notation |    Size(Hours)    |  Target Use  |
 |:---------------|:-------------:|:-------------:|:-------------|
 | eXtra Small | XS        |  10        |pipeline/recipe coding & debugging, gradient/loss playground |
@@ -41,6 +42,7 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 {`XL` includes {`L` includes {`M` includes {`S` includes {`XS`}}}}}
 
 
+### Transcribed Evaluation Subsets
 ## Dev Set (~12 hours)
 * all audio files are randomly drawn from crawled podcast & youtube data
 
