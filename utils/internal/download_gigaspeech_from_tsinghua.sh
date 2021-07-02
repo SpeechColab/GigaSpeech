@@ -45,7 +45,8 @@ fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
 if [ -z "$PASSWORD" ]; then
   echo "SAFEBOX/password is empty?"
-exit 1
+  exit 1
+fi
 
 # Check downloading tools
 if ! which wget >/dev/null; then
@@ -73,7 +74,7 @@ if [ $stage -le 2 ]; then
   echo $cmd
   eval $cmd
 
-  cmd="openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/GigaSpeech.json.tgz.aes | tar xzf - -C $gigaspeech_dataset_dir/"
+  cmd="openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/GigaSpeech.json.tgz.aes | tar xzf - -C $gigaspeech_dataset_dir"
   echo $cmd
   eval $cmd
 fi
