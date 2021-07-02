@@ -3,7 +3,6 @@
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
 #                 Jiayu DU
 
-
 set -e
 set -o pipefail
 
@@ -18,40 +17,35 @@ if [ $# -ne 1 ]; then
   echo ""
   echo "This script downloads the entire GigaSpeech dataset"
   echo "to your local dir <gigaspeech-dataset-dir>. "
-  echo "We suggest at least 1.2T of free space under <gigaspeech-dataset-dir>."
   echo "options:"
   echo "  --with-dict true|false(default) download cmudict & g2p model"
+  echo "  --stage 0|1|2|3|4|5 specifies from which stage to start with"
+  echo "    0: env/downloader prepare & check"
+  echo "    1: user agreement"
+  echo "    2: metadata"
+  echo "    3: audio"
+  echo "    4: optional dictionary and g2p models"
+  echo "    5: md5 check on downloaded audio files"
   exit 1
 fi
 
 gigaspeech_dataset_dir=$1
 
-if [ $stage -le 0 ]; then
-  echo "$0: Setting up downloader."
-  utils/install_downloader.sh || exit 1
-fi
+if [[ "$GIGA_SPEECH_RELEASE_URL" == oss* ]]; then
+  # This is for SpeechColab collaborators, need 600G free space
+  utils/internal/download_gigaspeech_from_oss.sh \
+    --stage $stage --with-dict $with_dict \
+    $gigaspeech_dataset_dir
 
-if [ $stage -le 1 ]; then
-  # Download the metadata.
-  echo "$0: Downloading GigaSpeech.json"
-  utils/download_meta.sh $gigaspeech_dataset_dir || exit 1
+elif [[ "$GIGA_SPEECH_RELEASE_URL" == *tsinghua* ]]; then
+  # This is for public release, need 1.2T free space
+  utils/internal/download_gigaspeech_from_tsinghua.sh \
+    --stage $stage --with-dict $with_dict \
+    $gigaspeech_dataset_dir
 
-  # Download the audio data. Currently it downloads the entire audio collection,
-  # but this can be improved to only download a certain part of the collection.
-  echo "$0: Downloading the audio collection"
-  utils/download_audio.sh $gigaspeech_dataset_dir || exit 1
-
-  if [ $with_dict == true ]; then
-    # Download the CMU dictionary and the corresponding G2P model.
-    echo "$0: Downloading the CMU dictionary and the corresponding G2P model."
-    utils/download_cmudict_and_g2p.sh $gigaspeech_dataset_dir || exit 1
-  fi
-fi
-
-if [ $stage -le 2 ]; then
-  # Verify the data size or md5.
-  echo "$0: Checking md5 of downloaded audio files"
-  utils/check_audio_md5.sh $gigaspeech_dataset_dir || exit 1
+else
+  echo "unsupported release URL: $GIGA_SPEECH_RELEASE_URL"
+  exit 1
 fi
 
 echo "$0: Done"
