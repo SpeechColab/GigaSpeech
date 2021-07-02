@@ -78,7 +78,7 @@ if [ $stage -le 4 ]; then
   fi
 fi
 
-# check audio md5
+# Check audio md5
 if [ $stage -le 5 ]; then
   echo "$0: Checking md5 of downloaded audio files"
   utils/check_audio_md5.sh $gigaspeech_dataset_dir || exit 1

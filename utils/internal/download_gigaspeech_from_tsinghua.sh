@@ -22,6 +22,7 @@ if [ $# -ne 1 ]; then
 fi
 
 gigaspeech_dataset_dir=$1
+mkdir -p $gigaspeech_dataset_dir
 
 # Check operating system
 if [ `uname -s` != 'Linux' ]; then
@@ -68,8 +69,13 @@ fi
 # Download metadata
 if [ $stage -le 2 ]; then
   echo "Start to download GigaSpeech Metadata"
-  wget -c -P $gigaspeech_dataset_dir $GIGA_SPEECH_RELEASE_URL/GigaSpeech.json.tgz.aes
-  tar -zxf $gigaspeech_dataset_dir/GigaSpeech.json.tgz -C $gigaspeech_dataset_dir/
+  cmd="wget -c -P $gigaspeech_dataset_dir $GIGA_SPEECH_RELEASE_URL/GigaSpeech.json.tgz.aes"
+  echo $cmd
+  eval $cmd
+
+  cmd="openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/GigaSpeech.json.tgz.aes | tar xzf - -C $gigaspeech_dataset_dir/"
+  echo $cmd
+  eval $cmd
 fi
 
 # Download audio
@@ -105,7 +111,7 @@ if [ $stage -le 4 ]; then
   fi
 fi
 
-# check audio md5
+# Check audio md5
 if [ $stage -le 5 ]; then
   echo "$0: Checking md5 of downloaded audio files"
   utils/check_audio_md5.sh $gigaspeech_dataset_dir || exit 1
