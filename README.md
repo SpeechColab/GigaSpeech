@@ -16,7 +16,7 @@ Please fill out the Google Form [here]() and follow the instructions to download
 | <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | GigaSpeech v1.0.0 | <u>model</u> <u>example</u> | 14.78 / 14.84 |
 | <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | GigaSpeech v1.0.0 | <u>model</u> <u>example</u> | 12.30 / 12.30 |
 |||||
-| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) <u>example</u> | |
+| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [Conformer-AED](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) [example](https://github.com/wenet-e2e/wenet/blob/main/runtime/server/x86/README.md) | 11.1 / 11.0 |
 
 
 ## Dataset
@@ -100,7 +100,9 @@ toolkit. For example, for ESPnet2, you would add
 `toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
 other related scripts should be maintained under `toolkits/espnet2`.
 
-## License
+
+## Collaboration
+
 
 ## Citation
 Please cite our paper if you find this work useful:
