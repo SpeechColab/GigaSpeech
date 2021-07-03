@@ -26,25 +26,25 @@ mkdir -p $gigaspeech_dataset_dir
 
 # Check operating system
 if [ `uname -s` != 'Linux' ]; then
-  echo "Tsinghua host supports *linux only*"
+  echo "$0: Tsinghua host supports *linux only*"
   exit 1
 fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
-if [ -z "${GIGA_SPEECH_RELEASE_URL}" ]; then
-  echo "Error: env variable GIGA_SPEECH_RELEASE_URL is empty(check env_vars.sh?)"
+if [ -z "${GIGASPEECH_RELEASE_URL}" ]; then
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL(in env_vars.sh) is empty."
   exit 1
 fi
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
-  echo "Error: make sure you have download credential: SAFEBOX/password"
+  echo "$0: Please apply for the credentials (see README) and add it to SAFEBOX/password"
   exit 1
 fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
 if [ -z "$PASSWORD" ]; then
-  echo "SAFEBOX/password is empty?"
+  echo "$0: Error, SAFEBOX/password is empty"
   exit 1
 fi
 
@@ -58,10 +58,36 @@ if ! which openssl >/dev/null; then
   exit 1
 fi
 
+download_and_process() {
+  local obj=$1
+
+  # download object
+  local remote_path=${GIGASPEECH_RELEASE_URL}/$obj
+  local path=${gigaspeech_dataset_dir}/$obj
+  local location=$(dirname $path)
+  mkdir -p $location && wget -c -P $location $remote_path
+
+  # post processing (e.g. decryption & decompression)
+  if [[ $path == *.tgz.aes ]]; then
+    # encrypted-gziped-tarball contains contents of a GigaSpeech sub-directory
+    local subdir_name=$(basename $path .tgz.aes)
+    mkdir -p $location/$subdir_name \
+      && openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
+      | tar xzf - -C $location/$subdir_name
+  elif [[ $path == *.gz.aes ]]; then
+    # encripted-gziped object represents a regular GigaSpeech file
+    local file_name=$(basename $path .gz.aes)
+    openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
+      | gunzip -c > $location/$file_name
+  else
+    :
+  fi
+}
+
 # Download agreement
 if [ $stage -le 1 ]; then
-  echo "Start to download GigaSpeech user agreement"
-  wget -c -P $gigaspeech_dataset_dir $GIGA_SPEECH_RELEASE_URL/TERMS_OF_ACCESS
+  echo "$0: Start to download GigaSpeech user agreement"
+  wget -c -P $gigaspeech_dataset_dir $GIGASPEECH_RELEASE_URL/TERMS_OF_ACCESS
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="
@@ -69,31 +95,18 @@ fi
 
 # Download metadata
 if [ $stage -le 2 ]; then
-  echo "Start to download GigaSpeech Metadata"
-  cmd="wget -c -P $gigaspeech_dataset_dir $GIGA_SPEECH_RELEASE_URL/GigaSpeech.json.tgz.aes"
-  echo $cmd
-  eval $cmd
-
-  cmd="openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/GigaSpeech.json.tgz.aes | tar xzf - -C $gigaspeech_dataset_dir"
-  echo $cmd
-  eval $cmd
+  echo "$0: Start to download GigaSpeech Metadata"
+  for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
+    download_and_process $obj
+  done
 fi
 
 # Download audio
 if [ $stage -le 3 ]; then
-  echo "Start to download GigaSpeech cached audio collection"
-  for domain in youtube podcast audiobook; do
-    for part in `grep -v '^#' misc/${domain}.list`; do
-      part_dir=$gigaspeech_dataset_dir/$part
-      mkdir -p $part_dir
-
-      cmd="wget -c -P $(dirname $part_dir) ${GIGA_SPEECH_RELEASE_URL}/${part}.tgz.aes"
-      echo $cmd
-      eval $cmd
-      
-      cmd="openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in ${part_dir}.tgz.aes | tar xzf - -C $part_dir"
-      echo $cmd
-      eval $cmd
+  echo "$0: Start to download GigaSpeech cached audio collection"
+  for audio_source in youtube podcast audiobook; do
+    for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
+      download_and_process $obj
     done
   done
 fi
@@ -101,14 +114,9 @@ fi
 # Download optional dictionary and pretrained g2p model
 if [ $stage -le 4 ]; then
   if [ $with_dict == true ]; then
-    cmd="wget -c -P $gigaspeech_dataset_dir ${GIGA_SPEECH_RELEASE_URL}/dict.tgz.aes"
-    echo $cmd
-    eval $cmd
-
-    mkdir -p $gigaspeech_dataset_dir/dict
-    cmd="openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $gigaspeech_dataset_dir/dict.tgz.aes | tar xzf - -C $gigaspeech_dataset_dir/dict"
-    echo $cmd
-    eval $cmd
+    for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
+      download_and_process $obj
+    done
   fi
 fi
 

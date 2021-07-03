@@ -25,13 +25,13 @@ fi
 gigaspeech_dataset_dir=$1
 
 . ./env_vars.sh || exit 1
-if [ -z "${GIGA_SPEECH_RELEASE_URL}" ]; then
-  echo "Error: env variable GIGA_SPEECH_RELEASE_URL is empty(check env_vars.sh?)"
+if [ -z "${GIGASPEECH_RELEASE_URL}" ]; then
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL(in env_vars.sh) is empty."
   exit 1
 fi
 
 if [ ! -f SAFEBOX/aliyun_ossutil.cfg ]; then
-  echo "Error: make sure you have download credential: SAFEBOX/aliyun_ossutil.cfg"
+  echo "$0: Error, make sure you have: SAFEBOX/aliyun_ossutil.cfg"
   exit 1
 fi
 
@@ -50,31 +50,31 @@ if [ $stage -le 0 ]; then
 fi
 
 if [ $stage -le 1 ]; then
-  echo "Skip downloading TERM_OF_ACCESS, our co-authors don't need this"
+  echo "$0: Skip downloading TERM_OF_ACCESS, our co-authors don't need this"
 fi
 
 # Download metadata
 if [ $stage -le 2 ]; then
-  echo "Start to download GigaSpeech Metadata"
+  echo "$0: Start to download GigaSpeech Metadata"
   $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-    cp -u ${GIGA_SPEECH_RELEASE_URL}/GigaSpeech.json $gigaspeech_dataset_dir/ || exit 1
+    cp -u ${GIGASPEECH_RELEASE_URL}/GigaSpeech.json $gigaspeech_dataset_dir/ || exit 1
 fi
 
 # Download audio
 if [ $stage -le 3 ]; then
-  echo "Start to download GigaSpeech cached audio collection"
+  echo "$0: Start to download GigaSpeech cached audio collection"
   $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-    cp -ur ${GIGA_SPEECH_RELEASE_URL}/audio/ $gigaspeech_dataset_dir/audio || exit 1
+    cp -ur ${GIGASPEECH_RELEASE_URL}/audio/ $gigaspeech_dataset_dir/audio || exit 1
 fi
 
 # Download optional dictionary and pretrained g2p model
 if [ $stage -le 4 ]; then
   if [ $with_dict == true ]; then
     $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-      cp -u ${GIGA_SPEECH_RELEASE_URL}/dict/cmudict.0.7a \
+      cp -u ${GIGASPEECH_RELEASE_URL}/dict/cmudict.0.7a \
       $gigaspeech_dataset_dir/dict/cmudict.0.7a || exit 1
     $ossbin -c SAFEBOX/aliyun_ossutil.cfg \
-      cp -ur ${GIGA_SPEECH_RELEASE_URL}/dict/g2p $gigaspeech_dataset_dir/dict/ || exit 1
+      cp -ur ${GIGASPEECH_RELEASE_URL}/dict/g2p $gigaspeech_dataset_dir/dict/ || exit 1
   fi
 fi
 
