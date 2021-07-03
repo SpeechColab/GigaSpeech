@@ -106,6 +106,7 @@ We are a group of volunteers trying to make speech technologies easier to use. W
 
 * Inference architecture for different pre-trained models
 * Adding diverse audio source
+* Benchmarking speech algorithms/services
 * Building and releasing pre-trained models
 * Supporting more languages
 * Making new datasets with permissive licenses
