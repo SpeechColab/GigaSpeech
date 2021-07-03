@@ -6,6 +6,9 @@
 export GIGASPEECH_RELEASE_URL=http://www.tsinghua-ieit.com/dataset/GigaSpeech
 
 # Distribution Channel 3: Haitian Host
+
 # Distribution Channel 4: MagicData Host
+
+# Distribution Channel 5: From IPFS
 
 export PATH=$PWD:$PATH

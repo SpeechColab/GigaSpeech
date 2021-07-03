@@ -31,6 +31,8 @@ fi
 
 gigaspeech_dataset_dir=$1
 
+. ./env_vars.sh || exit 1
+
 if [[ "$GIGASPEECH_RELEASE_URL" == oss* ]]; then
   # This is for SpeechColab collaborators, need 600G free space
   utils/internal/download_gigaspeech_from_oss.sh \

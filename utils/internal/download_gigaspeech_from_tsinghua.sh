@@ -62,12 +62,14 @@ download_and_process() {
   local obj=$1
 
   # download object
+  echo "$0: downloading $obj"
   local remote_path=${GIGASPEECH_RELEASE_URL}/$obj
   local path=${gigaspeech_dataset_dir}/$obj
   local location=$(dirname $path)
   mkdir -p $location && wget -c -P $location $remote_path
 
   # post processing (e.g. decryption & decompression)
+  echo "$0: processing $obj"
   if [[ $path == *.tgz.aes ]]; then
     # encrypted-gziped-tarball contains contents of a GigaSpeech sub-directory
     local subdir_name=$(basename $path .tgz.aes)
@@ -91,6 +93,11 @@ if [ $stage -le 1 ]; then
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="
+  echo "$0: GigaSpeech downloading will start in 5 seconds"
+  for t in $(seq 5 -1 1); do
+    echo "$t"
+    sleep 1
+  done
 fi
 
 # Download metadata
