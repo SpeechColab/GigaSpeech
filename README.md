@@ -70,7 +70,7 @@ use Kaldi as an example)
 git clone https://github.com/SpeechColab/GigaSpeech.git
 
 cd GigaSpeech
-utils/gigaspeech_download.sh /disk1/audio_data/gigaspeech
+utils/download_gigaspeech.sh /disk1/audio_data/gigaspeech
 toolkits/kaldi/gigaspeech_data_prep.sh --train-subset XL /disk1/audio_data/gigaspeech ../data
 cd ..
 ```
@@ -102,7 +102,13 @@ other related scripts should be maintained under `toolkits/espnet2`.
 
 
 ## Collaboration
+We are a group of volunteers trying to make speech technologies easier to use. We welcome any kind of contributions. Currently we are exploring the following directions. If you are interested in one of the directions, and you think you will be able to help, please contact info@speechcolab.org.
 
+* Inference architecture for different pre-trained models
+* Adding diverse audio source
+* Building and releasing pre-trained models
+* Supporting more languages
+* Making new datasets with permissive licenses
 
 ## Citation
 Please cite our paper if you find this work useful:
