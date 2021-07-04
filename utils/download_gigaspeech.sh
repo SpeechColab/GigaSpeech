@@ -35,18 +35,18 @@ gigaspeech_dataset_dir=$1
 
 if [[ "$GIGASPEECH_RELEASE_URL" == oss* ]]; then
   # This is for SpeechColab collaborators, need 600G free space
+  echo "$0: Downloading from the oss host..."
   utils/internal/download_gigaspeech_from_oss.sh \
     --stage $stage --with-dict $with_dict \
-    $gigaspeech_dataset_dir
-
+    $gigaspeech_dataset_dir || exit 1;
 elif [[ "$GIGASPEECH_RELEASE_URL" == *tsinghua* ]]; then
   # This is for public release, need 1.2T free space
+  echo "$0: Downloading from the Tsinghua University host..."
   utils/internal/download_gigaspeech_from_tsinghua.sh \
     --stage $stage --with-dict $with_dict \
-    $gigaspeech_dataset_dir
-
+    $gigaspeech_dataset_dir || exit 1;
 else
-  echo "$0: unsupported release URL: $GIGASPEECH_RELEASE_URL"
+  echo "$0: Unsupported release URL: $GIGASPEECH_RELEASE_URL"
   exit 1
 fi
 

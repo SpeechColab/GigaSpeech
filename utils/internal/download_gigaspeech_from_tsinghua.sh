@@ -39,12 +39,13 @@ fi
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
-  echo "$0: Please apply for the credentials (see README) and add it to SAFEBOX/password"
+  echo "$0: Please apply for the download credentials (see the \"Download\""
+  echo "$0: section in README) and it to SAFEBOX/password."
   exit 1
 fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
 if [ -z "$PASSWORD" ]; then
-  echo "$0: Error, SAFEBOX/password is empty"
+  echo "$0: Error, SAFEBOX/password is empty."
   exit 1
 fi
 
@@ -57,6 +58,15 @@ if ! which openssl >/dev/null; then
   echo "$0: Error, please make sure you have openssl installed."
   exit 1
 fi
+openssl_version=`openssl version|sed -E 's/^.*([0-9]+\.[0-9]+\.[0-9]+).*$/\1/g'`
+required_version="1.1.1"
+older_version=$(printf "$required_version\n$openssl_version\n"|sort -V|head -n1)
+if [[ "$older_version" != "$required_version" ]]; then
+  echo "$0: The script requires openssl version $required_version or newer."
+  echo "$0: Please download the openssl source code, and install openssl"
+  echo "$0: version $required_version"
+  exit 1
+fi
 
 download_and_process() {
   local obj=$1
@@ -66,7 +76,8 @@ download_and_process() {
   local remote_path=${GIGASPEECH_RELEASE_URL}/$obj
   local path=${gigaspeech_dataset_dir}/$obj
   local location=$(dirname $path)
-  mkdir -p $location && wget -c -P $location $remote_path
+  mkdir -p $location || exit 1;
+  wget -c -P $location $remote_path || exit 1;
 
   # post processing (e.g. decryption & decompression)
   echo "$0: processing $obj"
@@ -104,7 +115,7 @@ fi
 if [ $stage -le 2 ]; then
   echo "$0: Start to download GigaSpeech Metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
-    download_and_process $obj
+    download_and_process $obj || exit 1;
   done
 fi
 
@@ -113,7 +124,7 @@ if [ $stage -le 3 ]; then
   echo "$0: Start to download GigaSpeech cached audio collection"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
-      download_and_process $obj
+      download_and_process $obj || exit 1;
     done
   done
 fi
@@ -122,7 +133,7 @@ fi
 if [ $stage -le 4 ]; then
   if [ $with_dict == true ]; then
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
-      download_and_process $obj
+      download_and_process $obj || exit 1;
     done
   fi
 fi
