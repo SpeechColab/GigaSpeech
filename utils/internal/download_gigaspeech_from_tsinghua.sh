@@ -26,7 +26,7 @@ mkdir -p $gigaspeech_dataset_dir
 
 # Check operating system
 if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
-  echo "$0: Tsinghua host downloader supports *linux* & *Mac*"
+  echo "$0: Tsinghua host downloader supports Linux and Mac only"
   exit 1
 fi
 
