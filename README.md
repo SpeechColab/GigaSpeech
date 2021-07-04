@@ -75,6 +75,33 @@ toolkits/kaldi/gigaspeech_data_prep.sh --train-subset XL /disk1/audio_data/gigas
 cd ..
 ```
 
+### Metadata structure walkthrough
+Metadata is stored in single json file(GigaSpeech.json), and we intentionally design the structure as simple as possible, below is a skeleton example:
+
+```json
+{
+  "dataset": "GigaSpeech",
+  "language": "EN",
+  ...
+  "audios": [
+    {
+      "path": "audio/podcast/P0001/abc.opus",
+      ...
+      "segments": {
+        "begin_time": 15.7,
+        "end_time": 23.6,
+        "text_tn": "this is the transcription of this segment",
+        ...
+      },
+      ...
+    },
+    ...
+  ]
+}
+```
+Basically it contains a big list of audios, each contains a list of labelled segments. It should be easy to parse/analyse/extract in python. And we provide some convenient command-line tools based on [jq](https://stedolan.github.io/jq/), in case you need them [ls_audio](utils/ls_audios.sh), [show_segment_info](utils/show_segment_info.sh), [ls_md5](utils/ls_md5.sh).
+
+
 ### Audio Processing
 * `Resampling`: Audio files in GigaSpeech are encoded in `opus`, with bandwith conforming to 16k sample rate. However some Python/C libraries may have bugs that they don't honor the sample rate encoded in opus, and directly extract 48kHz wavs.  We recommend our users to explicitly resample opus to 16k wav before training & testing to avoid such pitfalls(this could be done on-the-fly or offline). For opus-to-wav conversion, refer to our exampler tool [utils/opus_to_wav.py](utils/opus_to_wav.py)
 
