@@ -98,11 +98,11 @@ cd ..
     ```
 
 ### Text Post-Processing(before word-error-rate scoring)
-* `Conversational Fillers`: Spontaneous speeches contains lots of conversational fillers like
+* `Conversational Fillers`: Spontaneous/Conversational speeches contain conversational fillers such as:
   ```
   'UH', 'UHH', 'UM', 'EH', 'MM', 'HM', 'AH', 'HUH', 'HA', 'ER'
   ```
-  these fillers are common, meaningless, and impractical to be transcribed in unified froms. So we highly recommend to remove these fillers from hypothese and reference text before WER scoring, for apple-to-apple scoring comparisons. See discussion [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We provide scoring tool [here](utils/gigaspeech_scoring.py), and this tool is used by all toolkits reported in above leaderboard section.
+  these fillers are everywhere, meaningless, and impractical to be transcribed in unified froms. So we highly recommend to remove these fillers from hypothese and reference text before WER scoring, for apple-to-apple scoring comparisons. See discussion [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We provide scoring tool [here](utils/gigaspeech_scoring.py), and this tool is used by all toolkits reported in above leaderboard section.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
