@@ -76,7 +76,7 @@ cd ..
 ```
 
 ### Audio Processing
-* `Resampling`: Audio files in GigaSpeech are encoded in `OPUS`, with bandwith conforming to 16k sample rate. However some Python/C libraries may have bugs that they don't honor the sample rate encoded in OPUS, and directly extract 48kHz wavs.  We recommend our users explicitly resample opus to 16k wav before training & testing (this could be done on-the-fly or offline). For opus-to-wav conversion, refer to our exampler tool [here](utils/opus_to_wav.py).
+* `Resampling`: Audio files in GigaSpeech are encoded in `opus`, with bandwith conforming to 16k sample rate. However some Python/C libraries may have bugs that they don't honor the sample rate encoded in opus, and directly extract 48kHz wavs.  We recommend our users to explicitly resample opus to 16k wav before training & testing to avoid such pitfalls(this could be done on-the-fly or offline). For opus-to-wav conversion, refer to our exampler tool [utils/opus_to_wav.py](utils/opus_to_wav.py)
 
 ### Text Pre-Processing
 * `Punctuations`: By design we keep 4 punctuations in labels(utterance's `text_tn` section)
@@ -102,7 +102,7 @@ cd ..
   ```
   'UH', 'UHH', 'UM', 'EH', 'MM', 'HM', 'AH', 'HUH', 'HA', 'ER'
   ```
-  these fillers are everywhere, meaningless, and impractical to be transcribed in unified froms. So we highly recommend to remove these fillers from hypothese and reference text before WER scoring, for apple-to-apple scoring comparisons. See discussion [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We provide scoring tool [here](utils/gigaspeech_scoring.py), and this tool is used by all toolkits reported in above leaderboard section.
+  these fillers are everywhere, meaningless, and impractical to be transcribed in unified forms. So we highly recommend to remove these fillers from hypothese and reference text before WER scoring, for apple-to-apple scoring comparisons. See discussion on postprocessing [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We provide scoring tool [utils/gigaspeech_scoring.py](utils/gigaspeech_scoring.py) and this tool is used by all toolkits reported in above leaderboard section.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
@@ -110,7 +110,6 @@ To add data preparation support for a new toolkit, please follow
 toolkit. For example, for ESPnet2, you would add
 `toolkits/espnet2/gigaspeech_data_prep.sh` to prepare the dataset, and all
 other related scripts should be maintained under `toolkits/espnet2`.
-
 
 ## Collaboration
 We are a group of volunteers trying to make speech technologies easier to use. We welcome any kind of contributions. Currently we are exploring the following directions. If you are interested in one of the directions, and you think you will be able to help, please contact info@speechcolab.org.
