@@ -25,8 +25,8 @@ gigaspeech_dataset_dir=$1
 mkdir -p $gigaspeech_dataset_dir
 
 # Check operating system
-if [ `uname -s` != 'Linux' ]; then
-  echo "$0: Tsinghua host supports *linux only*"
+if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
+  echo "$0: Tsinghua host downloader supports Linux and Mac only"
   exit 1
 fi
 
@@ -58,6 +58,15 @@ if ! which openssl >/dev/null; then
   echo "$0: Error, please make sure you have openssl installed."
   exit 1
 fi
+
+openssl_distro=`openssl version | awk '{print $1}'`
+required_distro="OpenSSL"
+if [[ "$openssl_distro" != "$required_distro" ]]; then
+  echo "$0: Unsupported $openssl_distro detected, please use $required_distro"
+  echo "$0: On mac, you should try: brew install openssl"
+  exit 1
+fi
+
 openssl_version=`openssl version|sed -E 's/^.*([0-9]+\.[0-9]+\.[0-9]+).*$/\1/g'`
 required_version="1.1.1"
 older_version=$(printf "$required_version\n$openssl_version\n"|sort -V|head -n1)
