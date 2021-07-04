@@ -76,7 +76,7 @@ cd ..
 ```
 
 ### Metadata structure walkthrough
-Metadata is stored in single json file(GigaSpeech.json), and we intentionally design the structure as simple as possible, below is a skeleton example:
+Metadata is stored in a single json file(GigaSpeech.json), and we intentionally design the structure as simple as possible:
 
 ```json
 {
@@ -87,12 +87,15 @@ Metadata is stored in single json file(GigaSpeech.json), and we intentionally de
     {
       "path": "audio/podcast/P0001/abc.opus",
       ...
-      "segments": {
-        "begin_time": 15.7,
-        "end_time": 23.6,
-        "text_tn": "this is the transcription of this segment",
+      "segments": [
+        {
+          "begin_time": 15.7,
+          "end_time": 23.6,
+          "text_tn": "this is the transcription of this segment",
+          ...
+        },
         ...
-      },
+      ],
       ...
     },
     ...
