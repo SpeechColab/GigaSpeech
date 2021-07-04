@@ -11,12 +11,12 @@ Please fill out the Google Form [here]() and follow the instructions to download
 | **Contributor**| **Toolkit**       | **Train Recipe**     | **Train Data** | **Inference**     |**Dev/Test WER**    |
 |:---------------|:------------------|:------------------|:------------------|:------------------|:------------------:|
 |||||
-| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | GigaSpeech v1.0.0 | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) [example](https://github.com/athena-team/athena/blob/e704884ec6a3a947769d892aa267578038e49ecb/examples/asr/gigaspeech/run.sh#L85) | 13.60 / 12.70 | 
-| <em>Baseline</em>    | [Espnet](https://github.com/espnet/espnet) | [Conformer/Transformer-AED](https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1) | GigaSpeech v1.0.0 | [model](https://zenodo.org/record/4630406) [example](https://github.com/espnet/espnet_model_zoo#asr) | 10.90 / 10.80 |
-| <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | GigaSpeech v1.0.0 | <u>model</u> <u>example</u> | 14.78 / 14.84 |
-| <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | GigaSpeech v1.0.0 | <u>model</u> <u>example</u> | 12.30 / 12.30 |
+| <em>Baseline</em>   | [Athena](https://github.com/athena-team/athena)            | [Transformer-AED + RNNLM](https://github.com/athena-team/athena/tree/master/examples/asr/gigaspeech) | GigaSpeech v1.0.0 XL | [model](https://drive.google.com/drive/folders/1HUUKzfnqqVfQR3epUVnnOWw9EEFpulVM) [example](https://github.com/athena-team/athena/blob/e704884ec6a3a947769d892aa267578038e49ecb/examples/asr/gigaspeech/run.sh#L85) | 13.60 / 12.70 | 
+| <em>Baseline</em>    | [Espnet](https://github.com/espnet/espnet) | [Conformer/Transformer-AED](https://github.com/espnet/espnet/tree/master/egs2/gigaspeech/asr1) | GigaSpeech v1.0.0 XL | [model](https://zenodo.org/record/4630406) [example](https://github.com/espnet/espnet_model_zoo#asr) | 10.90 / 10.80 |
+| <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | GigaSpeech v1.0.0 XL | <u>model</u> <u>example</u> | 14.78 / 14.84 |
+| <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | GigaSpeech v1.0.0 XL | <u>model</u> <u>example</u> | 12.30 / 12.30 |
 |||||
-| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [Conformer-AED](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) [example](https://github.com/wenet-e2e/wenet/blob/main/runtime/server/x86/README.md) | 11.10 / 11.00 |
+| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [Conformer-AED](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 XL | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210618_conformer_exp.tar.gz) [example](https://github.com/wenet-e2e/wenet/blob/main/runtime/server/x86/README.md) | 11.10 / 11.00 |
 
 
 ## Dataset
@@ -55,7 +55,7 @@ Larger subsets are supersets of smaller subsets, e.g., subset `L` contains all t
 Evaluation subsets are annotated by ***professional human annotators***
 
 
-## Data preparation Guidelines
+## Data Preparation Guidelines
 We maintain data preparation scripts for different speech recognition toolkits
 in this repository so that when we update the dataset (note, this is an evolving
 dataset), we don't have to update the scripts in the downstream toolkits. Data
@@ -63,7 +63,7 @@ preparation scripts for different speech recognition toolkits are maintained in
 the `toolkits/` folder, e.g., `toolkits/kaldi` for the Kaldi speech recognition
 toolkit.
 
-### Preparation Scripts Usage
+### Preparation Scripts
 To use the data preparation scripts, do the following in your toolkit (here we
 use Kaldi as an example)
 ```bash
@@ -75,16 +75,20 @@ toolkits/kaldi/gigaspeech_data_prep.sh --train-subset XL /disk1/audio_data/gigas
 cd ..
 ```
 
-### Notes on Text Processing
-1. By design we have `punctuations` in labels. This could enable E2E endpointer & punctuator research. To be specific, 4 punctuations may appear in utterance's `text_tn` section, they are:
+### Audio Processing
+* `Resampling`: Audio files in GigaSpeech are encoded in `OPUS`, with bandwith conforming to 16k sample rate. However some Python/C libraries may have bugs that they don't honor the sample rate encoded in OPUS, and directly extract 48kHz wavs.  We recommend our users explicitly resample opus to 16k wav before training & testing (this could be done on-the-fly or offline). For opus-to-wav conversion, refer to our exampler tool [here](utils/opus_to_wav.py).
+
+### Text Pre-Processing
+* `Punctuations`: By design we keep 4 punctuations in labels(utterance's `text_tn` section)
     ```
     <COMMA>
     <PERIOD>
     <QUESTIONMARK>
     <EXCLAMATIONPOINT>
     ```
+    This could enable E2E endpointer & punctuator research. If you don't want these, just remove these punctuations in your text preprocessing.
 
-2. `Grabage utterance tags`:
+* `Grabage Utterance Tags`:
    DEV/TEST sets are labeled by human annotators, they are instructed to label entire audio without "gap". So for segments that are not human speech, *garbage utterance tags* are used as labels. We recommend to discard these utterances in preprocessing. A *complete table* of these tags are:
     ```
     <SIL>
@@ -92,6 +96,13 @@ cd ..
     <NOISE>
     <OTHER>
     ```
+
+### Text Post-Processing(before word-error-rate scoring)
+* `Conversational Fillers`: Spontaneous speeches contains lots of conversational fillers like
+  ```
+  'UH', 'UHH', 'UM', 'EH', 'MM', 'HM', 'AH', 'HUH', 'HA', 'ER'
+  ```
+  these fillers are common, meaningless, and impractical to be transcribed in unified froms. So we highly recommend to remove these fillers from hypothese and reference text before WER scoring, for apple-to-apple scoring comparisons. See discussion [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We provide scoring tool [here](utils/gigaspeech_scoring.py), and this tool is used by all toolkits reported in above leaderboard section.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
