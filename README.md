@@ -142,11 +142,11 @@ We also provide some convenient command-line tools based on [jq](https://stedola
     ```
 
 ### Text Post-Processing (before scoring)
-* `Conversational Fillers`: Spontaneous/Conversational speeches contain conversational fillers such as:
+* `Conversational Fillers`: Spontaneous/Conversational speech contains conversational fillers such as:
   ```
   'UH', 'UHH', 'UM', 'EH', 'MM', 'HM', 'AH', 'HUH', 'HA', 'ER'
   ```
-  these fillers are everywhere, meaningless, and impractical to be transcribed in unified forms. So we highly recommend to remove these fillers from hypothese and reference text before WER scoring, for apple-to-apple scoring comparisons. See discussion on postprocessing [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We provide scoring tool [utils/gigaspeech_scoring.py](utils/gigaspeech_scoring.py) and this tool is used by all toolkits reported in above leaderboard section.
+  We recommend our users to remove these fillers from both hypothese and reference text before WER scoring, so that we will have apple-to-apple performance comparisons across different toolkits. See discussion on post-processing [here](https://github.com/SpeechColab/GigaSpeech/issues/24). We also provide a scoring tool [utils/gigaspeech_scoring.py](utils/gigaspeech_scoring.py) and this tool is used by all the toolkits reported in above leaderboard section.
 
 ### Add Support for a New Toolkit
 To add data preparation support for a new toolkit, please follow
