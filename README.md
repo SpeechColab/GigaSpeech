@@ -117,11 +117,11 @@ To use the corpus, users are expected to extract the relevant information from G
 
 The metadata file GigaSpeech.json is version controlled, and is supposed to get updated over the time. In future releases, we plan to add speaker information to the metadata file, so that it will be suitable for speaker identification/verification tasks. We also plan to add more data from different sources to increase the diversity.
 
-We also provide some convenient command-line tools based on [jq](https://stedolan.github.io/jq/), e.g.,  [ls_audio.sh](utils/ls_audios.sh), [show_segment_info.sh](utils/show_segment_info.sh), [ls_md5.sh](utils/ls_md5.sh).
+We also provide some convenient command-line tools based on [jq](https://stedolan.github.io/jq/), e.g.,  [utils/ls_audio.sh](utils/ls_audios.sh), [utils/show_segment_info.sh](utils/show_segment_info.sh), [utils/ls_md5.sh](utils/ls_md5.sh).
 
 
 ### Audio Processing
-* `Resampling`: Audio files in GigaSpeech are encoded in `opus`, with bandwith conforming to 16k sample rate. However some Python/C libraries may have bugs that they don't honor the sample rate encoded in opus, and directly extract 48kHz wavs.  We recommend our users to explicitly resample opus to 16k wav before training & testing to avoid such pitfalls(this could be done on-the-fly or offline). For opus-to-wav conversion, refer to our exampler tool [utils/opus_to_wav.py](utils/opus_to_wav.py)
+* `Resampling`: GigaSpeech audio files are resampled at 16 kHz sampling rate, and are compressed with the Opus format. The Opus compression, however, does not depend on the input sample rate; it uses the bandwidth instead. Timestamps are measured in 48 kHz units even if the full bandwidth is not used. Likewise, the output sample rate may be freely chosen. For example, audio can be input at 16 kHz yet be set to encode only narrowband audio. For this reason, we recommend our users to explicitly resample the decoded audio to 16 kHz sampling rate before training & testing. For opus-to-wav conversion, refer to our exampler tool [utils/opus_to_wav.py](utils/opus_to_wav.py)
 
 ### Text Pre-Processing
 * `Punctuations`: By design we keep 4 punctuations in labels(utterance's `text_tn` section)
