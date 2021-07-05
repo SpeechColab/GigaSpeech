@@ -19,13 +19,7 @@ if [ $# -ne 1 ]; then
   echo "to your local dir <gigaspeech-dataset-dir>. "
   echo "options:"
   echo "  --with-dict true|false(default) download cmudict & g2p model"
-  echo "  --stage 0|1|2|3|4|5 specifies from which stage to start with"
-  echo "    0: env/downloader prepare & check"
-  echo "    1: user agreement"
-  echo "    2: metadata"
-  echo "    3: audio"
-  echo "    4: optional dictionary and g2p models"
-  echo "    5: md5 check on downloaded audio files"
+  echo "  --stage stage(default 0) specifies from which stage to start with"
   exit 1
 fi
 
