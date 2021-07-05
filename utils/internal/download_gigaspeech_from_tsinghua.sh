@@ -22,18 +22,18 @@ if [ $# -ne 1 ]; then
 fi
 
 gigaspeech_dataset_dir=$1
-mkdir -p $gigaspeech_dataset_dir
+mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check operating system
 if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
-  echo "$0: Tsinghua host downloader supports Linux and Mac only"
+  echo "$0: The Tsinghua host downloader only supports Linux and Mac OS."
   exit 1
 fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
 if [ -z "${GIGASPEECH_RELEASE_URL}" ]; then
-  echo "$0: Error, variable GIGASPEECH_RELEASE_URL(in env_vars.sh) is empty."
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL (in env_vars.sh) is not set."
   exit 1
 fi
 
@@ -79,33 +79,33 @@ fi
 
 download_object_from_release() {
   local obj=$1
-  echo "$0: downloading $obj"
+  echo "$0: Downloading $obj"
   local remote_obj=${GIGASPEECH_RELEASE_URL}/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
+  mkdir -p $location || exit 1;
   # -T seconds timeout, -t number of tries
-  mkdir -p $location \
-    && wget -c -t 20 -T 90 -P $location $remote_obj || exit 1;
+  wget -c -t 20 -T 90 -P $location $remote_obj || exit 1;
 }
 
 process_downloaded_object() {
   local obj=$1
-  echo "$0: processing $obj"
+  echo "$0: Processing $obj"
   local path=${gigaspeech_dataset_dir}/$obj
   local location=$(dirname $path)
 
   if [[ $path == *.tgz.aes ]]; then
     # encrypted-gziped-tarball contains contents of a GigaSpeech sub-directory
     local subdir_name=$(basename $path .tgz.aes)
-    mkdir -p $location/$subdir_name \
-      && openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
-      | tar xzf - -C $location/$subdir_name || exit 1;
+    mkdir -p $location/$subdir_name || exit 1;
+    openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path |\
+      tar xzf - -C $location/$subdir_name || exit 1;
   elif [[ $path == *.gz.aes ]]; then
     # encripted-gziped object represents a regular GigaSpeech file
     local file_name=$(basename $path .gz.aes)
-    mkdir -p $location \
-      && openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
-      | gunzip -c > $location/$file_name || exit 1;
+    mkdir -p $location || exit 1;
+    openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path |\
+      gunzip -c > $location/$file_name || exit 1;
   else
     # keep the object as it is
     :
@@ -130,14 +130,14 @@ fi
 
 # Metadata
 if [ $stage -le 1 ]; then
-  echo "$0: Start to download GigaSpeech Metadata"
+  echo "$0: Start to download GigaSpeech metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
     download_object_from_release $obj || exit 1;
   done
 fi
 
 if [ $stage -le 2 ]; then
-  echo "$0: Start to process downloaded metadata"
+  echo "$0: Start to process the downloaded metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
     process_downloaded_object $obj || exit 1;
   done
@@ -145,7 +145,7 @@ fi
 
 # Audio
 if [ $stage -le 3 ]; then
-  echo "$0: Start to download GigaSpeech cached audios"
+  echo "$0: Start to download GigaSpeech cached audio files"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
       download_object_from_release $obj || exit 1;
@@ -154,7 +154,7 @@ if [ $stage -le 3 ]; then
 fi
 
 if [ $stage -le 4 ]; then
-  echo "$0: Start to process downloaded audios"
+  echo "$0: Start to process the downloaded audio files"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
       process_downloaded_object $obj || exit 1;
@@ -165,14 +165,14 @@ fi
 # Optional dictionary & pretrained g2p model
 if [ $with_dict == true ]; then
   if [ $stage -le 5 ]; then
-    echo "$0: Start to downloaded dict resources"
+    echo "$0: Start to downloaded dictionary resources"
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
       download_object_from_release $obj || exit 1;
     done
   fi
 
   if [ $stage -le 6 ]; then
-    echo "$0: Start to process downloaded dict resources"
+    echo "$0: Start to process the downloaded dictionary resources"
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
       process_downloaded_object $obj || exit 1;
     done
