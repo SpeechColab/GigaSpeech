@@ -83,9 +83,9 @@ download_object_from_release() {
   local remote_obj=${GIGASPEECH_RELEASE_URL}/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
+  mkdir -p $location
   # -T seconds timeout, -t number of tries
-  mkdir -p $location \
-    && wget -c -t 20 -T 90 -P $location $remote_obj || exit 1;
+  wget -c -t 20 -T 90 -P $location $remote_obj || exit 1;
 }
 
 process_downloaded_object() {
@@ -97,14 +97,14 @@ process_downloaded_object() {
   if [[ $path == *.tgz.aes ]]; then
     # encrypted-gziped-tarball contains contents of a GigaSpeech sub-directory
     local subdir_name=$(basename $path .tgz.aes)
-    mkdir -p $location/$subdir_name \
-      && openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
+    mkdir -p $location/$subdir_name
+    openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
       | tar xzf - -C $location/$subdir_name || exit 1;
   elif [[ $path == *.gz.aes ]]; then
     # encripted-gziped object represents a regular GigaSpeech file
     local file_name=$(basename $path .gz.aes)
-    mkdir -p $location \
-      && openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
+    mkdir -p $location
+    openssl aes-256-cbc -d -salt -pass pass:$PASSWORD -pbkdf2 -in $path \
       | gunzip -c > $location/$file_name || exit 1;
   else
     # keep the object as it is
