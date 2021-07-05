@@ -124,17 +124,16 @@ We also provide some convenient command-line tools based on [jq](https://stedola
 * `Resampling`: GigaSpeech audio files are resampled at 16 kHz sampling rate, and are compressed with the Opus format. The Opus compression, however, does not depend on the input sample rate; it uses the bandwidth instead. Timestamps are measured in 48 kHz units even if the full bandwidth is not used. Likewise, the output sample rate may be freely chosen. For example, audio can be input at 16 kHz yet be set to encode only narrowband audio. For this reason, we recommend our users to explicitly resample the decoded audio to 16 kHz sampling rate before training & testing. For opus-to-wav conversion, refer to our exampler tool [utils/opus_to_wav.py](utils/opus_to_wav.py)
 
 ### Text Pre-Processing
-* `Punctuations`: By design we keep 4 punctuations in labels(utterance's `text_tn` section)
+* `Punctuations`: We keep 4 punctuations in the normalized text (see the `text_tn` entry in GigaSpeech.json)
     ```
     <COMMA>
     <PERIOD>
     <QUESTIONMARK>
     <EXCLAMATIONPOINT>
     ```
-    This could enable E2E endpointer & punctuator research. If you don't want these, just remove these punctuations in your text preprocessing.
+    This allows researchers to explore directions such as end-to-end endpointing and punctuation restoration. If you don't need these, you can remove them for your own training.
 
-* `Grabage Utterance Tags`:
-   DEV/TEST sets are labeled by human annotators, they are instructed to label entire audio without "gap". So for segments that are not human speech, *garbage utterance tags* are used as labels. We recommend to discard these utterances in preprocessing. A *complete table* of these tags are:
+* `Grabage Utterance Tags`: The Dev/Test evaluation sets are annotated by human annotators. They are instructed to label the entire audio file without "gaps". So for non-speech segments, *garbage utterance tags* are used instead. We recommend our users to discard these utterances in your training. A *complete list* of these tags are:
     ```
     <SIL>
     <MUSIC>
@@ -142,7 +141,7 @@ We also provide some convenient command-line tools based on [jq](https://stedola
     <OTHER>
     ```
 
-### Text Post-Processing(before word-error-rate scoring)
+### Text Post-Processing (before scoring)
 * `Conversational Fillers`: Spontaneous/Conversational speeches contain conversational fillers such as:
   ```
   'UH', 'UHH', 'UM', 'EH', 'MM', 'HM', 'AH', 'HUH', 'HA', 'ER'
