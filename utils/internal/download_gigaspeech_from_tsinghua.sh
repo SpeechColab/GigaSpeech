@@ -114,7 +114,7 @@ process_downloaded_object() {
 
 
 # User agreement
-if [ $stage -le 10 ]; then
+if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
   wget -c -P $gigaspeech_dataset_dir $GIGASPEECH_RELEASE_URL/TERMS_OF_ACCESS
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
@@ -129,13 +129,14 @@ if [ $stage -le 10 ]; then
 fi
 
 # Metadata
-if [ $stage -le 20 ]; then
+if [ $stage -le 1 ]; then
   echo "$0: Start to download GigaSpeech Metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
     download_object_from_release $obj || exit 1;
   done
 fi
-if [ $stage -le 25 ]; then
+
+if [ $stage -le 2 ]; then
   echo "$0: Start to process downloaded metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
     process_downloaded_object $obj || exit 1;
@@ -143,7 +144,7 @@ if [ $stage -le 25 ]; then
 fi
 
 # Audio
-if [ $stage -le 30 ]; then
+if [ $stage -le 3 ]; then
   echo "$0: Start to download GigaSpeech cached audios"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
@@ -151,7 +152,8 @@ if [ $stage -le 30 ]; then
     done
   done
 fi
-if [ $stage -le 35 ]; then
+
+if [ $stage -le 4 ]; then
   echo "$0: Start to process downloaded audios"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
@@ -161,16 +163,15 @@ if [ $stage -le 35 ]; then
 fi
 
 # Optional dictionary & pretrained g2p model
-if [ $stage -le 40 ]; then
-  if [ $with_dict == true ]; then
+if [ $with_dict == true ]; then
+  if [ $stage -le 5 ]; then
     echo "$0: Start to downloaded dict resources"
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
       download_object_from_release $obj || exit 1;
     done
   fi
-fi
-if [ $stage -le 45 ]; then
-  if [ $with_dict == true ]; then
+
+  if [ $stage -le 6 ]; then
     echo "$0: Start to process downloaded dict resources"
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
       process_downloaded_object $obj || exit 1;
@@ -179,7 +180,7 @@ if [ $stage -le 45 ]; then
 fi
 
 # Check audio md5
-if [ $stage -le 50 ]; then
+if [ $stage -le 7 ]; then
   echo "$0: Checking md5 of downloaded audio files"
   utils/check_audio_md5.sh $gigaspeech_dataset_dir || exit 1
 fi
