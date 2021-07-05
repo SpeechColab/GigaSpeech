@@ -1,10 +1,10 @@
 # GigaSpeech
 This is the official repository of the GigaSpeech dataset. For details of how we created the dataset, please refer to our Interspeech paper: *"GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio"*. [Preprint available on arxiv](https://arxiv.org/abs/2106.06909).
 
-GigaSpeech version: 1.0.0 (07/01/2021)
+GigaSpeech version: 1.0.0 (07/05/2021)
 
 ## Download
-Please fill out the Google Form [here]() and follow the instructions to download the GigaSpeech dataset.
+Please fill out the Google Form [here](https://forms.gle/UuGQAPyscGRrUMLq6) and follow the instructions to download the GigaSpeech dataset.
 
 ## Leaderboard
 
