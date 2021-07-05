@@ -102,7 +102,7 @@ other related scripts should be maintained under `toolkits/espnet2`.
 
 
 ## Collaboration
-We are a group of volunteers trying to make speech technologies easier to use. We welcome any kind of contributions. Currently we are exploring the following directions. If you are interested in one of the directions, and you think you will be able to help, please contact info@speechcolab.org.
+We are a group of volunteers trying to make speech technologies easier to use. We welcome any kind of contributions. Currently we are exploring the following directions. If you are interested in one of the directions, and you think you will be able to help, please contact gigaspeech@speechcolab.org.
 
 * Inference architecture for different pre-trained models
 * Adding diverse audio source
@@ -124,4 +124,5 @@ Please cite our paper if you find this work useful:
 }
 ```
 
-
+## Contact
+If you have any concerns, please contact gigaspeech@speechcolab.org.
