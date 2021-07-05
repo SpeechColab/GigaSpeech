@@ -78,8 +78,8 @@ if [[ "$older_version" != "$required_version" ]]; then
 fi
 
 download_object_from_release() {
-  echo "$0: downloading $obj"
   local obj=$1
+  echo "$0: downloading $obj"
   local remote_obj=${GIGASPEECH_RELEASE_URL}/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
@@ -89,8 +89,8 @@ download_object_from_release() {
 }
 
 process_downloaded_object() {
-  echo "$0: processing $obj"
   local obj=$1
+  echo "$0: processing $obj"
   local path=${gigaspeech_dataset_dir}/$obj
   local location=$(dirname $path)
 
