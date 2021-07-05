@@ -26,14 +26,14 @@ mkdir -p $gigaspeech_dataset_dir
 
 # Check operating system
 if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
-  echo "$0: Tsinghua host downloader supports Linux and Mac only"
+  echo "$0: The Tsinghua host downloader only supports Linux and Mac OS."
   exit 1
 fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
 if [ -z "${GIGASPEECH_RELEASE_URL}" ]; then
-  echo "$0: Error, variable GIGASPEECH_RELEASE_URL(in env_vars.sh) is empty."
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL (in env_vars.sh) is not set."
   exit 1
 fi
 
@@ -79,7 +79,7 @@ fi
 
 download_object_from_release() {
   local obj=$1
-  echo "$0: downloading $obj"
+  echo "$0: Downloading $obj"
   local remote_obj=${GIGASPEECH_RELEASE_URL}/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
@@ -90,7 +90,7 @@ download_object_from_release() {
 
 process_downloaded_object() {
   local obj=$1
-  echo "$0: processing $obj"
+  echo "$0: Processing $obj"
   local path=${gigaspeech_dataset_dir}/$obj
   local location=$(dirname $path)
 
@@ -130,14 +130,14 @@ fi
 
 # Metadata
 if [ $stage -le 1 ]; then
-  echo "$0: Start to download GigaSpeech Metadata"
+  echo "$0: Start to download GigaSpeech metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
     download_object_from_release $obj || exit 1;
   done
 fi
 
 if [ $stage -le 2 ]; then
-  echo "$0: Start to process downloaded metadata"
+  echo "$0: Start to process the downloaded metadata"
   for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
     process_downloaded_object $obj || exit 1;
   done
@@ -145,7 +145,7 @@ fi
 
 # Audio
 if [ $stage -le 3 ]; then
-  echo "$0: Start to download GigaSpeech cached audios"
+  echo "$0: Start to download GigaSpeech cached audio files"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
       download_object_from_release $obj || exit 1;
@@ -154,7 +154,7 @@ if [ $stage -le 3 ]; then
 fi
 
 if [ $stage -le 4 ]; then
-  echo "$0: Start to process downloaded audios"
+  echo "$0: Start to process the downloaded audio files"
   for audio_source in youtube podcast audiobook; do
     for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
       process_downloaded_object $obj || exit 1;
@@ -165,14 +165,14 @@ fi
 # Optional dictionary & pretrained g2p model
 if [ $with_dict == true ]; then
   if [ $stage -le 5 ]; then
-    echo "$0: Start to downloaded dict resources"
+    echo "$0: Start to downloaded dictionary resources"
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
       download_object_from_release $obj || exit 1;
     done
   fi
 
   if [ $stage -le 6 ]; then
-    echo "$0: Start to process downloaded dict resources"
+    echo "$0: Start to process the downloaded dictionary resources"
     for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
       process_downloaded_object $obj || exit 1;
     done
