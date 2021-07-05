@@ -109,6 +109,7 @@ We are a group of volunteers trying to make speech technologies easier to use. W
 * Benchmarking speech algorithms/services
 * Building and releasing pre-trained models
 * Supporting more languages
+* Supporting more tasks through GigaSpeech.json (e.g., speaker ID)
 * Making new datasets with permissive licenses
 
 ## Citation
