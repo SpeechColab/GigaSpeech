@@ -130,6 +130,7 @@ dmypy.json
 
 # GigaSpeech ignore list
 SAFEBOX/aliyun_ossutil.cfg
+SAFEBOX/password
 */dict/*
 */g2p/*
 *.json
@@ -138,3 +139,6 @@ ossutil64
 ossutilmac64
 ossutil_output/
 tmp/
+.DS_Store
+*.aes
+*.tgz
