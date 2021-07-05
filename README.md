@@ -98,7 +98,6 @@ GigaSpeech.json. Below is a snip of this file:
           "speaker": "N/A",
           "begin_time": 780.31,
           "end_time": 783.13,
-          "text_raw": "“Four o'clock tomorrow afternoon”, said Williams.",
           "text_tn": "FOUR O'CLOCK TOMORROW AFTERNOON <COMMA> SAID WILLIAMS <PERIOD>",
           "subsets": [
             "{XL}",
