@@ -75,34 +75,49 @@ toolkits/kaldi/gigaspeech_data_prep.sh --train-subset XL /disk1/audio_data/gigas
 cd ..
 ```
 
-### Metadata structure walkthrough
-Metadata is stored in a single json file(GigaSpeech.json), and we intentionally design the structure as simple as possible:
+### Metadata walkthrough
+
+We save all the metadata information to a single JSON file named
+GigaSpeech.json. Below is a snip of this file:
 
 ```json
 {
   "dataset": "GigaSpeech",
   "language": "EN",
-  ...
+  "version": "v1.0.0",
+  ... ...
   "audios": [
     {
-      "path": "audio/podcast/P0001/abc.opus",
-      ...
+      "title": "The Architect of Hollywood",
+      "url": "https://99percentinvisible.org/episode/the-architect-of-hollywood/download",
+      "path": "audio/podcast/P0001/POD0000000025.opus",
+      ... ...
       "segments": [
         {
-          "begin_time": 15.7,
-          "end_time": 23.6,
-          "text_tn": "this is the transcription of this segment",
-          ...
+          "sid": "POD0000000025_S0000103",
+          "speaker": "N/A",
+          "begin_time": 780.31,
+          "end_time": 783.13,
+          "text_raw": "“Four o'clock tomorrow afternoon”, said Williams.",
+          "text_tn": "FOUR O'CLOCK TOMORROW AFTERNOON <COMMA> SAID WILLIAMS <PERIOD>",
+          "subsets": [
+            "{XL}",
+            "{L}"
+          ]
         },
-        ...
+        ... ...
       ],
-      ...
+      ... ...
     },
-    ...
+    ... ...
   ]
 }
 ```
-Basically it contains a big list of audios, each contains a list of labelled segments. It should be easy to parse/analyse/extract in python. And we provide some convenient command-line tools based on [jq](https://stedolan.github.io/jq/), in case you need them [ls_audio](utils/ls_audios.sh), [show_segment_info](utils/show_segment_info.sh), [ls_md5](utils/ls_md5.sh).
+To use the corpus, users are expected to extract the relevant information from GigaSpeech.json. For example, for the speech recognition task, one should first follow the "audios" entry, and work out a list of audio files. One can then follow the "url" entry to download the original audio file, or "path" if preprocessed audio files have been downloaded to the disk. After that, for each audio file, one can follow the "segments" entry, and work out the trainable audio segments, as well as their corresponding transcripts. Of course, we also have various supplementary entries, such as "subsets", "md5", which will also be helpful for your task.
+
+The metadata file GigaSpeech.json is version controlled, and is supposed to get updated over the time. In future releases, we plan to add speaker information to the metadata file, so that it will be suitable for speaker identification/verification tasks. We also plan to add more data from different sources to increase the diversity.
+
+We also provide some convenient command-line tools based on [jq](https://stedolan.github.io/jq/), e.g.,  [ls_audio.sh](utils/ls_audios.sh), [show_segment_info.sh](utils/show_segment_info.sh), [ls_md5.sh](utils/ls_md5.sh).
 
 
 ### Audio Processing
