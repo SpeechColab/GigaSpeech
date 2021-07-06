@@ -1,5 +1,4 @@
-#
-#!/usr/bin/env bash
+#!/usr/bin/python
 # coding=utf-8
 # Copyright (C) 2021 ATHENA AUTHORS; Shuaijiang Zhao; Xiaoning Lei
 #

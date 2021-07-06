@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# coding=utf-8
 # Copyright 2021  Xiaomi Corporation (Author: Yongqing Wang)
 #                 Athena Authors (Shuaijiang Zhao)
 
