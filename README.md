@@ -38,7 +38,7 @@ Please fill out the Google Form [here](https://forms.gle/UuGQAPyscGRrUMLq6) and 
 | Subset    |    Hours    |  Remarks  |
 |:---------------:|:-------------:|:-------------|
 | XS |  10        | System building and debugging |
-| S  |  250        | Qucik research experiments |
+| S  |  250        | Quick research experiments |
 | M  |  1,000      | Large-scale research experiments |
 | L  |  2,500      | Medium-scale industrial experiments |
 | XL |  10,000    | Large-scale industrial experiments |
