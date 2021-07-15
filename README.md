@@ -165,6 +165,13 @@ We are a group of volunteers trying to make speech technologies easier to use. W
 * Supporting more tasks through GigaSpeech.json (e.g., speaker ID)
 * Making new datasets with permissive licenses
 
+## Institutional Contributors
+|  Institution | Contribution |
+|:------|:-----|
+| [Speechocean](http://en.speechocean.com/)                  | Data host mirror; Evaluation data annotation; |
+| [IEIT, Tsinghua University](http://www.tsinghua-ieit.com/) | Computing power; Data host; Researchers |
+| [Xiaomi Corporation](https://www.mi.com/global/)           | Computing power; Researchers |
+
 ## Citation
 Please cite our paper if you find this work useful:
 
