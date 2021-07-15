@@ -169,8 +169,8 @@ We are a group of volunteers trying to make speech technologies easier to use. W
 |  Institution | Contribution |
 |:------|:-----|
 | [Speechocean](http://en.speechocean.com/)                  | Data host mirror; Evaluation data annotation; |
-| [IEIT, Tsinghua University](http://www.tsinghua-ieit.com/) | Computing power; Data host |
-| [Xiaomi Corporation](https://www.mi.com/global/)           | Computing power |
+| [IEIT, Tsinghua University](http://www.tsinghua-ieit.com/) | Computing power; Data host; Researchers |
+| [Xiaomi Corporation](https://www.mi.com/global/)           | Computing power; Researchers |
 
 ## Citation
 Please cite our paper if you find this work useful:
