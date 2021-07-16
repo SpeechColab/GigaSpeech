@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2021  Jiayu Du
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
+#                 Tsinghua University (Author: Shuzhou Chai)
 
 set -e
 set -o pipefail
@@ -10,9 +11,9 @@ with_dict=false
 
 . ./utils/parse_options.sh || exit 1
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 <gigaspeech-dataset-dir> <host>"
-  echo " e.g.: $0 /disk1/audio_data/gigaspeech speechocean"
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <gigaspeech-dataset-dir>"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script downloads the entire GigaSpeech Dataset from Speechocean host."
   echo "We suggest having at least 1.2T of free space in local dir."
@@ -22,7 +23,6 @@ if [ $# -ne 2 ]; then
 fi
 
 gigaspeech_dataset_dir=$1
-host=$2
 mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check operating system
@@ -33,8 +33,8 @@ fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
-echo ${GIGASPEECH_RELEASE_URL[$host]}
-if [ -z "${GIGASPEECH_RELEASE_URL[$host]}" ]; then
+echo ${GIGASPEECH_RELEASE_URL[speechocean]}
+if [ -z "${GIGASPEECH_RELEASE_URL[speechocean]}" ]; then
   echo "$0: Error, variable GIGASPEECH_RELEASE_URL (in env_vars.sh) is not set."
   exit 1
 fi
@@ -90,7 +90,7 @@ download_object_from_release() {
   mkdir -p $location_dirname || exit 1;
 
   # -T seconds timeout, -t number of tries
-  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD ftp://124.207.81.184/GigaSpeech/$remote_obj -O $location || exit 1;
+  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD ftp://${GIGASPEECH_RELEASE_URL[speechocean]}/GigaSpeech/$remote_obj -O $location || exit 1;
 }
 
 process_downloaded_object() {
@@ -122,7 +122,7 @@ process_downloaded_object() {
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
   wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
-    ftp://124.207.81.184/GigaSpeech/TERMS_OF_ACCESS -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS 
+    ftp://${GIGASPEECH_RELEASE_URL[speechocean]}/GigaSpeech/TERMS_OF_ACCESS -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS 
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="

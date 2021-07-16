@@ -10,9 +10,9 @@ with_dict=false
 
 . ./utils/parse_options.sh || exit 1
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 <gigaspeech-dataset-dir><host>"
-  echo " e.g.: $0 /disk1/audio_data/gigaspeech tsinghua"
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <gigaspeech-dataset-dir>"
+  echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script downloads the entire GigaSpeech Dataset from Tsinghua host."
   echo "We suggest having at least 1.2T of free space in local dir."
@@ -22,7 +22,6 @@ if [ $# -ne 2 ]; then
 fi
 
 gigaspeech_dataset_dir=$1
-host=$2
 mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check operating system
@@ -33,8 +32,8 @@ fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
-echo ${GIGASPEECH_RELEASE_URL[$host]}
-if [ -z "${GIGASPEECH_RELEASE_URL[$host]}" ]; then
+echo ${GIGASPEECH_RELEASE_URL[tsinghua]}
+if [ -z "${GIGASPEECH_RELEASE_URL[tsinghua]}" ]; then
   echo "$0: Error, variable GIGASPEECH_RELEASE_URL (in env_vars.sh) is not set."
   exit 1
 fi
@@ -82,7 +81,7 @@ fi
 download_object_from_release() {
   local obj=$1
   echo "$0: Downloading $obj"
-  local remote_obj=${GIGASPEECH_RELEASE_URL[$host]}/$obj
+  local remote_obj=${GIGASPEECH_RELEASE_URL[tsinghua]}/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
   mkdir -p $location || exit 1;
@@ -118,7 +117,7 @@ process_downloaded_object() {
 # User agreement
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
-  wget -c -P $gigaspeech_dataset_dir ${GIGASPEECH_RELEASE_URL[$host]}/TERMS_OF_ACCESS
+  wget -c -P $gigaspeech_dataset_dir ${GIGASPEECH_RELEASE_URL[tsinghua]}/TERMS_OF_ACCESS
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="
