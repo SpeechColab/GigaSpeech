@@ -30,33 +30,27 @@ gigaspeech_dataset_dir=$1
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
 
 test_local_file="GigaSpeech.json.gz.aes"
-start_t="$(date +%s)"
-check_download_speed() {
 
-    stop_t="$(date +%s)"
+check_download_speed() {
     file_stat="$(stat $test_local_file)"
-    file_ctime="$(echo "$file_stat" | awk -F "[ .]" 'FNR==5{print $2,$3}' | sed 's/[- :]/ /g')"
-    file_ct="$(awk -v t="$file_ctime" 'BEGIN{print mktime(t)}')"
     file_size="$(du -sm $test_local_file | cut -f1)"
     rm "$test_local_file"
-
-    connect_t=$(($file_ct-$start_t))
-    transfer_t=$(($stop_t-$file_ct))
-    all_t=$(($stop_t-$start_t))
-    speed="$(echo "scale=3; $file_size/$transfer_t" | bc | awk '{printf "%.3f", $0}' )"
-    echo " size:${file_size}MB, all_time:$all_t, connect_time:$connect_t, transfer_time:$transfer_t, speed:${speed}MB/s"
-
+    speed="$(echo "scale=3; $file_size/20" | bc | awk '{printf "%.3f", $0}' )"
 }
 
 if [ -z "$host" ];then
-  timeout 20s wget -c -t 20 -T 90 ${GIGASPEECH_RELEASE_URL[tsinghua]}/GigaSpeech.json.gz.aes
+  #check differnet host and choose one with the fastest download speed
+  if [ `uname -s` == 'Darwin' ]; then
+    alias timeout=gtimeout
+  fi
+
+  timeout 20 wget -c -t 20 -T 90 http://www.tsinghua-ieit.com/dataset/GigaSpeech/GigaSpeech.json.gz.aes
   check_download_speed
   tsinghua_speed=$speed
   echo Speed of Tsinghua host is ${tsinghua_speed}MB/s
-  echo ${GIGASPEECH_URL[speechocean]}
   
-  timeout 20s wget -c  -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
-    ftp://${GIGASPEECH_RELEASE_URL[speechocean]}/GigaSpeech/GigaSpeech.json.gz.aes 
+  timeout 20 wget -c  -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
+    ftp://124.207.81.184/GigaSpeech/GigaSpeech.json.gz.aes 
   check_download_speed
   speechocean_speed=$speed
   echo Speed of Speechocean host is ${speechocean_speed}MB/s
@@ -87,7 +81,7 @@ elif [[ "$host" == *speechocean* ]]; then
     --stage $stage --with-dict $with_dict \
     $gigaspeech_dataset_dir || exit 1;
 else
-  echo "$0: Unsupported release URL: $GIGASPEECH_RELEASE_URL"
+  echo "$0: Unsupported host: $host"
   exit 1
 fi
 

@@ -32,11 +32,6 @@ fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
-echo ${GIGASPEECH_RELEASE_URL[tsinghua]}
-if [ -z "${GIGASPEECH_RELEASE_URL[tsinghua]}" ]; then
-  echo "$0: Error, variable GIGASPEECH_RELEASE_URL (in env_vars.sh) is not set."
-  exit 1
-fi
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
@@ -81,7 +76,7 @@ fi
 download_object_from_release() {
   local obj=$1
   echo "$0: Downloading $obj"
-  local remote_obj=${GIGASPEECH_RELEASE_URL[tsinghua]}/$obj
+  local remote_obj=http://www.tsinghua-ieit.com/dataset/GigaSpeech/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
   mkdir -p $location || exit 1;
@@ -117,7 +112,7 @@ process_downloaded_object() {
 # User agreement
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
-  wget -c -P $gigaspeech_dataset_dir ${GIGASPEECH_RELEASE_URL[tsinghua]}/TERMS_OF_ACCESS
+  wget -c -P $gigaspeech_dataset_dir http://www.tsinghua-ieit.com/dataset/GigaSpeech/TERMS_OF_ACCESS
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="

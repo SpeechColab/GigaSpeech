@@ -33,11 +33,6 @@ fi
 
 # Check release URL
 . ./env_vars.sh || exit 1
-echo ${GIGASPEECH_RELEASE_URL[speechocean]}
-if [ -z "${GIGASPEECH_RELEASE_URL[speechocean]}" ]; then
-  echo "$0: Error, variable GIGASPEECH_RELEASE_URL (in env_vars.sh) is not set."
-  exit 1
-fi
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
@@ -90,7 +85,7 @@ download_object_from_release() {
   mkdir -p $location_dirname || exit 1;
 
   # -T seconds timeout, -t number of tries
-  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD ftp://${GIGASPEECH_RELEASE_URL[speechocean]}/GigaSpeech/$remote_obj -O $location || exit 1;
+  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD ftp://124.207.81.184/GigaSpeech/$remote_obj -O $location || exit 1;
 }
 
 process_downloaded_object() {
@@ -122,7 +117,7 @@ process_downloaded_object() {
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
   wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
-    ftp://${GIGASPEECH_RELEASE_URL[speechocean]}/GigaSpeech/TERMS_OF_ACCESS -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS 
+    ftp://124.207.81.184/GigaSpeech/TERMS_OF_ACCESS -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS 
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="
