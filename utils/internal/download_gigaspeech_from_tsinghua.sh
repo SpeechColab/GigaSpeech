@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Copyright 2021  Jiayu Du
 #                 Seasalt AI, Inc (Author: Guoguo Chen)
+#                 Tsinghua University (Author: Shuzhou Chai)
 
 set -e
 set -o pipefail
@@ -8,6 +9,7 @@ set -o pipefail
 stage=0
 with_dict=false
 
+. ./env_vars.sh || exit 1
 . ./utils/parse_options.sh || exit 1
 
 if [ $# -ne 1 ]; then
@@ -15,9 +17,9 @@ if [ $# -ne 1 ]; then
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script downloads the entire GigaSpeech Dataset from Tsinghua host."
-  echo "We suggest having at least 1.2T of free space in local dir."
-  echo "If dataset resources are updated, you can just re-run this script for "
-  echo "incremental downloading, downloader will only download updates"
+  echo "We suggest having at least 1.2T of free space in the target directory."
+  echo "If dataset resources are updated, you can re-run this script for "
+  echo "incremental download."
   exit 1
 fi
 
@@ -31,7 +33,11 @@ if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
 fi
 
 # Check release URL
-. ./env_vars.sh || exit 1
+if [ -z "$GIGASPEECH_RELEASE_URL_TSINGHUA" ]; then
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL_TSINGHUA (in env_vars.sh)"
+  echo "$0: is not set."
+  exit 1
+fi
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
@@ -76,7 +82,7 @@ fi
 download_object_from_release() {
   local obj=$1
   echo "$0: Downloading $obj"
-  local remote_obj=http://www.tsinghua-ieit.com/dataset/GigaSpeech/$obj
+  local remote_obj=$GIGASPEECH_RELEASE_URL_TSINGHUA/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
   mkdir -p $location || exit 1;
@@ -112,7 +118,8 @@ process_downloaded_object() {
 # User agreement
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
-  wget -c -P $gigaspeech_dataset_dir http://www.tsinghua-ieit.com/dataset/GigaSpeech/TERMS_OF_ACCESS
+  wget -c -P $gigaspeech_dataset_dir \
+    $GIGASPEECH_RELEASE_URL_TSINGHUA/TERMS_OF_ACCESS || exit 1;
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="

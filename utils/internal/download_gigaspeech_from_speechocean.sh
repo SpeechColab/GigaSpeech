@@ -9,16 +9,17 @@ set -o pipefail
 stage=0
 with_dict=false
 
+. ./env_vars.sh || exit 1
 . ./utils/parse_options.sh || exit 1
 
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script downloads the entire GigaSpeech Dataset from Speechocean host."
-  echo "We suggest having at least 1.2T of free space in local dir."
-  echo "If dataset resources are updated, you can just re-run this script for "
-  echo "incremental downloading, downloader will only download updates"
+  echo "This script downloads the entire GigaSpeech Dataset from Speechocean"
+  echo "host. We suggest having at least 1.2T of free space in the target"
+  echo "directory. If dataset resources are updated, you can re-run this"
+  echo "script for incremental download."
   exit 1
 fi
 
@@ -32,7 +33,11 @@ if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
 fi
 
 # Check release URL
-. ./env_vars.sh || exit 1
+if [ -z "$GIGASPEECH_RELEASE_URL_SPEECHOCEAN" ]; then
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL_SPEECHOCEAN (in env_vars.sh)"
+  echo "$0: is not set."
+  exit 1
+fi
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
@@ -40,7 +45,6 @@ if [ ! -f SAFEBOX/password ]; then
   echo "$0: section in README) and it to SAFEBOX/password."
   exit 1
 fi
-
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
 if [ -z "$PASSWORD" ]; then
   echo "$0: Error, SAFEBOX/password is empty."
@@ -78,14 +82,13 @@ fi
 download_object_from_release() {
   local obj=$1
   echo "$0: Downloading $obj"
-  local remote_obj=$obj
-  local location=${gigaspeech_dataset_dir}$obj
-  local location_dirname=$(dirname ${gigaspeech_dataset_dir}/$obj)
+  local remote_obj=$GIGASPEECH_RELEASE_URL_SPEECHOCEAN/$obj
+  local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
-  mkdir -p $location_dirname || exit 1;
-
+  mkdir -p $location || exit 1;
   # -T seconds timeout, -t number of tries
-  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD ftp://124.207.81.184/GigaSpeech/$remote_obj -O $location || exit 1;
+  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
+    -P $location $remote_obj || exit 1;
 }
 
 process_downloaded_object() {
@@ -117,7 +120,8 @@ process_downloaded_object() {
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
   wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
-    ftp://124.207.81.184/GigaSpeech/TERMS_OF_ACCESS -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS 
+    $GIGASPEECH_RELEASE_URL_SPEECHOCEAN/TERMS_OF_ACCESS \
+    -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS || exit 1;
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="
