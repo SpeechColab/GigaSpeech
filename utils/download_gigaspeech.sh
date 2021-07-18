@@ -36,11 +36,14 @@ gigaspeech_dataset_dir=$1
 mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check credentials.
+if [ ! -f SAFEBOX/password ]; then
+  echo "$0: Please apply for the download credentials (see the \"Download\""
+  echo "$0: section in README) and it to SAFEBOX/password."
+  exit 1;
+fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
 if [ -z "$PASSWORD" ]; then
-  echo "$0: Please follow the download section in the README file, apply for"
-  echo "$0: the GigaSpeech credentials, and then follow the instructions and"
-  echo "$0: create the SAFEBOX/password file."
+  echo "$0: Error, SAFEBOX/password is empty."
   exit 1;
 fi
 
