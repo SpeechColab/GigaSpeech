@@ -120,15 +120,22 @@ if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
   wget -c -P $gigaspeech_dataset_dir \
     $GIGASPEECH_RELEASE_URL_TSINGHUA/TERMS_OF_ACCESS || exit 1;
-  echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
+  GREEN='\033[0;32m'
+  NC='\033[0m'       # No Color
+  echo -e "${GREEN}"
+  echo -e "BY PROCEEDING YOU AGREE TO THE FOLLOWING GIGASPEECH TERMS OF ACCESS:"
+  echo -e ""
+  echo -e "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
-  echo "=================================================================="
-  echo "$0: GigaSpeech downloading will start in 5 seconds"
+  echo -e "=================================================================="
+  echo -e "$0: GigaSpeech downloading will start in 5 seconds"
+  echo -e ""
 
   for t in $(seq 5 -1 1); do
     echo "$t"
     sleep 1
   done
+  echo -e "${NC}"
 fi
 
 # Metadata
