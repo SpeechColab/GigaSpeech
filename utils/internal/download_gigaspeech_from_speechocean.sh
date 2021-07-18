@@ -16,10 +16,10 @@ if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script downloads the entire GigaSpeech Dataset from Tsinghua host."
-  echo "We suggest having at least 1.2T of free space in the target directory."
-  echo "If dataset resources are updated, you can re-run this script for "
-  echo "incremental download."
+  echo "This script downloads the entire GigaSpeech Dataset from Speechocean"
+  echo "host. We suggest having at least 1.2T of free space in the target"
+  echo "directory. If dataset resources are updated, you can re-run this"
+  echo "script for incremental download."
   exit 1
 fi
 
@@ -28,13 +28,13 @@ mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check operating system
 if [ `uname -s` != 'Linux' ] && [ `uname -s` != 'Darwin' ]; then
-  echo "$0: The Tsinghua host downloader only supports Linux and Mac OS."
+  echo "$0: The Speechocean host downloader only supports Linux and Mac OS."
   exit 1
 fi
 
 # Check release URL
-if [ -z "$GIGASPEECH_RELEASE_URL_TSINGHUA" ]; then
-  echo "$0: Error, variable GIGASPEECH_RELEASE_URL_TSINGHUA (in env_vars.sh)"
+if [ -z "$GIGASPEECH_RELEASE_URL_SPEECHOCEAN" ]; then
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL_SPEECHOCEAN (in env_vars.sh)"
   echo "$0: is not set."
   exit 1
 fi
@@ -82,12 +82,13 @@ fi
 download_object_from_release() {
   local obj=$1
   echo "$0: Downloading $obj"
-  local remote_obj=$GIGASPEECH_RELEASE_URL_TSINGHUA/$obj
+  local remote_obj=$GIGASPEECH_RELEASE_URL_SPEECHOCEAN/$obj
   local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
 
   mkdir -p $location || exit 1;
   # -T seconds timeout, -t number of tries
-  wget -c -t 20 -T 90 -P $location $remote_obj || exit 1;
+  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
+    -P $location $remote_obj || exit 1;
 }
 
 process_downloaded_object() {
@@ -118,8 +119,9 @@ process_downloaded_object() {
 # User agreement
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
-  wget -c -P $gigaspeech_dataset_dir \
-    $GIGASPEECH_RELEASE_URL_TSINGHUA/TERMS_OF_ACCESS || exit 1;
+  wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
+    $GIGASPEECH_RELEASE_URL_SPEECHOCEAN/TERMS_OF_ACCESS \
+    -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS || exit 1;
   echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
   echo "=================================================================="
@@ -134,14 +136,14 @@ fi
 # Metadata
 if [ $stage -le 1 ]; then
   echo "$0: Start to download GigaSpeech metadata"
-  for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
+  for obj in `grep -v '^#' misc/speechocean/metadata.list`; do
     download_object_from_release $obj || exit 1;
   done
 fi
 
 if [ $stage -le 2 ]; then
   echo "$0: Start to process the downloaded metadata"
-  for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
+  for obj in `grep -v '^#' misc/speechocean/metadata.list`; do
     process_downloaded_object $obj || exit 1;
   done
 fi
@@ -150,7 +152,7 @@ fi
 if [ $stage -le 3 ]; then
   echo "$0: Start to download GigaSpeech cached audio files"
   for audio_source in youtube podcast audiobook; do
-    for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
+    for obj in `grep -v '^#' misc/speechocean/${audio_source}.list`; do
       download_object_from_release $obj || exit 1;
     done
   done
@@ -159,7 +161,7 @@ fi
 if [ $stage -le 4 ]; then
   echo "$0: Start to process the downloaded audio files"
   for audio_source in youtube podcast audiobook; do
-    for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
+    for obj in `grep -v '^#' misc/speechocean/${audio_source}.list`; do
       process_downloaded_object $obj || exit 1;
     done
   done
@@ -169,14 +171,14 @@ fi
 if [ $with_dict == true ]; then
   if [ $stage -le 5 ]; then
     echo "$0: Start to downloaded dictionary resources"
-    for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
+    for obj in `grep -v '^#' misc/speechocean/dict.list`; do
       download_object_from_release $obj || exit 1;
     done
   fi
 
   if [ $stage -le 6 ]; then
     echo "$0: Start to process the downloaded dictionary resources"
-    for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
+    for obj in `grep -v '^#' misc/speechocean/dict.list`; do
       process_downloaded_object $obj || exit 1;
     done
   fi
@@ -189,3 +191,5 @@ if [ $stage -le 7 ]; then
 fi
 
 echo "$0: Done"
+
+
