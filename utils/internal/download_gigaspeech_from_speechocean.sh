@@ -122,15 +122,22 @@ if [ $stage -le 0 ]; then
   wget -c -t 20 -T 90 --ftp-user=GigaSpeech --ftp-password=$PASSWORD \
     $GIGASPEECH_RELEASE_URL_SPEECHOCEAN/TERMS_OF_ACCESS \
     -O $gigaspeech_dataset_dir/TERMS_OF_ACCESS || exit 1;
-  echo "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
+  GREEN='\033[0;32m'
+  NC='\033[0m'       # No Color
+  echo -e "${GREEN}"
+  echo -e "BY PROCEEDING YOU AGREE TO THE FOLLOWING GIGASPEECH TERMS OF ACCESS:"
+  echo -e ""
+  echo -e "=============== GIGASPEECH DATASET TERMS OF ACCESS ==============="
   cat $gigaspeech_dataset_dir/TERMS_OF_ACCESS
-  echo "=================================================================="
-  echo "$0: GigaSpeech downloading will start in 5 seconds"
+  echo -e "=================================================================="
+  echo -e ""
+  echo -e "$0: GigaSpeech downloading will start in 5 seconds"
 
   for t in $(seq 5 -1 1); do
-    echo "$t"
+    echo -e "$t"
     sleep 1
   done
+  echo -e "${NC}"
 fi
 
 # Metadata
