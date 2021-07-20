@@ -62,10 +62,25 @@ check_download_speed() {
   eval "$1 &" || exit 1;
   local jobid=$!
   trap "kill $jobid; rm -f /tmp/$test_local_file; exit 1" INT
-  sleep $duration
 
-  # Checks if the download is still alive. It's not possible to finish the
-  # download in $duration time, so if the job is gone, something must be wrong.
+  # Wait for $duration seconds, but exit if the job finishes earlier.
+  for t in `seq 1 $duration`; do
+    if ! ps -p $jobid > /dev/null; then
+      if [[ -f "/tmp/$test_local_file" ]]; then
+        local file_size="$(du -sk /tmp/$test_local_file | cut -f1)"
+        rm -f "/tmp/$test_local_file"
+        local speed="$(echo "scale=3; $file_size/1024/$duration" | bc)"
+        echo "$speed"
+        return 0
+      else
+        echo "0"
+        return 0
+      fi
+    fi
+    sleep 1
+  done
+
+  # Check if the jobs is still alive, if yes, then kill it.
   if ps -p $jobid > /dev/null; then
     kill $jobid || exit 1;
     # Check file size.
