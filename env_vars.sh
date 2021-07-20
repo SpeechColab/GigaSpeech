@@ -5,7 +5,7 @@ GIGASPEECH_RELEASE_URL_OSS=
 
 # Distribution Channel 2: Tsinghua Host. Script utils/download_gigaspeech.sh
 # host option "tsinghua".
-GIGASPEECH_RELEASE_URL_TSINGHUA='http://www.tsinghua-ieit.com/dataset/GigaSpeech'
+GIGASPEECH_RELEASE_URL_TSINGHUA='http://aidata.tsinghua-ieit.com/GigaSpeech'
 
 # Distribution Channel 3: Haitian Host. Script utils/download_gigaspeech.sh
 # host option "speechocean".
