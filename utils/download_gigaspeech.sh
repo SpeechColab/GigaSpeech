@@ -63,22 +63,36 @@ check_download_speed() {
   local jobid=$!
   trap "kill $jobid; rm -f /tmp/$test_local_file; exit 1" INT
   sleep $duration
-  kill $jobid || exit 1;
 
-  # Check file size.
-  local file_size="$(du -sk /tmp/$test_local_file | cut -f1)"
-  rm -f "/tmp/$test_local_file"
-  local speed="$(echo "scale=3; $file_size/1024/$duration" | bc)"
-  echo "$speed"
+  # Checks if the download is still alive. It's not possible to finish the
+  # download in $duration time, so if the job is gone, something must be wrong.
+  if ps -p $jobid > /dev/null; then
+    kill $jobid || exit 1;
+    # Check file size.
+    if [[ -f "/tmp/$test_local_file" ]]; then
+      local file_size="$(du -sk /tmp/$test_local_file | cut -f1)"
+      rm -f "/tmp/$test_local_file"
+      local speed="$(echo "scale=3; $file_size/1024/$duration" | bc)"
+      echo "$speed"
+    else
+      echo "0"
+    fi
+  else
+    echo "0"
+  fi
 }
 
 if [ -z "$host" ];then
+  # Default download host.
+  host=tsinghua
+  speed=0
+
   # Check all available hosts and choose the fastest one.
   echo "$0: Testing Tsinghua host speed..."
   wget_cmd="wget -c -t 20 -T 90 -P /tmp"
   wget_cmd="$wget_cmd $GIGASPEECH_RELEASE_URL_TSINGHUA/GigaSpeech.json.gz.aes"
-  tsinghua_speed=$(check_download_speed "$wget_cmd")
-  echo "$0: Speed of the Tsinghua host is ${tsinghua_speed}MB/s"
+  speed=$(check_download_speed "$wget_cmd")
+  echo; echo "$0: The Tsinghua host speed: $speed M/s."; echo;
   
   echo "$0: Testing speechocean host speed..."
   wget_cmd="wget -c  -t 20 -T 90 -P /tmp"
@@ -86,13 +100,18 @@ if [ -z "$host" ];then
   wget_cmd="$wget_cmd $GIGASPEECH_RELEASE_URL_SPEECHOCEAN/"
   wget_cmd="${wget_cmd}GigaSpeech.json.gz.aes"
   speechocean_speed=$(check_download_speed "$wget_cmd")
-  echo "$0: Speed of the speechocean host is ${speechocean_speed}MB/s"
-
-  if [ $(echo "$tsinghua_speed > $speechocean_speed" | bc) = 1 ];then
-    host=tsinghua
-  else
+  if [ $(echo "$speed < $speechocean_speed" | bc) = 1 ]; then
     host=speechocean
+    speed=$speechocean_speed
   fi
+  echo; echo "$0: The speechocean host speed: $speechocean_speed M/s."; echo;
+
+  # Check if there is available host.
+  if [ $(echo "$speed == 0" | bc) = 1 ]; then
+    echo "$0: All hosts are down..."
+    exit 1;
+  fi
+  echo; echo "$0: Using $host host, speed is $speed M/s."; echo;
 fi
 
 if [[ "$host" == "oss" ]]; then
