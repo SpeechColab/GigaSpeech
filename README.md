@@ -132,7 +132,7 @@ We also provide some convenient command-line tools based on [jq](https://stedola
     ```
     This allows researchers to explore directions such as end-to-end endpointing and punctuation restoration. If you don't need these, you can remove them for your own training.
 
-* `Grabage Utterance Tags`: The Dev/Test evaluation sets are annotated by human annotators. They are instructed to label the entire audio file without "gaps". So for non-speech segments, *garbage utterance tags* are used instead. We recommend our users to discard these utterances in your training. A *complete list* of these tags are:
+* `Garbage Utterance Tags`: The Dev/Test evaluation sets are annotated by human annotators. They are instructed to label the entire audio file without "gaps". So for non-speech segments, *garbage utterance tags* are used instead. We recommend our users to discard these utterances in your training. A *complete list* of these tags are:
     ```
     <SIL>
     <MUSIC>
