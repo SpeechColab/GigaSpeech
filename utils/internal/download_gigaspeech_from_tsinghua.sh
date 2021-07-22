@@ -91,7 +91,15 @@ download_object_from_release() {
   mkdir -p $location || exit 1;
 
   if [ -f $local_obj ]; then
-    local_md5=$(md5 -r $local_obj | awk '{print $1}')
+    if [[ `uname -s` == "Linux" ]]; then
+      local local_md5=$(md5sum $local_obj | awk '{print $1}')
+    elif 
+      local local_md5=$(md5 -r $local_obj | awk '{print $1}')
+    else
+      echo "$0: only supports Linux and Mac OS"
+      exit 1
+    fi
+
     if [ "$local_md5" == "$remote_md5" ]; then
       echo "$0: Skipping $local_obj, successfully retrieved already."
     else
