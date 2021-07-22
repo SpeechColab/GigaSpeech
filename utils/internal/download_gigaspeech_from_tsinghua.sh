@@ -162,7 +162,7 @@ if [ $stage -le 0 ]; then
   echo -e "${NC}"
 fi
 
-# Metadata
+# Download metadata
 if [ $stage -le 1 ]; then
   echo "$0: Start to download GigaSpeech metadata"
   grep -v '^#' misc/tsinghua/metadata.list | (while read line; do
@@ -170,15 +170,8 @@ if [ $stage -le 1 ]; then
   done) || exit 1;
 fi
 
+# Download audio
 if [ $stage -le 2 ]; then
-  echo "$0: Start to process the downloaded metadata"
-  grep -v '^#' misc/tsinghua/metadata.list | (while read line; do
-    process_downloaded_object $line || exit 1;
-  done) || exit 1;
-fi
-
-# Audio
-if [ $stage -le 3 ]; then
   echo "$0: Start to download GigaSpeech cached audio files"
   for audio_source in youtube podcast audiobook; do
     grep -v '^#' misc/tsinghua/${audio_source}.list | (while read line; do
@@ -187,7 +180,26 @@ if [ $stage -le 3 ]; then
   done
 fi
 
+# Download optional dictionary & pretrained g2p model
+if [ $with_dict == true ]; then
+  if [ $stage -le 3 ]; then
+    echo "$0: Start to downloaded dictionary resources"
+    grep -v '^#' misc/tsinghua/dict.list | (while read line; do
+      download_object_from_release $line || exit 1;
+    done) || exit 1;
+  fi
+fi
+
+# Process metadata
 if [ $stage -le 4 ]; then
+  echo "$0: Start to process the downloaded metadata"
+  grep -v '^#' misc/tsinghua/metadata.list | (while read line; do
+    process_downloaded_object $line || exit 1;
+  done) || exit 1;
+fi
+
+# Process audio
+if [ $stage -le 5 ]; then
   echo "$0: Start to process the downloaded audio files"
   for audio_source in youtube podcast audiobook; do
     grep -v '^#' misc/tsinghua/${audio_source}.list | (while read line; do
@@ -196,15 +208,8 @@ if [ $stage -le 4 ]; then
   done
 fi
 
-# Optional dictionary & pretrained g2p model
+# Process optional dictionary & pretrained g2p model
 if [ $with_dict == true ]; then
-  if [ $stage -le 5 ]; then
-    echo "$0: Start to downloaded dictionary resources"
-    grep -v '^#' misc/tsinghua/dict.list | (while read line; do
-      download_object_from_release $line || exit 1;
-    done) || exit 1;
-  fi
-
   if [ $stage -le 6 ]; then
     echo "$0: Start to process the downloaded dictionary resources"
     grep -v '^#' misc/tsinghua/dict.list | (while read line; do
@@ -213,8 +218,14 @@ if [ $with_dict == true ]; then
   fi
 fi
 
-# Check audio md5
+# Check meta md5
 if [ $stage -le 7 ]; then
+  echo "$0: Checking md5 of meta"
+  utils/check_meta_md5.sh $gigaspeech_dataset_dir || exit 1
+fi
+
+# Check audio md5
+if [ $stage -le 8 ]; then
   echo "$0: Checking md5 of downloaded audio files"
   utils/check_audio_md5.sh $gigaspeech_dataset_dir || exit 1
 fi
