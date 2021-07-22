@@ -111,7 +111,7 @@ download_object_from_release() {
     wget -t 20 -T 90 -P $location $remote_obj || exit 1;
   fi
 
-  echo "$0: $obj Done"
+  echo "$0: $obj successfully synchronized to $local_obj"
 }
 
 process_downloaded_object() {
