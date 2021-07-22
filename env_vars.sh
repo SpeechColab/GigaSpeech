@@ -1,7 +1,7 @@
 # Download URL.
 # Distribution channel 1: Aliyun Object Storage Service, for invited paper
 # collaborators. Script utils/download_gigaspeech.sh host option "oss".
-GIGASPEECH_RELEASE_URL_OSS='oss://speechcolab/GigaSpeech/release/GigaSpeech/'
+GIGASPEECH_RELEASE_URL_OSS='oss://speechcolab/GigaSpeech/release/GigaSpeech'
 
 # Distribution Channel 2: Tsinghua Host. Script utils/download_gigaspeech.sh
 # host option "tsinghua".
