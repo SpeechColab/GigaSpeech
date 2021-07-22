@@ -24,9 +24,12 @@ fi
 
 gigaspeech_dataset_dir=$1
 
+
 . ./env_vars.sh || exit 1
+GIGASPEECH_RELEASE_URL=$GIGASPEECH_RELEASE_URL_OSS
+
 if [ -z "${GIGASPEECH_RELEASE_URL}" ]; then
-  echo "$0: Error, variable GIGASPEECH_RELEASE_URL(in env_vars.sh) is empty."
+  echo "$0: Error, variable GIGASPEECH_RELEASE_URL_OSS(in env_vars.sh) is empty."
   exit 1
 fi
 
