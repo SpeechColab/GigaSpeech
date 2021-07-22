@@ -93,7 +93,7 @@ download_object_from_release() {
   if [ -f $local_obj ]; then
     if [[ `uname -s` == "Linux" ]]; then
       local local_md5=$(md5sum $local_obj | awk '{print $1}')
-    elif 
+    elif [[ `uname -s` == "Darwin" ]]; then
       local local_md5=$(md5 -r $local_obj | awk '{print $1}')
     else
       echo "$0: only supports Linux and Mac OS"
