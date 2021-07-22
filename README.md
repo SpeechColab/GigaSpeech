@@ -16,7 +16,7 @@ Please fill out the Google Form [here](https://forms.gle/UuGQAPyscGRrUMLq6) and 
 | <em>Baseline</em>    | [Kaldi](https://github.com/kaldi-asr/kaldi) | [Chain + RNNLM](https://github.com/kaldi-asr/kaldi/tree/master/egs/gigaspeech/s5/) | GigaSpeech v1.0.0 XL | <u>model</u> <u>example</u> | 14.78 / 14.84 |
 | <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | GigaSpeech v1.0.0 XL | <u>model</u> <u>example</u> | 12.30 / 12.30 |
 |||||
-| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [Conformer-AED](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 XL | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210705_conformer_bidecoder_exp.tar.gz) [example](https://github.com/wenet-e2e/wenet/blob/main/runtime/server/x86/README.md) | 11.00 / 10.90 |
+| Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [Joint CTC/AED(U2++)](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 XL | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210720_conformer_bidecoder_exp.tar.gz) [example](https://github.com/wenet-e2e/wenet/blob/main/runtime/server/x86/README.md) | 10.70 / 10.70 |
 
 
 ## Dataset
