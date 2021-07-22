@@ -80,18 +80,34 @@ if [[ "$older_version" != "$required_version" ]]; then
 fi
 
 download_object_from_release() {
-  local obj=$1
-  echo "$0: Downloading $obj"
-  local remote_obj=$GIGASPEECH_RELEASE_URL_TSINGHUA/$obj
-  local location=$(dirname ${gigaspeech_dataset_dir}/$obj)
+  local remote_md5=$1
+  local obj=$2
+  echo "$0: Downloading $obj remote_md5=$remote_md5"
 
+  local remote_obj=$GIGASPEECH_RELEASE_URL_TSINGHUA/$obj
+  local local_obj=${gigaspeech_dataset_dir}/$obj
+
+  local location=$(dirname $local_obj)
   mkdir -p $location || exit 1;
-  # -T seconds timeout, -t number of tries
-  wget -c -t 20 -T 90 -P $location $remote_obj || exit 1;
+
+  if [ -f $local_obj ]; then
+    local_md5=$(md5 -r $local_obj | awk '{print $1}')
+    if [ "$local_md5" == "$remote_md5" ]; then
+      echo "$0: Skipping $local_obj, successfully retrieved already."
+    else
+      echo "$0: $local_obj needs re-downloading due to inconsistent MD5."
+      rm $local_obj
+      wget -t 20 -T 90 -P $location $remote_obj || exit 1;
+    fi
+  else
+    wget -t 20 -T 90 -P $location $remote_obj || exit 1;
+  fi
+
+  echo "$0: $obj Done"
 }
 
 process_downloaded_object() {
-  local obj=$1
+  local obj=$2
   echo "$0: Processing $obj"
   local path=${gigaspeech_dataset_dir}/$obj
   local location=$(dirname $path)
@@ -141,34 +157,34 @@ fi
 # Metadata
 if [ $stage -le 1 ]; then
   echo "$0: Start to download GigaSpeech metadata"
-  for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
-    download_object_from_release $obj || exit 1;
-  done
+  grep -v '^#' misc/tsinghua/metadata.list | (while read line; do
+    download_object_from_release $line || exit 1;
+  done) || exit 1;
 fi
 
 if [ $stage -le 2 ]; then
   echo "$0: Start to process the downloaded metadata"
-  for obj in `grep -v '^#' misc/tsinghua/metadata.list`; do
-    process_downloaded_object $obj || exit 1;
-  done
+  grep -v '^#' misc/tsinghua/metadata.list | (while read line; do
+    process_downloaded_object $line || exit 1;
+  done) || exit 1;
 fi
 
 # Audio
 if [ $stage -le 3 ]; then
   echo "$0: Start to download GigaSpeech cached audio files"
   for audio_source in youtube podcast audiobook; do
-    for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
-      download_object_from_release $obj || exit 1;
-    done
+    grep -v '^#' misc/tsinghua/${audio_source}.list | (while read line; do
+      download_object_from_release $line || exit 1;
+    done) || exit 1;
   done
 fi
 
 if [ $stage -le 4 ]; then
   echo "$0: Start to process the downloaded audio files"
   for audio_source in youtube podcast audiobook; do
-    for obj in `grep -v '^#' misc/tsinghua/${audio_source}.list`; do
-      process_downloaded_object $obj || exit 1;
-    done
+    grep -v '^#' misc/tsinghua/${audio_source}.list | (while read line; do
+      process_downloaded_object $line || exit 1;
+    done) || exit 1;
   done
 fi
 
@@ -176,16 +192,16 @@ fi
 if [ $with_dict == true ]; then
   if [ $stage -le 5 ]; then
     echo "$0: Start to downloaded dictionary resources"
-    for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
-      download_object_from_release $obj || exit 1;
-    done
+    grep -v '^#' misc/tsinghua/dict.list | (while read line; do
+      download_object_from_release $line || exit 1;
+    done) || exit 1;
   fi
 
   if [ $stage -le 6 ]; then
     echo "$0: Start to process the downloaded dictionary resources"
-    for obj in `grep -v '^#' misc/tsinghua/dict.list`; do
-      process_downloaded_object $obj || exit 1;
-    done
+    grep -v '^#' misc/tsinghua/dict.list | (while read line; do
+      process_downloaded_object $line || exit 1;
+    done) || exit 1;
   fi
 fi
 
