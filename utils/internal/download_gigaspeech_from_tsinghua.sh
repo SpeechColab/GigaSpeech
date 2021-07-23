@@ -38,6 +38,7 @@ if [ -z "$GIGASPEECH_RELEASE_URL_TSINGHUA" ]; then
   echo "$0: is not set."
   exit 1
 fi
+GIGASPEECH_RELEASE_URL=$GIGASPEECH_RELEASE_URL_TSINGHUA
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
@@ -84,7 +85,7 @@ download_object_from_release() {
   local obj=$2
   echo "$0: Downloading $obj remote_md5=$remote_md5"
 
-  local remote_obj=$GIGASPEECH_RELEASE_URL_TSINGHUA/$obj
+  local remote_obj=${GIGASPEECH_RELEASE_URL}/$obj
   local local_obj=${gigaspeech_dataset_dir}/$obj
 
   local location=$(dirname $local_obj)
@@ -143,7 +144,7 @@ process_downloaded_object() {
 if [ $stage -le 0 ]; then
   echo "$0: Start to download GigaSpeech user agreement"
   wget -c -P $gigaspeech_dataset_dir \
-    $GIGASPEECH_RELEASE_URL_TSINGHUA/TERMS_OF_ACCESS || exit 1;
+    ${GIGASPEECH_RELEASE_URL}/TERMS_OF_ACCESS || exit 1;
   GREEN='\033[0;32m'
   NC='\033[0m'       # No Color
   echo -e "${GREEN}"
