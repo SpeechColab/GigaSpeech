@@ -103,7 +103,7 @@ download_object_from_release() {
     if [ "$local_md5" == "$remote_md5" ]; then
       echo "$0: Skipping $local_obj, successfully retrieved already."
     else
-      echo "$0: $local_obj needs re-downloading due to inconsistent MD5."
+      echo "$0: $local_obj corrupted or out-of-date, start to re-download."
       rm $local_obj
       wget -t 20 -T 90 -P $location $remote_obj || exit 1;
     fi
