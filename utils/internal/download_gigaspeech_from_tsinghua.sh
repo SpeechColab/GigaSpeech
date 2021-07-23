@@ -17,7 +17,7 @@ if [ $# -ne 1 ]; then
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
   echo "This script downloads the entire GigaSpeech Dataset from Tsinghua host."
-  echo "We suggest having at least 1.2T of free space in the target directory."
+  echo "We suggest having at least 1.0T of free space in the target directory."
   echo "If dataset resources are updated, you can re-run this script for "
   echo "incremental download."
   exit 1

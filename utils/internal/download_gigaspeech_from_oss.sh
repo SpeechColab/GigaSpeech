@@ -16,7 +16,7 @@ if [ $# -ne 1 ]; then
   echo ""
   echo "This script downloads the entire GigaSpeech Dataset from Aliyun."
   echo "This tool is used for our collaborator, not for public users."
-  echo "We suggest having at least 600G of free space in local dir."
+  echo "We suggest having at least 500G of free space in local dir."
   echo "If dataset resources are updated, you can just re-run this script for "
   echo "incremental downloading, downloader will only download updates"
   exit 1
