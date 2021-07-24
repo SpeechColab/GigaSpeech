@@ -8,7 +8,7 @@ if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script extract version field from meta file"
+  echo "This script extract version field from metadata file"
   exit 1
 fi
 

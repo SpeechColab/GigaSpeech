@@ -10,9 +10,9 @@ if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
   echo ""
-  echo "This script tries to detect errors in the downloaded meta data "
+  echo "This script tries to detect errors in the downloaded metadata "
   echo "by checking the md5 value. You can find the expected md5 value in"
-  echo "misc/meta_versions.txt."
+  echo "misc/metadata_versions.txt."
   exit 1
 fi
 
@@ -24,7 +24,7 @@ if [ ! -f $gigaspeech_dataset_dir/GigaSpeech.json ]; then
 fi
 
 verified="false"
-local_version=$(utils/meta_version.sh $gigaspeech_dataset_dir)
+local_version=$(utils/extract_metadata_version.sh $gigaspeech_dataset_dir)
 if [[ `uname -s` == "Linux" ]]; then
   if ! which md5sum >/dev/null; then
     echo "$0: Please install md5sum"
@@ -42,12 +42,12 @@ else
   exit 1
 fi
 
-grep -v '^#' misc/meta_versions.txt | (while read line; do
+grep -v '^#' misc/metadata_versions.txt | (while read line; do
   version=$(echo $line | awk '{print $1}')
   md5=$(echo $line | awk '{print $2}')
   if [[ "$local_version" == "$version" ]]; then
     if [[ "$local_md5" == "$md5" ]]; then
-      echo "$0: Successfully verified meta version:$version, md5:$md5"
+      echo "$0: Successfully verified metadata version:$version, md5:$md5"
       verified="true"
     else
       echo "$0: ERROR, $local_version expects md5=$md5, got $local_md5"

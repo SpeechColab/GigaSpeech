@@ -105,7 +105,7 @@ download_object_from_release() {
       echo "$0: Skipping $local_obj, successfully retrieved already."
     else
       echo "$0: $local_obj corrupted or out-of-date, start to re-download."
-      rm $local_obj
+      rm $local_obj || exit 1;
       wget -t 20 -T 90 -P $location $remote_obj || exit 1;
     fi
   else
@@ -219,10 +219,10 @@ if [ $with_dict == true ]; then
   fi
 fi
 
-# Check meta md5
+# Check metadata md5
 if [ $stage -le 7 ]; then
-  echo "$0: Checking md5 of meta"
-  utils/check_meta_md5.sh $gigaspeech_dataset_dir || exit 1
+  echo "$0: Checking md5 of metadata"
+  utils/check_metadata_md5.sh $gigaspeech_dataset_dir || exit 1
 fi
 
 # Check audio md5
