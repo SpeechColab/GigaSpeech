@@ -1,0 +1,18 @@
+# last update: 2021.07.24, Jiayu
+#
+# A dummy host for download debugging
+# independent from official distribution host
+# total size: ~= 55M
+# 
+# wget base url:
+#   https://swaphub.oss-cn-hangzhou.aliyuncs.com/GigaSpeechDownloadDebug
+# 
+# `tree GigaSpeechDownloadDebug` gives:
+# GigaSpeechDownloadDebug
+# ├── TERMS_OF_ACCESS
+# ├── audio
+# │   └── youtube
+# │       └── P0111.tgz.aes
+# └── dict.tgz.aes
+683e162ebebabc6c3cd5fb42e72a9868  audio/youtube/P0111.tgz.aes
+e88de4ea902cd94e2551a85355e031ca  dict.tgz.aes
