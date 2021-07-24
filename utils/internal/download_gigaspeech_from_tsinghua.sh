@@ -157,7 +157,7 @@ if [ $stage -le 0 ]; then
   echo -e ""
 
   for t in $(seq 5 -1 1); do
-    echo "$t"
+    echo -e "$t"
     sleep 1
   done
   echo -e "${NC}"
