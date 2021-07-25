@@ -168,8 +168,8 @@ We are a group of volunteers trying to make speech technologies easier to use. W
 ## Institutional Contributors
 |  Institution | Contribution |
 |:------|:-----|
-| [speechocean](http://en.speechocean.com/)                  | Data host mirror; Evaluation data annotation |
 | [IEIT, Tsinghua University](http://www.tsinghua-ieit.com/) | Computing power; Data host; Researchers |
+| [speechocean](http://en.speechocean.com/)                  | Data host mirror; Evaluation data annotation |
 | [Xiaomi Corporation](https://www.mi.com/global/)           | Computing power; Researchers |
 
 ## Citation
@@ -186,3 +186,7 @@ Please cite our paper if you find this work useful:
 
 ## Contact
 If you have any concerns, please contact gigaspeech@speechcolab.org.
+
+## Metadata Changelog
+* **07/23/2021 v1.0.0**: We found a bug in the metadata and fixed that. We made an exception and kept the version number the same because this **correct** version was used in the original experiments in the paper.
+* **07/05/2021 v1.0.0**: Initial release.

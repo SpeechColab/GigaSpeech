@@ -59,4 +59,4 @@ else
   exit 1
 fi
 
-echo "$0: Done md5 verification."
+echo "$0: Successfully verified audio files."
