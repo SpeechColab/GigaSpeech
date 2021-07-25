@@ -12,6 +12,8 @@ GIGASPEECH_RELEASE_URL_TSINGHUA='http://aidata.tsinghua-ieit.com/GigaSpeech'
 GIGASPEECH_RELEASE_URL_SPEECHOCEAN='ftp://124.207.81.184/GigaSpeech'
 
 # Distribution Channel 4: MagicData Host
+GIGASPEECH_RELEASE_URL_MAGICDATA='https://freedata.oss-cn-beijing.aliyuncs.com/magichub/GigaSpeech'
+
 # Distribution Channel 5: From IPFS
 
 export PATH=$PWD:$PATH

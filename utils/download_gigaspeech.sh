@@ -14,6 +14,7 @@ with_dict=false
 # 1. oss
 # 2. tsinghua
 # 3. speechocean
+# 4. magicdata
 host=
 
 . ./env_vars.sh || exit 1
@@ -107,7 +108,7 @@ if [ -z "$host" ];then
   wget_cmd="wget -c -t 20 -T 90 -P /tmp"
   wget_cmd="$wget_cmd $GIGASPEECH_RELEASE_URL_TSINGHUA/GigaSpeech.json.gz.aes"
   speed=$(check_download_speed "$wget_cmd")
-  echo; echo "$0: The Tsinghua host speed: $speed M/s."; echo;
+  echo; echo "$0: The Tsinghua host speed: $speed MB/s."; echo;
   
   echo "$0: Testing speechocean host speed..."
   wget_cmd="wget -c  -t 20 -T 90 -P /tmp"
@@ -119,32 +120,48 @@ if [ -z "$host" ];then
     host=speechocean
     speed=$speechocean_speed
   fi
-  echo; echo "$0: The speechocean host speed: $speechocean_speed M/s."; echo;
+  echo; echo "$0: The speechocean host speed: $speechocean_speed MB/s."; echo;
+
+  echo "$0: Testing Magic Data host speed..."
+  wget_cmd="wget -c  -t 20 -T 90 -P /tmp"
+  wget_cmd="$wget_cmd $GIGASPEECH_RELEASE_URL_MAGICDATA/GigaSpeech.json.gz.aes"
+  magicdata_speed=$(check_download_speed "$wget_cmd")
+  if [ $(echo "$speed < $magicdata_speed" | bc) = 1 ]; then
+    host=magicdata
+    speed=$magicdata_speed
+  fi
+  echo; echo "$0: The Magic Data host speed: $magicdata_speed MB/s."; echo;
 
   # Check if there is available host.
   if [ $(echo "$speed == 0" | bc) = 1 ]; then
     echo "$0: All hosts are down..."
     exit 1;
   fi
-  echo; echo "$0: Using $host host, speed is $speed M/s."; echo;
+  echo; echo "$0: Using $host host, speed is $speed MB/s."; echo;
 fi
 
 if [[ "$host" == "oss" ]]; then
-  # This is for SpeechColab collaborators, need 600G free space
+  # This is for SpeechColab collaborators, need 500G free space
   echo "$0: Downloading from the oss host..."
   utils/internal/download_gigaspeech_from_oss.sh \
     --stage $stage --with-dict $with_dict \
     $gigaspeech_dataset_dir || exit 1;
 elif [[ "$host" == "tsinghua" ]]; then
-  # This is for public release, need 1.2T free space
+  # This is for public release, need 1.0T free space
   echo "$0: Downloading from the Tsinghua University host..."
   utils/internal/download_gigaspeech_from_tsinghua.sh \
     --stage $stage --with-dict $with_dict \
     $gigaspeech_dataset_dir || exit 1;
 elif [[ "$host" == "speechocean" ]]; then
-  # This is for public release, need 1.2T free space
+  # This is for public release, need 1.0T free space
   echo "$0: Downloading from the Speechocean host..."
   utils/internal/download_gigaspeech_from_speechocean.sh \
+    --stage $stage --with-dict $with_dict \
+    $gigaspeech_dataset_dir || exit 1;
+elif [[ "$host" == "magicdata" ]]; then
+  # This is for public release, need 1.0T free space
+  echo "$0: Downloading from the Magic Data host..."
+  utils/internal/download_gigaspeech_from_magicdata.sh \
     --stage $stage --with-dict $with_dict \
     $gigaspeech_dataset_dir || exit 1;
 else
