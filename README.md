@@ -169,6 +169,7 @@ We are a group of volunteers trying to make speech technologies easier to use. W
 |  Institution | Contribution |
 |:------|:-----|
 | [IEIT, Tsinghua University](http://www.tsinghua-ieit.com/) | Computing power; Data host; Researchers |
+| [Magic Data](https://www.magicdatatech.com/)               | Data host mirror|
 | [speechocean](http://en.speechocean.com/)                  | Data host mirror; Evaluation data annotation |
 | [Xiaomi Corporation](https://www.mi.com/global/)           | Computing power; Researchers |
 
