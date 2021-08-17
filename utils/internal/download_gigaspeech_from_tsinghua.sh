@@ -46,8 +46,7 @@ fi
 python3 << END
 from speechcolab.datasets import gigaspeech
 gigaspeech_data = gigaspeech.GigaSpeech('$gigaspeech_dataset_dir')
-password = '$PASSWORD'
-gigaspeech_data.download(password)
+gigaspeech_data.download('$PASSWORD')
 END
 
 
