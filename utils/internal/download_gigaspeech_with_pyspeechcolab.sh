@@ -7,9 +7,10 @@
 set -e
 set -o pipefail
 
-with_dict=false
+with_dict=False
+host=tsinghua
+subset={XL}
 
-. ./env_vars.sh || exit 1
 . ./utils/parse_options.sh || exit 1
 
 if [ $# -ne 1 ]; then
@@ -42,11 +43,14 @@ if [ -z "$PASSWORD" ]; then
   exit 1
 fi
 
+# false -> False, true -> True
+with_dict=$(echo $with_dict | sed 's/.*/&/')
+
 # Download with PySpeechColab
 python3 << END
 from speechcolab.datasets import gigaspeech
 gigaspeech_data = gigaspeech.GigaSpeech('$gigaspeech_dataset_dir')
-gigaspeech_data.download('$PASSWORD')
+gigaspeech_data.download('$PASSWORD', subset='$subset', host='$host', with_dict=$with_dict)
 END
 
 
