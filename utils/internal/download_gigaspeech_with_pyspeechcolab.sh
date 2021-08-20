@@ -29,7 +29,9 @@ mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check dependency
 python3 -c "import speechcolab" 2> /dev/null || \
-  (echo "$0: This recipe needs the package speechcolab installed. Exit."; exit 1)
+  (echo "$0: This recipe needs the package speechcolab installed.";
+   echo "To install:"
+   echo "    pip install speechcolab"; exit 1)
 
 # Check credential
 if [ ! -f SAFEBOX/password ]; then
