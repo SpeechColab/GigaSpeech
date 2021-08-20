@@ -31,6 +31,8 @@ if [ $# -ne 1 ]; then
   echo "options:"
   echo "  --with-dict true|false(default) download cmudict & g2p model"
   echo "  --stage stage(default 0) specifies from which stage to start with"
+  echo "  --host tsinghua(default)|speechocean|magicdata|oss specifies the host"
+  echo "  --subset subset(default {XL}) specifies the subset to download"
   exit 1
 fi
 

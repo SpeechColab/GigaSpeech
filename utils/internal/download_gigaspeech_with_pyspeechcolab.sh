@@ -44,7 +44,7 @@ if [ -z "$PASSWORD" ]; then
 fi
 
 # false -> False, true -> True
-with_dict=$(echo $with_dict | sed 's/.*/&/')
+with_dict=$(echo $with_dict | sed "s/\b\(.\)/\u\1/g")
 
 # Download with PySpeechColab
 python3 << END
