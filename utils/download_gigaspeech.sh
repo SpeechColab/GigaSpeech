@@ -31,7 +31,7 @@ if [ $# -ne 1 ]; then
   echo "options:"
   echo "  --with-dict true|false(default) download cmudict & g2p model"
   echo "  --stage stage(default 0) specifies from which stage to start with"
-  echo "  --host tsinghua(default)|speechocean|magicdata|oss specifies the host"
+  echo "  --host tsinghua|speechocean|magicdata|oss specifies the host"
   echo "  --subset subset(default {XL}) specifies the subset to download"
   exit 1
 fi
@@ -41,8 +41,8 @@ mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check credentials.
 if [ ! -f SAFEBOX/password ]; then
-  echo "$0: Please apply for the download credentials (see the \"Download\""
-  echo "$0: section in README) and it to SAFEBOX/password."
+  echo -n "$0: Please apply for the download credentials (see the \"Download\""
+  echo " section in README) and it to SAFEBOX/password."
   exit 1;
 fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
