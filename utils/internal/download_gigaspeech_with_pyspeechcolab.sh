@@ -50,9 +50,9 @@ with_dict=$(echo $with_dict | sed "s/\b\(.\)/\u\1/g")
 
 # Download with PySpeechColab
 python3 << END
-from speechcolab.datasets import gigaspeech
-gigaspeech_data = gigaspeech.GigaSpeech('$gigaspeech_dataset_dir')
-gigaspeech_data.download('$PASSWORD', subset='$subset', host='$host', with_dict=$with_dict)
+from speechcolab.datasets.gigaspeech import GigaSpeech
+gigaspeech = GigaSpeech('$gigaspeech_dataset_dir')
+gigaspeech.download('$PASSWORD', subset='$subset', host='$host', with_dict=$with_dict)
 END
 
 
