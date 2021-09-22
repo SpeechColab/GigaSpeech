@@ -33,6 +33,8 @@ if __name__ == '__main__':
         with audioread.audio_open(f'{args.corpus}/{audio["path"]}') as input_file:
             data = b''.join(list(input_file.read_data()))
             for seg in audio['segments']:
+                if args.subset not in seg['subsets']:
+                    continue
                 sr_native = input_file.samplerate
                 sr_target = 16000
                 n_channels = input_file.channels
