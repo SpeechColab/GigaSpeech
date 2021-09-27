@@ -5,6 +5,9 @@
 set -e
 set -o pipefail
 
+. ./env_vars.sh || exit 1
+. ./utils/parse_options.sh || exit 1
+
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <gigaspeech-dataset-dir>"
   echo " e.g.: $0 /disk1/audio_data/gigaspeech"
@@ -17,9 +20,8 @@ fi
 gigaspeech_dataset_dir=$1
 
 if ! which jq >/dev/null; then
-  >&2 echo "$0: You have to get jq installed in order to use this. See"
-  >&2 echo "$0: utils/install_jq.sh"
-  exit 1
+  echo "$0: You have to get jq installed in order to use this."
+  utils/install_jq.sh || exit 1
 fi
 
 if [ -f $gigaspeech_dataset_dir/GigaSpeech.json ]; then
