@@ -16,6 +16,7 @@ with_dict=false
 # 3. speechocean
 # 4. magicdata
 host=
+subset={XL}  # unavailable for oss
 
 . ./env_vars.sh || exit 1
 . ./utils/parse_options.sh || exit 1
@@ -30,6 +31,8 @@ if [ $# -ne 1 ]; then
   echo "options:"
   echo "  --with-dict true|false(default) download cmudict & g2p model"
   echo "  --stage stage(default 0) specifies from which stage to start with"
+  echo "  --host tsinghua|speechocean|magicdata|oss specifies the host"
+  echo "  --subset subset(default {XL}) specifies the subset to download"
   exit 1
 fi
 
@@ -38,8 +41,8 @@ mkdir -p $gigaspeech_dataset_dir || exit 1;
 
 # Check credentials.
 if [ ! -f SAFEBOX/password ]; then
-  echo "$0: Please apply for the download credentials (see the \"Download\""
-  echo "$0: section in README) and it to SAFEBOX/password."
+  echo -n "$0: Please apply for the download credentials (see the \"Download\""
+  echo " section in README) and it to SAFEBOX/password."
   exit 1;
 fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
@@ -146,23 +149,11 @@ if [[ "$host" == "oss" ]]; then
   utils/internal/download_gigaspeech_from_oss.sh \
     --stage $stage --with-dict $with_dict \
     $gigaspeech_dataset_dir || exit 1;
-elif [[ "$host" == "tsinghua" ]]; then
+elif [[ "$host" == "tsinghua" || "$host" == "speechocean" || "$host" == "magicdata" ]]; then
   # This is for public release, need 1.0T free space
-  echo "$0: Downloading from the Tsinghua University host..."
-  utils/internal/download_gigaspeech_from_tsinghua.sh \
-    --stage $stage --with-dict $with_dict \
-    $gigaspeech_dataset_dir || exit 1;
-elif [[ "$host" == "speechocean" ]]; then
-  # This is for public release, need 1.0T free space
-  echo "$0: Downloading from the Speechocean host..."
-  utils/internal/download_gigaspeech_from_speechocean.sh \
-    --stage $stage --with-dict $with_dict \
-    $gigaspeech_dataset_dir || exit 1;
-elif [[ "$host" == "magicdata" ]]; then
-  # This is for public release, need 1.0T free space
-  echo "$0: Downloading from the Magic Data host..."
-  utils/internal/download_gigaspeech_from_magicdata.sh \
-    --stage $stage --with-dict $with_dict \
+  echo "$0: Downloading with PySpeechColab..."
+  utils/internal/download_gigaspeech_with_pyspeechcolab.sh \
+    --host $host --subset $subset --with-dict $with_dict \
     $gigaspeech_dataset_dir || exit 1;
 else
   echo "$0: Unsupported host: $host"
