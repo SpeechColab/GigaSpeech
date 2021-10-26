@@ -7,10 +7,10 @@
 set -e
 set -o pipefail
 
-with_dict=False
+with_dict=false
 host=tsinghua
 subset={XL}
-download_eval=True
+download_eval=true
 
 . ./utils/parse_options.sh || exit 1
 
@@ -53,10 +53,10 @@ with_dict=$(echo $with_dict | sed "s/\b\(.\)/\u\1/g")
 python3 << END
 from speechcolab.datasets.gigaspeech import GigaSpeech
 gigaspeech = GigaSpeech('$gigaspeech_dataset_dir')
-gigaspeech.download('$PASSWORD', subset='$subset', host='$host', with_dict=$with_dict)
-if '$download_eval':
+if '$download_eval' and '$subset' != '{DEV}' and '$subset' != '{TEST}':
     gigaspeech.download('$PASSWORD', subset='{DEV}', host='$host', with_dict=$with_dict)
     gigaspeech.download('$PASSWORD', subset='{TEST}', host='$host', with_dict=$with_dict)
+gigaspeech.download('$PASSWORD', subset='$subset', host='$host', with_dict=$with_dict)
 END
 
 
