@@ -17,6 +17,8 @@ with_dict=false
 # 4. magicdata
 host=
 subset={XL}  # unavailable for oss
+download_dev=true
+download_test=true
 
 . ./env_vars.sh || exit 1
 . ./utils/parse_options.sh || exit 1
@@ -33,6 +35,8 @@ if [ $# -ne 1 ]; then
   echo "  --stage stage(default 0) specifies from which stage to start with"
   echo "  --host tsinghua|speechocean|magicdata|oss specifies the host"
   echo "  --subset subset(default {XL}) specifies the subset to download"
+  echo "  --download-dev  true(default)|false download {DEV} subset"
+  echo "  --download-test  true(default)|false download {TEST} subset"
   exit 1
 fi
 
@@ -112,7 +116,7 @@ if [ -z "$host" ];then
   wget_cmd="$wget_cmd $GIGASPEECH_RELEASE_URL_TSINGHUA/GigaSpeech.json.gz.aes"
   speed=$(check_download_speed "$wget_cmd")
   echo; echo "$0: The Tsinghua host speed: $speed MB/s."; echo;
-  
+
   echo "$0: Testing speechocean host speed..."
   wget_cmd="wget -c  -t 20 -T 90 -P /tmp"
   wget_cmd="$wget_cmd --ftp-user=GigaSpeech --ftp-password=$PASSWORD"
@@ -154,6 +158,7 @@ elif [[ "$host" == "tsinghua" || "$host" == "speechocean" || "$host" == "magicda
   echo "$0: Downloading with PySpeechColab..."
   utils/internal/download_gigaspeech_with_pyspeechcolab.sh \
     --host $host --subset $subset --with-dict $with_dict \
+    --download-dev $download_dev --download-test $download_test \
     $gigaspeech_dataset_dir || exit 1;
 else
   echo "$0: Unsupported host: $host"
