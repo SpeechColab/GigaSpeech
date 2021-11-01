@@ -48,6 +48,9 @@ if [ ! -f SAFEBOX/password ]; then
   exit 1;
 fi
 PASSWORD=`cat SAFEBOX/password 2>/dev/null`
+if [ -z "$PASSWORD" ]; then
+  echo "$0: Error, SAFEBOX/password is empty."
+fi
 PASSWORD_MD5=`echo $PASSWORD | md5sum | cut -d ' ' -f 1`
 if [[ $PASSWORD_MD5 != "dfbf0cde1a3ce23749d8d81e492741b8" ]]; then
   echo "$0: Error, invalid SAFEBOX/password."
