@@ -72,6 +72,6 @@ if __name__ == '__main__':
                     bits_per_sample = 16,
                 )
 
-                utt = {'ID': segment['sid'], 'AUDIO': segment_path, 'DURATION': f'{duration:.3f}', 'TEXT': text }
+                utt = {'ID': segment['sid'], 'AUDIO': segment_path, 'DURATION': f'{duration:.4f}', 'TEXT': text }
                 csv_writer.writerow(utt)
 
