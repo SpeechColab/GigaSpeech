@@ -2,6 +2,21 @@
 # coding=utf8
 # Copyright 2022  Jiayu DU
 
+'''
+This tool is used to extract supervised segments from GigaSpeech,
+segments are saved in .wav format, supervisions are saved in a simple .tsv file:
+
+--- exampler tsv begin ---
+ID  AUDIO   BEGIN   DURATION    TEXT
+POD1000000004_S0000017	audio/POD1000000004_S0000017.wav	0   3.163	YOU KNOW TO PUT THIS STUFF TOGETHER
+...
+...
+
+--- exampler tsv end---
+
+It can be, but not should be used to extract large subsets such as L, XL (because it would be extremely slow).
+'''
+
 import os, sys
 import argparse
 import csv
