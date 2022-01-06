@@ -27,7 +27,7 @@ gigaspeech_punctuations = ['<COMMA>', '<PERIOD>', '<QUESTIONMARK>', '<EXCLAMATIO
 gigaspeech_garbage_utterance_tags = ['<SIL>', '<NOISE>', '<MUSIC>', '<OTHER>']
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Save the audio segments into flac files.')
+    parser = argparse.ArgumentParser(description='Save the audio segments into wav, and meta into tsv.')
     parser.add_argument('--subset', choices = ['XS', 'S', 'M', 'L', 'XL', 'DEV', 'TEST'], default='XS', help='The subset name')
     parser.add_argument('gigaspeech_dataset_dir', help='The GigaSpeech corpus directory')
     parser.add_argument('dst_dir', help='Ouput subset directory')
