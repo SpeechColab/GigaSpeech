@@ -17,6 +17,7 @@ Please fill out the Google Form [here](https://forms.gle/UuGQAPyscGRrUMLq6) and 
 | <em>Baseline</em>    | [Pika](https://github.com/tencent-ailab/pika) | [RNN-T](https://github.com/tencent-ailab/pika/tree/) | GigaSpeech v1.0.0 XL | <u>model</u> <u>example</u> | 12.30 / 12.30 |
 |||||
 | Mobvoi               | [Wenet](https://github.com/wenet-e2e/wenet) | [Joint CTC/AED(U2++)](https://github.com/wenet-e2e/wenet/tree/main/examples/gigaspeech/s0) | GigaSpeech v1.0.0 XL | [model](http://mobvoi-speech-public.ufile.ucloud.cn/public/wenet/gigaspeech/20210811_conformer_bidecoder_exp.tar.gz) [example](https://github.com/wenet-e2e/wenet/blob/main/runtime/server/x86/README.md) | 10.70 / 10.60 |
+| ByteDance AI Lab | [NeurST](https://github.com/bytedance/neurst) |  [Transformer-AED](https://github.com/bytedance/neurst/tree/master/examples/speech_transformer/gigaspeech) | GigaSpeech v1.0.0 XL | [model](https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/neurst/speech_to_text/gigaspeech/ckpt.tgz) [example](https://github.com/bytedance/neurst/tree/master/examples/speech_transformer/gigaspeech#models) | 11.89 / 11.60 | 
 
 
 ## Dataset
