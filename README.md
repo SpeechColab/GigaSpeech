@@ -4,7 +4,10 @@ This is the official repository of the GigaSpeech dataset. For details of how we
 GigaSpeech version: 1.0.0 (07/05/2021)
 
 ## Download
-Please fill out the Google Form [here](https://forms.gle/UuGQAPyscGRrUMLq6) and follow the instructions to download the GigaSpeech dataset.
+1. Step 1: Please fill out the Google Form [here](https://forms.gle/UuGQAPyscGRrUMLq6)
+2. Step 2:
+    - Option A: Follow the instructions in replied email from SpeechColab to get the raw release of GigaSpeech
+    - Option B: Refer to [GigaSpeech On HuggingFace](https://github.com/SpeechColab/GigaSpeech/issues/117) to get a pre-processed version of GigaSpeech via HuggingFace.
 
 ## Leaderboard
 
