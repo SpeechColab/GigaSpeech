@@ -109,7 +109,7 @@ if [ $stage -le 1 ]; then
     --pipe-format $gigaspeech_dir/GigaSpeech.json $corpus_dir || exit 1;
   utt2spk=$corpus_dir/utt2spk
   spk2utt=$corpus_dir/spk2utt
-  utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
+  toolkits/kaldi/utt2spk_to_spk2utt.pl <$utt2spk >$spk2utt ||\
     (echo "$0: utt2spk to spk2utt" && exit 1) || exit 1;
 fi
 
