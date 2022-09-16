@@ -134,7 +134,7 @@ def prepare_data(data_dir='', subset='XL'):
             # remove the punctuation tags
             transcriptions = re.sub(punctuation_tags, "", transcriptions)
             # convert two spaces to one space
-            transcriptions = re.sub("  ", "", transcriptions)
+            transcriptions = re.sub("  ", " ", transcriptions)
             text_d[speaker].append(utt_key + '\t' + time_d[utt_key] +
                                    '\t' + transcriptions + '\t' + speaker)
 
