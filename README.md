@@ -185,10 +185,11 @@ Please cite our paper if you find this work useful:
 
 ```bibtext
 @inproceedings{GigaSpeech2021,
-  title={GigaSpeech: An Evolving, Multi-domain ASR Corpus with 10,000 Hours of Transcribed Audio},
+  title={GigaSpeech: An Evolving, Multi-Domain ASR Corpus with 10,000 Hours of Transcribed Audio},
   booktitle={Proc. Interspeech 2021},
   year=2021,
-  author={Guoguo Chen, Shuzhou Chai, Guanbo Wang, Jiayu Du, Wei-Qiang Zhang, Chao Weng, Dan Su, Daniel Povey, Jan Trmal, Junbo Zhang, Mingjie Jin, Sanjeev Khudanpur, Shinji Watanabe, Shuaijiang Zhao, Wei Zou, Xiangang Li, Xuchen Yao, Yongqing Wang, Yujun Wang, Zhao You, Zhiyong Yan}
+  author={Guoguo Chen and Shuzhou Chai and Guan-Bo Wang and Jiayu Du and Wei-Qiang Zhang and Chao Weng and Dan Su and Daniel Povey and Jan Trmal and Junbo Zhang and Mingjie Jin and Sanjeev Khudanpur and Shinji Watanabe and Shuaijiang Zhao and Wei Zou and Xiangang Li and Xuchen Yao and Yongqing Wang and Zhao You and Zhiyong Yan},
+  pages={3670--3674},
 }
 ```
 
